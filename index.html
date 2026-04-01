@@ -17,11 +17,11 @@
   <div class="section">
     <h2 class="title">ВЫБОР ИГРЫ:</h2>
 
-    <div class="game-btn gta">
+    <div class="game-btn gta" onclick="selectGame('gta')">
       <span>GTA 5 RP</span>
     </div>
 
-    <div class="game-btn br">
+    <div class="game-btn br" onclick="selectGame('br')">
       <span>BLACK RUSSIA</span>
     </div>
 
@@ -36,7 +36,7 @@
       Приглашайте друзей и получайте бонусы от их покупок!
     </p>
 
-    <button class="copy-btn">СКОПИРОВАТЬ ССЫЛКУ</button>
+    <button class="copy-btn" onclick="copyLink()">СКОПИРОВАТЬ ССЫЛКУ</button>
   </div>
 
 </div>
@@ -48,6 +48,24 @@
   <div class="nav-item">💬</div>
 </div>
 
-<script src="script.js"></script>
+<script>
+function selectGame(game) {
+  if (game === 'gta') {
+    alert('Вы выбрали GTA 5 RP');
+    // тут потом сделаем переход
+  }
+
+  if (game === 'br') {
+    alert('Вы выбрали Black Russia');
+  }
+}
+
+function copyLink() {
+  const link = "https://t.me/your_bot?start=ref123"; // замени на свою
+  navigator.clipboard.writeText(link);
+  alert("Ссылка скопирована!");
+}
+</script>
+
 </body>
 </html>

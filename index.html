@@ -15,18 +15,12 @@ body {
 
 .container {
   max-width: 400px;
-  margin: 40px auto;
-  padding: 20px;
+  margin: 30px auto;
+  padding: 15px;
 }
 
-/* СКРЫТИЕ ЭКРАНОВ */
-.screen {
-  display: none;
-}
-
-.active {
-  display: block;
-}
+.screen { display: none; }
+.active { display: block; }
 
 .card {
   background: rgba(255,255,255,0.05);
@@ -35,122 +29,157 @@ body {
   text-align: center;
 }
 
-.game-btn, .server-btn {
+.btn {
   margin: 10px 0;
-  padding: 15px;
+  padding: 14px;
   border-radius: 12px;
   cursor: pointer;
   font-weight: bold;
 }
 
-.gta {
-  background: linear-gradient(90deg, orange, red);
-}
-
-.br {
-  background: linear-gradient(90deg, #ff4b6e, red);
-}
+.gta { background: linear-gradient(90deg, orange, red); }
+.br { background: linear-gradient(90deg, #ff4b6e, red); }
 
 .server-btn {
   background: rgba(255,255,255,0.1);
 }
 
-.back-btn {
-  margin-bottom: 10px;
-  cursor: pointer;
-  color: #aaa;
+input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  margin: 10px 0;
 }
 
-img {
-  height: 20px;
-  margin-right: 5px;
+.pay-btn {
+  background: linear-gradient(90deg, #4da3ff, #2a7fff);
+}
+
+.back {
+  color: #aaa;
+  cursor: pointer;
+  margin-bottom: 10px;
 }
 </style>
-
 </head>
+
 <body>
 
 <div class="container">
 
-<!-- ГЛАВНЫЙ ЭКРАН -->
+<!-- ГЛАВНАЯ -->
 <div id="home" class="screen active card">
+<h2>ВЫБОР ИГРЫ</h2>
 
-<h2>ГЛАВНАЯ</h2>
-
-<p>История последних покупок<br>Загрузка...</p>
-
-<h3>ВЫБОР ИГРЫ:</h3>
-
-<div class="game-btn gta" onclick="openServers('gta')">
-  <img src="gta5rp.svg"> GTA 5 RP
+<div class="btn gta" onclick="openServers('gta')">
+  <img src="gta5rp.svg" height="20"> GTA 5 RP
 </div>
 
-<div class="game-btn br" onclick="openServers('br')">
-  <img src="black-russia.svg"> BLACK RUSSIA
+<div class="btn br" onclick="openServers('br')">
+  <img src="black-russia.svg" height="20"> BLACK RUSSIA
+</div>
 </div>
 
-</div>
-
-<!-- ЭКРАН СЕРВЕРОВ -->
+<!-- СЕРВЕРА -->
 <div id="servers" class="screen card">
-
-<div class="back-btn" onclick="goBack()">⬅ Назад</div>
-
+<div class="back" onclick="goHome()">⬅ Назад</div>
 <h3>ВЫБОР СЕРВЕРА</h3>
+<div id="serversList"></div>
+</div>
 
-<div id="server-list"></div>
+<!-- ПОКУПКА -->
+<div id="buy" class="screen card">
+<div class="back" onclick="goServers()">⬅ Назад</div>
 
+<h3>ПОКУПКА</h3>
+
+<input id="nickname" placeholder="Введите ник">
+
+<div id="amounts"></div>
+
+<div class="btn pay-btn" onclick="buy()">КУПИТЬ</div>
 </div>
 
 </div>
 
 <script>
-let currentGame = '';
+let game = '';
+let server = '';
+let amount = 0;
 
 // ОТКРЫТЬ СЕРВЕРА
-function openServers(game) {
-  currentGame = game;
-
-  document.getElementById('home').classList.remove('active');
-  document.getElementById('servers').classList.add('active');
-
+function openServers(g) {
+  game = g;
+  switchScreen('servers');
   loadServers();
 }
 
-// ЗАГРУЗКА СЕРВЕРОВ
+// СЕРВЕРА
 function loadServers() {
-  const container = document.getElementById('server-list');
-  container.innerHTML = '';
+  const el = document.getElementById('serversList');
+  el.innerHTML = '';
 
-  let servers = [];
+  let list = game === 'gta'
+    ? ['Downtown','Strawberry','Vinewood']
+    : ['Москва','Питер','Казань'];
 
-  if (currentGame === 'gta') {
-    servers = ['Downtown', 'Strawberry', 'Vinewood'];
-  }
-
-  if (currentGame === 'br') {
-    servers = ['Москва', 'Питер', 'Казань'];
-  }
-
-  servers.forEach(server => {
-    const div = document.createElement('div');
-    div.className = 'server-btn';
-    div.innerText = server;
-
-    div.onclick = () => {
-      alert(`Вы выбрали сервер: ${server}`);
-      // тут дальше сделаем покупку
-    };
-
-    container.appendChild(div);
+  list.forEach(s => {
+    let div = document.createElement('div');
+    div.className = 'btn server-btn';
+    div.innerText = s;
+    div.onclick = () => openBuy(s);
+    el.appendChild(div);
   });
 }
 
-// НАЗАД
-function goBack() {
-  document.getElementById('servers').classList.remove('active');
-  document.getElementById('home').classList.add('active');
+// ОТКРЫТЬ ПОКУПКУ
+function openBuy(s) {
+  server = s;
+  switchScreen('buy');
+  loadAmounts();
 }
+
+// СУММЫ
+function loadAmounts() {
+  const el = document.getElementById('amounts');
+  el.innerHTML = '';
+
+  let prices = [100, 300, 500, 1000];
+
+  prices.forEach(p => {
+    let div = document.createElement('div');
+    div.className = 'btn';
+    div.innerText = p + ' ₽';
+    div.onclick = () => {
+      amount = p;
+      alert('Выбрано: ' + p);
+    };
+    el.appendChild(div);
+  });
+}
+
+// ПОКУПКА
+function buy() {
+  let nick = document.getElementById('nickname').value;
+
+  if (!nick) return alert('Введите ник');
+  if (!amount) return alert('Выберите сумму');
+
+  alert(`Покупка:\nИгра: ${game}\nСервер: ${server}\nНик: ${nick}\nСумма: ${amount}₽`);
+
+  // ТУТ ТВОЯ ССЫЛКА ОПЛАТЫ
+  // window.location.href = "https://your-payment-link";
+}
+
+// ПЕРЕКЛЮЧЕНИЕ
+function switchScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function goHome() { switchScreen('home'); }
+function goServers() { switchScreen('servers'); }
 </script>
 
 </body>

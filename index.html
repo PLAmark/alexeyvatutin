@@ -6,23 +6,34 @@
     <title>Black Russia Store</title>
     <script src="https://telegram.org"></script>
     <style>
-        :root { --blue-dark: #0d49a1; --blue-light: #3f89f8; --bg-dark: #0a0a0a; }
         body {
-            margin: 0; padding: 0; background: radial-gradient(circle at center, #1a56ab 0%, #0a0a0a 100%);
-            color: white; font-family: 'Segoe UI', Roboto, sans-serif; display: flex; flex-direction: column; align-items: center; min-height: 100vh; overflow: hidden;
+            margin: 0; padding: 0;
+            background: radial-gradient(circle at center, #1a56ab 0%, #0a0a0a 100%);
+            color: white; font-family: 'Segoe UI', Roboto, sans-serif;
+            display: flex; flex-direction: column; align-items: center; min-height: 100vh;
         }
-        /* Центральный блок */
+        /* Статус-бар сверху */
+        .header {
+            width: 100%; padding: 20px; display: flex; justify-content: flex-end; box-sizing: border-box;
+            background: linear-gradient(to bottom, rgba(13,73,161,0.6), transparent);
+        }
+        .status-badge {
+            background: linear-gradient(to bottom right, #ffffff, #a7cafe);
+            color: black; padding: 6px 14px; border-radius: 12px; font-weight: bold; font-size: 13px;
+        }
+        /* Основная карточка */
         .main-card {
-            background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1);
-            width: 90%; max-width: 400px; border-radius: 30px; margin-top: 40px; padding: 25px; text-align: center;
+            background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(15px);
+            border: 1px solid rgba(255,255,255,0.1); width: 90%; max-width: 400px;
+            border-radius: 30px; margin-top: 20px; padding: 25px; text-align: center; box-sizing: border-box;
         }
-        .section-title { font-size: 18px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px; }
+        .section-title { font-size: 16px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px; color: #fff; }
         
         /* Кнопки выбора игры */
         .game-btn {
-            width: 100%; height: 65px; border-radius: 18px; border: none; margin-bottom: 12px;
-            display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 20px;
-            cursor: pointer; transition: 0.2s; position: relative;
+            width: 100%; height: 60px; border-radius: 15px; border: none; margin-bottom: 12px;
+            display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 18px;
+            cursor: pointer; transition: 0.2s;
         }
         .btn-gta { background: linear-gradient(to right, #f4b400, #ffcc33); color: black; }
         .btn-br { background: linear-gradient(to right, #e61e22, #f44336); color: white; }
@@ -30,44 +41,44 @@
 
         /* Нижнее меню */
         .nav-bar {
-            position: fixed; bottom: 20px; width: 90%; max-width: 400px; height: 70px;
-            background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(20px); border-radius: 20px;
+            position: fixed; bottom: 15px; width: 92%; max-width: 400px; height: 65px;
+            background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(20px); border-radius: 20px;
             display: flex; justify-content: space-around; align-items: center; border: 1px solid rgba(255,255,255,0.1);
         }
-        .nav-item { text-align: center; opacity: 0.6; font-size: 10px; cursor: pointer; }
-        .nav-active { opacity: 1; color: var(--blue-light); }
-        .nav-icon { font-size: 24px; display: block; margin-bottom: 2px; }
+        .nav-item { text-align: center; opacity: 0.5; font-size: 10px; cursor: pointer; transition: 0.3s; }
+        .nav-active { opacity: 1; color: #3f89f8; }
+        .nav-icon { font-size: 22px; display: block; margin-bottom: 2px; }
 
-        .referral-btn {
-            background: var(--blue-light); color: white; border: none; width: 100%; 
-            padding: 12px; border-radius: 12px; font-weight: bold; margin-top: 15px; cursor: pointer;
+        .footer-info {
+            background: rgba(0,0,0,0.3); padding: 12px; border-radius: 12px;
+            font-size: 11px; margin-top: 20px; border-left: 4px solid #3f89f8; text-align: left;
         }
     </style>
 </head>
 <body>
 
+    <div class="header">
+        <div class="status-badge">Магазин активен</div>
+    </div>
+
     <div class="main-card">
         <div class="section-title">Главная</div>
-        <p style="font-size: 12px; opacity: 0.5;">История последних покупок загружается...</p>
+        <p style="font-size: 11px; opacity: 0.5; margin-top: -10px;">Последние покупки загружены ✅</p>
         
         <div class="section-title" style="margin-top: 30px;">Выбор игры:</div>
         
         <button class="game-btn btn-gta" onclick="buy('GTA 5 RP')">GTA 5 RP</button>
         <button class="game-btn btn-br" onclick="buy('BLACK RUSSIA')">BLACK RUSSIA</button>
 
-        <div style="background: rgba(0,0,0,0.3); padding: 10px; border-radius: 12px; font-size: 11px; margin-top: 15px; border-left: 4px solid var(--blue-light);">
-            ℹ️ Выберите нужный сервер, чтобы начать операцию
+        <div class="footer-info">
+            ℹ️ Выберите нужную игру и сервер, чтобы начать покупку вирт.
         </div>
-
-        <div class="section-title" style="margin-top: 30px;">Реферальная система</div>
-        <p style="font-size: 11px; opacity: 0.6;">Приглашайте друзей и получайте бонусы!</p>
-        <button class="referral-btn">СКОПИРОВАТЬ ССЫЛКУ</button>
     </div>
 
     <div class="nav-bar">
         <div class="nav-item"><span class="nav-icon">👤</span>Профиль</div>
         <div class="nav-item nav-active"><span class="nav-icon">🏠</span>Главная</div>
-        <div class="nav-item"><span class="nav-icon">🔗</span>Рефералка</div>
+        <div class="nav-item"><span class="nav-icon">🔗</span>Бонусы</div>
         <div class="nav-item"><span class="nav-icon">💬</span>Помощь</div>
     </div>
 
@@ -77,8 +88,8 @@
         tg.ready();
 
         function buy(game) {
-            // Передаем название игры твоему боту на VDS
-            tg.sendData("Выбрана игра: " + game);
+            // Передаем название игры боту на VDS
+            tg.sendData(game);
             tg.close();
         }
     </script>

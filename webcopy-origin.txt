@@ -1,0 +1,136 @@
+Uri: https://tg.vatutin.su/
+File Name: C:\Downloaded Web Sites\tg.vatutin.su\index.htm
+Content Type: text/html
+
+Uri: https://tg.vatutin.su/bg.png
+File Name: C:\Downloaded Web Sites\tg.vatutin.su\bg.png
+Content Type: image/png
+
+Uri: https://tg.vatutin.su/black-russia.svg
+File Name: C:\Downloaded Web Sites\tg.vatutin.su\black-russia.svg
+Content Type: image/svg+xml
+
+Uri: https://tg.vatutin.su/favicon.ico?favicon.0b3bf435.ico
+File Name: C:\Downloaded Web Sites\tg.vatutin.su\favicon.ico
+Content Type: image/x-icon
+
+Uri: https://tg.vatutin.su/gta5rp.svg
+File Name: C:\Downloaded Web Sites\tg.vatutin.su\gta5rp.svg
+Content Type: image/svg+xml
+
+Uri: https://tg.vatutin.su/web-app.js
+File Name: C:\Downloaded Web Sites\tg.vatutin.su\web-app.js
+Content Type: application/javascript
+
+Uri: https://tg.vatutin.su/_next/static/chunks/1987c84130c2f8d0.js
+File Name: C:\Downloaded Web Sites\tg.vatutin.su\_next\static\chunks\1987c84130c2f8d0.js
+Content Type: application/javascript
+
+Uri: https://tg.vatutin.su/_next/static/chunks/249261e921aeebba.js
+File Name: C:\Downloaded Web Sites\tg.vatutin.su\_next\static\chunks\249261e921aeebba.js
+Content Type: application/javascript
+
+Uri: https://tg.vatutin.su/_next/static/chunks/33624b9c98576880.js
+File Name: C:\Downloaded Web Sites\tg.vatutin.su\_next\static\chunks\33624b9c98576880.js
+Content Type: application/javascript
+
+Uri: https://tg.vatutin.su/_next/static/chunks/5777bc08048e2edc.js
+File Name: C:\Downloaded Web Sites\tg.vatutin.su\_next\static\chunks\5777bc08048e2edc.js
+Content Type: application/javascript
+
+Uri: https://tg.vatutin.su/_next/static/chunks/6fff1e28a91f534f.js
+File Name: C:\Downloaded Web Sites\tg.vatutin.su\_next\static\chunks\6fff1e28a91f534f.js
+Content Type: application/javascript
+
+Uri: https://tg.vatutin.su/_next/static/chunks/7340adf74ff47ec0.js
+File Name: C:\Downloaded Web Sites\tg.vatutin.su\_next\static\chunks\7340adf74ff47ec0.js
+Content Type: application/javascript
+
+Uri: https://tg.vatutin.su/_next/static/chunks/9c3fa0da01deaa57.js
+File Name: C:\Downloaded Web Sites\tg.vatutin.su\_next\static\chunks\9c3fa0da01deaa57.js
+Content Type: application/javascript
+
+Uri: https://tg.vatutin.su/_next/static/chunks/a6dad97d9634a72d.js
+File Name: C:\Downloaded Web Sites\tg.vatutin.su\_next\static\chunks\a6dad97d9634a72d.js
+Content Type: application/javascript
+
+Uri: https://tg.vatutin.su/_next/static/chunks/b756ec20543b9ab7.css
+File Name: C:\Downloaded Web Sites\tg.vatutin.su\_next\static\chunks\b756ec20543b9ab7.css
+Content Type: text/css
+
+Uri: https://tg.vatutin.su/_next/static/chunks/bb7bbd3fa13a5c7e.js
+File Name: C:\Downloaded Web Sites\tg.vatutin.su\_next\static\chunks\bb7bbd3fa13a5c7e.js
+Content Type: application/javascript
+
+Uri: https://tg.vatutin.su/_next/static/chunks/ff1a16fafef87110.js
+File Name: C:\Downloaded Web Sites\tg.vatutin.su\_next\static\chunks\ff1a16fafef87110.js
+Content Type: application/javascript
+
+Uri: https://tg.vatutin.su/_next/static/chunks/turbopack-e3cb4a049d40c16e.js
+File Name: C:\Downloaded Web Sites\tg.vatutin.su\_next\static\chunks\turbopack-e3cb4a049d40c16e.js
+Content Type: application/javascript
+
+Uri: https://tg.vatutin.su/_next/static/media/2b402d8aebffd579-s.ec7e94a5.woff2
+File Name: C:\Downloaded Web Sites\tg.vatutin.su\_next\static\media\2b402d8aebffd579-s.ec7e94a5.woff2
+Content Type: font/woff2
+
+Uri: https://tg.vatutin.su/_next/static/media/3fd967fc5374d70a-s.fbfab8ec.woff2
+File Name: C:\Downloaded Web Sites\tg.vatutin.su\_next\static\media\3fd967fc5374d70a-s.fbfab8ec.woff2
+Content Type: font/woff2
+
+Uri: https://tg.vatutin.su/_next/static/media/44fac91e6f2d2b1b-s.p.0a39a854.woff2
+File Name: C:\Downloaded Web Sites\tg.vatutin.su\_next\static\media\44fac91e6f2d2b1b-s.p.0a39a854.woff2
+Content Type: font/woff2
+
+Uri: https://tg.vatutin.su/_next/static/media/4e1c87b7aa9e2f2f-s.ab54a6c0.woff2
+File Name: C:\Downloaded Web Sites\tg.vatutin.su\_next\static\media\4e1c87b7aa9e2f2f-s.ab54a6c0.woff2
+Content Type: font/woff2
+
+Uri: https://tg.vatutin.su/_next/static/media/4fa387ec64143e14-s.c1fdd6c2.woff2
+File Name: C:\Downloaded Web Sites\tg.vatutin.su\_next\static\media\4fa387ec64143e14-s.c1fdd6c2.woff2
+Content Type: font/woff2
+
+Uri: https://tg.vatutin.su/_next/static/media/7178b3e590c64307-s.b97b3418.woff2
+File Name: C:\Downloaded Web Sites\tg.vatutin.su\_next\static\media\7178b3e590c64307-s.b97b3418.woff2
+Content Type: font/woff2
+
+Uri: https://tg.vatutin.su/_next/static/media/797e433ab948586e-s.p.dbea232f.woff2
+File Name: C:\Downloaded Web Sites\tg.vatutin.su\_next\static\media\797e433ab948586e-s.p.dbea232f.woff2
+Content Type: font/woff2
+
+Uri: https://tg.vatutin.su/_next/static/media/8298327da6d5bcce-s.fb2d5852.woff2
+File Name: C:\Downloaded Web Sites\tg.vatutin.su\_next\static\media\8298327da6d5bcce-s.fb2d5852.woff2
+Content Type: font/woff2
+
+Uri: https://tg.vatutin.su/_next/static/media/8a480f0b521d4e75-s.8e0177b5.woff2
+File Name: C:\Downloaded Web Sites\tg.vatutin.su\_next\static\media\8a480f0b521d4e75-s.8e0177b5.woff2
+Content Type: font/woff2
+
+Uri: https://tg.vatutin.su/_next/static/media/a88409fdd7dc121c-s.62b55a98.woff2
+File Name: C:\Downloaded Web Sites\tg.vatutin.su\_next\static\media\a88409fdd7dc121c-s.62b55a98.woff2
+Content Type: font/woff2
+
+Uri: https://tg.vatutin.su/_next/static/media/b59689b1142d37ce-s.p.0d06c9b2.woff2
+File Name: C:\Downloaded Web Sites\tg.vatutin.su\_next\static\media\b59689b1142d37ce-s.p.0d06c9b2.woff2
+Content Type: font/woff2
+
+Uri: https://tg.vatutin.su/_next/static/media/bbc41e54d2fcbd21-s.799d8ef8.woff2
+File Name: C:\Downloaded Web Sites\tg.vatutin.su\_next\static\media\bbc41e54d2fcbd21-s.799d8ef8.woff2
+Content Type: font/woff2
+
+Uri: https://tg.vatutin.su/_next/static/media/caa3a2e1cccd8315-s.p.853070df.woff2
+File Name: C:\Downloaded Web Sites\tg.vatutin.su\_next\static\media\caa3a2e1cccd8315-s.p.853070df.woff2
+Content Type: font/woff2
+
+Uri: https://tg.vatutin.su/_next/static/media/d0d9446e69c4847e-s.344a0dc1.woff2
+File Name: C:\Downloaded Web Sites\tg.vatutin.su\_next\static\media\d0d9446e69c4847e-s.344a0dc1.woff2
+Content Type: font/woff2
+
+Uri: https://tg.vatutin.su/_next/static/media/dd14639a62c56cb2-s.aaba70fa.woff2
+File Name: C:\Downloaded Web Sites\tg.vatutin.su\_next\static\media\dd14639a62c56cb2-s.aaba70fa.woff2
+Content Type: font/woff2
+
+Uri: https://tg.vatutin.su/_next/static/media/e8f2fbee2754df70-s.p.9b7a96b4.woff2
+File Name: C:\Downloaded Web Sites\tg.vatutin.su\_next\static\media\e8f2fbee2754df70-s.p.9b7a96b4.woff2
+Content Type: font/woff2
+

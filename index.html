@@ -1,0 +1,52 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- ВОТ ЭТОГО НЕ ХВАТАЛО: ОФИЦИАЛЬНЫЙ СКРИПТ ТЕЛЕГРАМ -->
+    <script src="https://telegram.org"></script>
+    
+    <link rel="stylesheet" href="_next/static/chunks/b756ec20543b9ab7.css" data-precedence="next">
+    <title>Black Russia Shop</title>
+    
+    <script>
+        // Скрипт для связи кнопок с твоим ботом на VDS
+        window.onload = function() {
+            const tg = window.Telegram.WebApp;
+            tg.expand(); // Разворачиваем окно
+            tg.ready();
+
+            // Функция, которая при клике на ЛЮБУЮ кнопку отправит текст этой кнопки боту
+            document.addEventListener('click', function(e) {
+                if (e.target.tagName === 'BUTTON' || e.target.closest('button')) {
+                    const btn = e.target.tagName === 'BUTTON' ? e.target : e.target.closest('button');
+                    const itemText = btn.innerText || "Заказ товара";
+                    tg.sendData(itemText); // Отправка боту
+                    tg.close(); // Закрываем окно
+                }
+            });
+        };
+    </script>
+</head>
+<body class="antialiased">
+    <!-- Твой оригинальный код загрузки из Next.js -->
+    <div class="relative">
+        <div class="flex flex-col items-center justify-center">
+            <header class="w-full flex items-center justify-end px-8 py-6 absolute top-0 left-0 bg-linear-to-b from-[#0d49a1] to-[#0d49a1]/0">
+                <div class="text-black text-xl font-bold font-sans bg-linear-to-br from-white to-[#a7cafe] rounded-2xl px-4 py-2">Магазин активен</div>
+            </header>
+            <div class="flex-1 w-full max-w-xl overflow-y-auto min-h-[calc(100vh-104px)] pt-[96px] font-sans">
+                <div class="flex items-center justify-center min-h-[calc(100vh-104px)]">
+                    <!-- Тут появится твой дизайн из скриптов _next -->
+                    Загрузка магазина...
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Подключаем оригинальные скрипты дизайна -->
+    <script src="_next/static/chunks/1987c84130c2f8d0.js" async=""></script>
+    <script src="_next/static/chunks/9c3fa0da01deaa57.js" async=""></script>
+    <script src="_next/static/chunks/6fff1e28a91f534f.js" async=""></script>
+</body>
+</html>

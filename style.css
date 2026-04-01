@@ -1,114 +1,31 @@
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: linear-gradient(180deg, #1f4fa3, #0b2c5c);
-  color: white;
+const tg = window.Telegram.WebApp;
+tg.expand();
+
+// КЛИК ПО ИГРЕ
+function selectGame(game) {
+  if (game === 'gta') {
+    tg.showAlert('Вы выбрали GTA 5 RP');
+
+    // пример перехода
+    window.location.href = 'gta.html';
+  }
+
+  if (game === 'br') {
+    tg.showAlert('Вы выбрали Black Russia');
+
+    window.location.href = 'br.html';
+  }
 }
 
-.container {
-  max-width: 400px;
-  margin: 40px auto;
-}
+// КОПИРОВАНИЕ ССЫЛКИ
+function copyLink() {
+  const link = "https://t.me/your_bot?start=ref123"; // ЗАМЕНИ НА СВОЮ
 
-.card {
-  background: rgba(255,255,255,0.05);
-  backdrop-filter: blur(20px);
-  border-radius: 20px;
-  padding: 20px;
-  border: 1px solid rgba(255,255,255,0.08);
-}
-
-.title {
-  text-align: center;
-  font-weight: 800;
-}
-
-.subtitle {
-  text-align: center;
-  font-size: 13px;
-  opacity: 0.7;
-}
-
-.section {
-  margin-top: 20px;
-}
-
-/* КНОПКИ ИГР */
-.game-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  margin-top: 10px;
-  padding: 14px;
-
-  border-radius: 16px;
-  font-weight: 700;
-
-  box-shadow: 0 6px 20px rgba(0,0,0,0.25);
-  transition: 0.15s;
-}
-
-.game-btn:active {
-  transform: scale(0.97);
-}
-
-.gta {
-  background: linear-gradient(90deg, #f7b733, #fc4a1a);
-}
-
-.br {
-  background: linear-gradient(90deg, #ff416c, #ff4b2b);
-}
-
-/* ALERT */
-.alert {
-  margin-top: 12px;
-  background: rgba(255,255,255,0.9);
-  color: black;
-  padding: 10px;
-  border-radius: 12px;
-  font-size: 13px;
-  text-align: center;
-}
-
-/* КНОПКА */
-.copy-btn {
-  width: 100%;
-  margin-top: 10px;
-  padding: 12px;
-
-  border: none;
-  border-radius: 12px;
-
-  background: linear-gradient(90deg, #4da6ff, #1e90ff);
-  color: white;
-  font-weight: 700;
-}
-
-/* НИЖНЕЕ МЕНЮ */
-.bottom-nav {
-  position: fixed;
-  bottom: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-
-  width: 90%;
-  padding: 12px;
-
-  border-radius: 20px;
-
-  background: rgba(0,0,0,0.6);
-  backdrop-filter: blur(20px);
-
-  display: flex;
-  justify-content: space-around;
-}
-
-.nav-item {
-  opacity: 0.6;
-}
-
-.nav-item.active {
-  opacity: 1;
+  navigator.clipboard.writeText(link)
+    .then(() => {
+      tg.showAlert("Ссылка скопирована!");
+    })
+    .catch(() => {
+      alert("Ошибка копирования");
+    });
 }

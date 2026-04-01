@@ -1,16 +1,10 @@
-// СОСТОЯНИЕ
+<script>
+// ===== СОСТОЯНИЕ =====
 let game = '';
 let server = '';
 let amount = 0;
 
-// ОТКРЫТИЕ СЕРВЕРОВ
-function openServers(g) {
-  game = g;
-  switchScreen('servers');
-  loadServers();
-}
-
-// ДАННЫЕ
+// ===== ДАННЫЕ BLACK RUSSIA =====
 const brColors = [
 "RED","GREEN","BLUE","YELLOW","ORANGE","PURPLE","LIME","PINK",
 "CHERRY","BLACK","INDIGO","WHITE","MAGENTA","CRIMSON","GOLD",
@@ -32,7 +26,23 @@ const brCities = [
 "PODOLSK","MAGADAN","CHEREPOVETS","NORILSK"
 ];
 
-// ЗАГРУЗКА
+// ===== ПЕРЕКЛЮЧЕНИЕ ЭКРАНОВ =====
+function switchScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function goHome() { switchScreen('home'); }
+function goServers() { switchScreen('servers'); }
+
+// ===== ОТКРЫТЬ СЕРВЕРА =====
+function openServers(g) {
+  game = g;
+  switchScreen('servers');
+  loadServers();
+}
+
+// ===== ЗАГРУЗКА СЕРВЕРОВ =====
 function loadServers() {
   const el = document.getElementById('serversList');
 
@@ -41,10 +51,14 @@ function loadServers() {
     <div id="serversContainer"></div>
   `;
 
-  renderServers([...brColors, ...brCities]);
+  let list = game === 'gta'
+    ? ['Downtown','Strawberry','Vinewood']
+    : [...brColors, ...brCities];
+
+  renderServers(list);
 }
 
-// РЕНДЕР
+// ===== ОТРИСОВКА =====
 function renderServers(list) {
   const container = document.getElementById('serversContainer');
   container.innerHTML = '';
@@ -60,25 +74,27 @@ function renderServers(list) {
   });
 }
 
-// ПОИСК
+// ===== ПОИСК =====
 function filterServers() {
   const value = document.getElementById('search').value.toLowerCase();
 
-  const all = [...brColors, ...brCities];
+  let all = game === 'gta'
+    ? ['Downtown','Strawberry','Vinewood']
+    : [...brColors, ...brCities];
 
   const filtered = all.filter(s => s.toLowerCase().includes(value));
 
   renderServers(filtered);
 }
 
-// ПОКУПКА
+// ===== ПОКУПКА =====
 function openBuy(s) {
   server = s;
   switchScreen('buy');
   loadAmounts();
 }
 
-// СУММЫ
+// ===== СУММЫ =====
 function loadAmounts() {
   const el = document.getElementById('amounts');
   el.innerHTML = '';
@@ -92,28 +108,23 @@ function loadAmounts() {
 
     div.onclick = () => {
       amount = p;
-      alert('Выбрано: ' + p);
+      alert('Выбрано: ' + p + ' ₽');
     };
 
     el.appendChild(div);
   });
 }
 
-// ПОКУПКА
+// ===== ПОКУПКА =====
 function buy() {
   let nick = document.getElementById('nickname').value;
 
   if (!nick) return alert('Введите ник');
   if (!amount) return alert('Выберите сумму');
 
-  alert(`Покупка:\n${game}\n${server}\n${nick}\n${amount}₽`);
-}
+  alert(`Покупка:\nИгра: ${game}\nСервер: ${server}\nНик: ${nick}\nСумма: ${amount}₽`);
 
-// ЭКРАНЫ
-function switchScreen(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
+  // 👉 ВСТАВЬ СВОЮ ССЫЛКУ ОПЛАТЫ НИЖЕ
+  // window.location.href = "https://your-payment-link";
 }
-
-function goHome() { switchScreen('home'); }
-function goServers() { switchScreen('servers'); }
+</script>

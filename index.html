@@ -49,17 +49,12 @@ input {
   padding: 12px;
   border-radius: 10px;
   border: none;
-  margin: 10px 0;
-}
-
-.pay-btn {
-  background: linear-gradient(90deg, #4da3ff, #2a7fff);
-}
-
-.back {
-  color: #aaa;
-  cursor: pointer;
   margin-bottom: 10px;
+}
+
+#serversContainer {
+  max-height: 300px;
+  overflow-y: auto;
 }
 </style>
 </head>
@@ -83,96 +78,36 @@ input {
 
 <!-- СЕРВЕРА -->
 <div id="servers" class="screen card">
-<div class="back" onclick="goHome()">⬅ Назад</div>
+<div onclick="goHome()">⬅ Назад</div>
 <h3>ВЫБОР СЕРВЕРА</h3>
+
 <div id="serversList"></div>
 </div>
 
 <!-- ПОКУПКА -->
 <div id="buy" class="screen card">
-<div class="back" onclick="goServers()">⬅ Назад</div>
-
-<h3>ПОКУПКА</h3>
+<div onclick="goServers()">⬅ Назад</div>
 
 <input id="nickname" placeholder="Введите ник">
-
 <div id="amounts"></div>
 
-<div class="btn pay-btn" onclick="buy()">КУПИТЬ</div>
+<div class="btn" onclick="buy()">КУПИТЬ</div>
 </div>
 
 </div>
 
 <script>
+// ===== СОСТОЯНИЕ =====
 let game = '';
 let server = '';
 let amount = 0;
 
-// ОТКРЫТЬ СЕРВЕРА
-function openServers(g) {
-  game = g;
-  switchScreen('servers');
-  loadServers();
-}
+// ===== ДАННЫЕ =====
+const brColors = ["RED","GREEN","BLUE","YELLOW","ORANGE","PURPLE","LIME","PINK","CHERRY","BLACK","INDIGO","WHITE","MAGENTA","CRIMSON","GOLD","AZURE","PLATINUM","AQUA","GRAY","ICE"];
 
-// СЕРВЕРА
-function loadServers() {
-  const el = document.getElementById('serversList');
-  el.innerHTML = '';
+const brCities = ["CHILLI","CHOCO","MOSCOW","SPB","UFA","SOCHI","KAZAN","SAMARA","ROSTOV","ANAPA","EKB","KRASNODAR","ARZAMAS","NOVOSIB","GROZNY","SARATOV","OMSK","IRKUTSK","VOLGOGRAD","VORONEZH","BELGOROD","MAKHACHKALA","VLADIKAVKAZ","VLADIVOSTOK","KALININGRAD","CHELYABINSK","KRASNOYARSK","CHEBOKSARY","KHABAROVSK","PERM","TULA","RYAZAN","MURMANSK","PENZA","KURSK","ARKHANGELSK","ORENBURG","KIROV","KEMEROVO","TYUMEN","TOLYATTI","IVANOVO","STAVROPOL","SMOLENSK","PSKOV","BRYANSK","OREL","YAROSLAVL","BARNAUL","LIPETSK","ULYANOVSK","YAKUTSK","TAMBOV","BRATSK","ASTRAKHAN","CHITA","KOSTROMA","VLADIMIR","KALUGA","NOVGOROD","TAGANROG","VOLOGDA","TVER","TOMSK","IZHEVSK","SURGUT","PODOLSK","MAGADAN","CHEREPOVETS","NORILSK"];
 
-  let list = game === 'gta'
-    ? ['Downtown','Strawberry','Vinewood']
-    : ['Москва','Питер','Казань'];
-
-  list.forEach(s => {
-    let div = document.createElement('div');
-    div.className = 'btn server-btn';
-    div.innerText = s;
-    div.onclick = () => openBuy(s);
-    el.appendChild(div);
-  });
-}
-
-// ОТКРЫТЬ ПОКУПКУ
-function openBuy(s) {
-  server = s;
-  switchScreen('buy');
-  loadAmounts();
-}
-
-// СУММЫ
-function loadAmounts() {
-  const el = document.getElementById('amounts');
-  el.innerHTML = '';
-
-  let prices = [100, 300, 500, 1000];
-
-  prices.forEach(p => {
-    let div = document.createElement('div');
-    div.className = 'btn';
-    div.innerText = p + ' ₽';
-    div.onclick = () => {
-      amount = p;
-      alert('Выбрано: ' + p);
-    };
-    el.appendChild(div);
-  });
-}
-
-// ПОКУПКА
-function buy() {
-  let nick = document.getElementById('nickname').value;
-
-  if (!nick) return alert('Введите ник');
-  if (!amount) return alert('Выберите сумму');
-
-  alert(`Покупка:\nИгра: ${game}\nСервер: ${server}\nНик: ${nick}\nСумма: ${amount}₽`);
-
-  // ТУТ ТВОЯ ССЫЛКА ОПЛАТЫ
-  // window.location.href = "https://your-payment-link";
-}
-
-// ПЕРЕКЛЮЧЕНИЕ
+// ===== НАВИГАЦИЯ =====
 function switchScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
@@ -180,6 +115,86 @@ function switchScreen(id) {
 
 function goHome() { switchScreen('home'); }
 function goServers() { switchScreen('servers'); }
+
+// ===== ОТКРЫТИЕ =====
+function openServers(g) {
+  game = g;
+  switchScreen('servers');
+  loadServers();
+}
+
+// ===== СЕРВЕРА =====
+function loadServers() {
+  const el = document.getElementById('serversList');
+
+  el.innerHTML = `
+    <input id="search" placeholder="Поиск сервера..." oninput="filterServers()">
+    <div id="serversContainer"></div>
+  `;
+
+  let list = game === 'gta'
+    ? ['Downtown','Strawberry','Vinewood']
+    : [...brColors, ...brCities];
+
+  renderServers(list);
+}
+
+function renderServers(list) {
+  const container = document.getElementById('serversContainer');
+  container.innerHTML = '';
+
+  list.forEach(name => {
+    let div = document.createElement('div');
+    div.className = 'btn server-btn';
+    div.innerText = name;
+
+    div.onclick = () => openBuy(name);
+
+    container.appendChild(div);
+  });
+}
+
+// ===== ПОИСК =====
+function filterServers() {
+  const value = document.getElementById('search').value.toLowerCase();
+
+  let all = game === 'gta'
+    ? ['Downtown','Strawberry','Vinewood']
+    : [...brColors, ...brCities];
+
+  renderServers(all.filter(s => s.toLowerCase().includes(value)));
+}
+
+// ===== ПОКУПКА =====
+function openBuy(s) {
+  server = s;
+  switchScreen('buy');
+  loadAmounts();
+}
+
+function loadAmounts() {
+  const el = document.getElementById('amounts');
+  el.innerHTML = '';
+
+  [100,300,500,1000].forEach(p => {
+    let div = document.createElement('div');
+    div.className = 'btn';
+    div.innerText = p + ' ₽';
+
+    div.onclick = () => amount = p;
+
+    el.appendChild(div);
+  });
+}
+
+function buy() {
+  let nick = document.getElementById('nickname').value;
+
+  if (!nick) return alert('Введите ник');
+  if (!amount) return alert('Выберите сумму');
+
+  alert(`Покупка:\n${game}\n${server}\n${nick}\n${amount}₽`);
+}
 </script>
 
 </body>

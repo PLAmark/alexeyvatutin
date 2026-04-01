@@ -2,79 +2,94 @@
 <html lang="ru">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <title>Black Russia Store</title>
-    
-    <!-- 1. ПОДКЛЮЧАЕМ ПРАВИЛЬНЫЙ СКРИПТ ТЕЛЕГРАМ -->
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-
-    <!-- 2. ИСПРАВЛЕННЫЕ ПУТИ К СТИЛЯМ (БЕЗ СЛЭША В НАЧАЛЕ) -->
+    <!-- Подключаем Telegram SDK -->
+    <script src="https://telegram.org"></script>
+    <!-- Подключаем оригинальные стили из твоей папки _next -->
     <link rel="stylesheet" href="_next/static/chunks/b756ec20543b9ab7.css">
-    
     <style>
-        body { background: #0a0a0a; color: white; font-family: sans-serif; }
-        .loading-screen { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; background: #0a0a0a; z-index: 100; }
-        .card-custom { background: rgba(25, 25, 25, 0.8); border: 1px solid #333; border-radius: 20px; padding: 20px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
+        body { background: radial-gradient(circle at center, #1a56ab 0%, #0a0a0a 100%); color: white; font-family: sans-serif; margin: 0; overflow: hidden; height: 100vh; }
+        .page { display: none; padding: 20px; padding-bottom: 100px; height: 100vh; overflow-y: auto; box-sizing: border-box; }
+        .page.active { display: block; }
+        .card { background: rgba(255,255,255,0.05); backdrop-filter: blur(15px); border-radius: 25px; padding: 20px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.1); }
+        .buy-btn { background: linear-gradient(to right, #3f89f8, #0f57c1); color: white; border: none; padding: 12px; border-radius: 12px; font-weight: bold; width: 100%; cursor: pointer; margin-top: 10px; }
+        
+        /* Нижнее меню */
+        .nav { position: fixed; bottom: 15px; width: 90%; left: 5%; height: 70px; background: rgba(0,0,0,0.8); backdrop-filter: blur(20px); border-radius: 20px; display: flex; justify-content: space-around; align-items: center; border: 1px solid rgba(255,255,255,0.1); z-index: 100; }
+        .nav-item { text-align: center; opacity: 0.5; font-size: 10px; transition: 0.3s; cursor: pointer; }
+        .nav-item.active { opacity: 1; color: #3f89f8; }
+        .nav-icon { font-size: 24px; display: block; }
     </style>
+</head>
+<body>
+
+    <!-- СТРАНИЦА: ГЛАВНАЯ -->
+    <div id="home" class="page active">
+        <h2 style="text-align: center; color: #3f89f8;">МАГАЗИН ВАЛЮТЫ</h2>
+        <div class="card">
+            <div style="font-weight: bold;">500,000 ВИРТ</div>
+            <div style="color: #3f89f8;">150 ₽</div>
+            <button class="buy-btn" onclick="sendOrder('500k_virts')">КУПИТЬ</button>
+        </div>
+        <div class="card">
+            <div style="font-weight: bold;">1,000,000 ВИРТ</div>
+            <div style="color: #3f89f8;">280 ₽</div>
+            <button class="buy-btn" onclick="sendOrder('1kk_virts')">КУПИТЬ</button>
+        </div>
+    </div>
+
+    <!-- СТРАНИЦА: ПРОФИЛЬ -->
+    <div id="profile" class="page">
+        <h2 style="text-align: center;">МОЙ ПРОФИЛЬ</h2>
+        <div class="card">
+            <p>ID: <span id="user_id">Загрузка...</span></p>
+            <p>Имя: <span id="user_name">Игрок</span></p>
+            <p>Покупок: 0</p>
+        </div>
+    </div>
+
+    <!-- СТРАНИЦА: ПОМОЩЬ -->
+    <div id="help" class="page">
+        <h2 style="text-align: center;">ПОДДЕРЖКА</h2>
+        <div class="card">
+            <p>Возникли проблемы с оплатой или получением?</p>
+            <button class="buy-btn" onclick="window.open('https://t.me')">СВЯЗАТЬСЯ С АДМИНОМ</button>
+        </div>
+    </div>
+
+    <!-- НИЖНЯЯ НАВИГАЦИЯ -->
+    <div class="nav">
+        <div class="nav-item" onclick="showPage('profile')"><span class="nav-icon">👤</span>Профиль</div>
+        <div class="nav-item active" onclick="showPage('home')"><span class="nav-icon">🏠</span>Главная</div>
+        <div class="nav-item" onclick="showPage('help')"><span class="nav-icon">💬</span>Помощь</div>
+    </div>
 
     <script>
-        window.onload = function() {
-            const tg = window.Telegram.WebApp;
-            tg.expand();
-            tg.ready();
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+        tg.ready();
 
-            // Скрываем экран загрузки через 1.5 секунды
-            setTimeout(() => {
-                const loader = document.getElementById('loader');
-                if(loader) loader.style.display = 'none';
-            }, 1500);
+        // Отображение данных пользователя
+        if (tg.initDataUnsafe.user) {
+            document.getElementById('user_id').innerText = tg.initDataUnsafe.user.id;
+            document.getElementById('user_name').innerText = tg.initDataUnsafe.user.first_name;
+        }
 
-            // Обработка кликов по кнопкам (связь с твоим VDS)
-            document.addEventListener('click', function(e) {
-                const btn = e.target.closest('button');
-                if (btn) {
-                    const itemName = btn.getAttribute('data-item') || btn.innerText;
-                    tg.sendData(itemName); 
-                    tg.close();
-                }
-            });
-        };
+        // Переключение вкладок
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            
+            document.getElementById(pageId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        // Функция покупки
+        function sendOrder(item) {
+            tg.sendData(item); // Данные улетают боту на VDS
+            tg.close();
+        }
     </script>
-</head>
-<body class="antialiased">
-
-    <div id="loader" class="loading-screen">
-        <p>Загрузка магазина...</p>
-    </div>
-
-    <div style="padding: 20px; text-align: center;">
-        <header style="width: 100%; padding: 20px; display: flex; justify-content: flex-end; background: linear-gradient(to bottom, #0d49a1, transparent);">
-            <div style="background: white; color: black; padding: 8px 16px; border-radius: 15px; font-weight: bold; font-size: 14px;">Магазин Активен</div>
-        </header>
-
-        <h1 style="color: #3f89f8; margin-top: 40px; font-size: 24px;">BLACK RUSSIA STORE</h1>
-        <p style="opacity: 0.6; margin-bottom: 40px;">Лучший курс игровой валюты</p>
-
-        <!-- Твои товары -->
-        <div class="card-custom">
-            <div style="text-align: left;">
-                <div style="font-weight: bold; font-size: 18px;">500,000 Вирт</div>
-                <div style="color: #3f89f8; font-weight: bold;">150 ₽</div>
-            </div>
-            <button data-item="500k_virts" style="background: linear-gradient(to right, #3f89f8, #0f57c1); color: white; border: none; padding: 12px 24px; border-radius: 12px; font-weight: bold; cursor: pointer;">КУПИТЬ</button>
-        </div>
-
-        <div class="card-custom">
-            <div style="text-align: left;">
-                <div style="font-weight: bold; font-size: 18px;">1,000,000 Вирт</div>
-                <div style="color: #3f89f8; font-weight: bold;">280 ₽</div>
-            </div>
-            <button data-item="1kk_virts" style="background: linear-gradient(to right, #3f89f8, #0f57c1); color: white; border: none; padding: 12px 24px; border-radius: 12px; font-weight: bold; cursor: pointer;">КУПИТЬ</button>
-        </div>
-    </div>
-
-    <!-- Подключаем оригинальные скрипты (БЕЗ СЛЭША) -->
-    <script src="_next/static/chunks/1987c84130c2f8d0.js" async></script>
-    <script src="_next/static/chunks/9c3fa0da01deaa57.js" async></script>
 </body>
 </html>

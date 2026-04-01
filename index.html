@@ -2,82 +2,85 @@
 <html lang="ru">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <title>Black Russia Store</title>
-    
-    <!-- ПОДКЛЮЧАЕМ ТЕЛЕГРАМ -->
     <script src="https://telegram.org"></script>
-
-    <!-- ИСПРАВЛЕННЫЕ ПУТИ К СТИЛЯМ (БЕЗ СЛЭША В НАЧАЛЕ) -->
-    <link rel="stylesheet" href="_next/static/chunks/b756ec20543b9ab7.css">
-    
     <style>
-        body { background: #0a0a0a; color: white; font-family: sans-serif; }
-        .loading-screen { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; background: #0a0a0a; z-index: 100; }
-        /* Стиль для твоих карточек, чтобы они выглядели как в оригинале */
-        .card-custom { background: rgba(25, 25, 25, 0.8); border: 1px solid #333; border-radius: 20px; padding: 20px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
+        :root { --blue-dark: #0d49a1; --blue-light: #3f89f8; --bg-dark: #0a0a0a; }
+        body {
+            margin: 0; padding: 0; background: radial-gradient(circle at center, #1a56ab 0%, #0a0a0a 100%);
+            color: white; font-family: 'Segoe UI', Roboto, sans-serif; display: flex; flex-direction: column; align-items: center; min-height: 100vh; overflow: hidden;
+        }
+        /* Центральный блок */
+        .main-card {
+            background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1);
+            width: 90%; max-width: 400px; border-radius: 30px; margin-top: 40px; padding: 25px; text-align: center;
+        }
+        .section-title { font-size: 18px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px; }
+        
+        /* Кнопки выбора игры */
+        .game-btn {
+            width: 100%; height: 65px; border-radius: 18px; border: none; margin-bottom: 12px;
+            display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 20px;
+            cursor: pointer; transition: 0.2s; position: relative;
+        }
+        .btn-gta { background: linear-gradient(to right, #f4b400, #ffcc33); color: black; }
+        .btn-br { background: linear-gradient(to right, #e61e22, #f44336); color: white; }
+        .game-btn:active { transform: scale(0.96); }
+
+        /* Нижнее меню */
+        .nav-bar {
+            position: fixed; bottom: 20px; width: 90%; max-width: 400px; height: 70px;
+            background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(20px); border-radius: 20px;
+            display: flex; justify-content: space-around; align-items: center; border: 1px solid rgba(255,255,255,0.1);
+        }
+        .nav-item { text-align: center; opacity: 0.6; font-size: 10px; cursor: pointer; }
+        .nav-active { opacity: 1; color: var(--blue-light); }
+        .nav-icon { font-size: 24px; display: block; margin-bottom: 2px; }
+
+        .referral-btn {
+            background: var(--blue-light); color: white; border: none; width: 100%; 
+            padding: 12px; border-radius: 12px; font-weight: bold; margin-top: 15px; cursor: pointer;
+        }
     </style>
+</head>
+<body>
+
+    <div class="main-card">
+        <div class="section-title">Главная</div>
+        <p style="font-size: 12px; opacity: 0.5;">История последних покупок загружается...</p>
+        
+        <div class="section-title" style="margin-top: 30px;">Выбор игры:</div>
+        
+        <button class="game-btn btn-gta" onclick="buy('GTA 5 RP')">GTA 5 RP</button>
+        <button class="game-btn btn-br" onclick="buy('BLACK RUSSIA')">BLACK RUSSIA</button>
+
+        <div style="background: rgba(0,0,0,0.3); padding: 10px; border-radius: 12px; font-size: 11px; margin-top: 15px; border-left: 4px solid var(--blue-light);">
+            ℹ️ Выберите нужный сервер, чтобы начать операцию
+        </div>
+
+        <div class="section-title" style="margin-top: 30px;">Реферальная система</div>
+        <p style="font-size: 11px; opacity: 0.6;">Приглашайте друзей и получайте бонусы!</p>
+        <button class="referral-btn">СКОПИРОВАТЬ ССЫЛКУ</button>
+    </div>
+
+    <div class="nav-bar">
+        <div class="nav-item"><span class="nav-icon">👤</span>Профиль</div>
+        <div class="nav-item nav-active"><span class="nav-icon">🏠</span>Главная</div>
+        <div class="nav-item"><span class="nav-icon">🔗</span>Рефералка</div>
+        <div class="nav-item"><span class="nav-icon">💬</span>Помощь</div>
+    </div>
 
     <script>
-        window.onload = function() {
-            const tg = window.Telegram.WebApp;
-            tg.expand();
-            tg.ready();
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+        tg.ready();
 
-            // Скрываем загрузку через секунду
-            setTimeout(() => {
-                document.getElementById('loader').style.display = 'none';
-            }, 1000);
-
-            // Обработка нажатий на КУПИТЬ
-            document.addEventListener('click', function(e) {
-                const btn = e.target.closest('button');
-                if (btn) {
-                    // Берем текст из карточки (например, 500.000 Вирт)
-                    const card = btn.closest('.card-custom');
-                    const itemName = card ? card.querySelector('.item-title').innerText : "Товар";
-                    tg.sendData(itemName); // Шлем боту на VDS
-                    tg.close();
-                }
-            });
-        };
+        function buy(game) {
+            // Передаем название игры твоему боту на VDS
+            tg.sendData("Выбрана игра: " + game);
+            tg.close();
+        }
     </script>
-</head>
-<body class="antialiased">
-
-    <div id="loader" class="loading-screen">
-        <p>Загрузка магазина...</p>
-    </div>
-
-    <div style="padding: 20px; text-align: center;">
-        <header style="width: 100%; padding: 20px; display: flex; justify-content: flex-end; background: linear-gradient(to bottom, #0d49a1, transparent);">
-            <div style="background: white; color: black; padding: 8px 16px; border-radius: 15px; font-weight: bold; font-size: 14px;">Магазин Активен</div>
-        </header>
-
-        <h1 style="color: #3f89f8; margin-top: 40px; font-size: 24px;">BLACK RUSSIA STORE</h1>
-        <p style="opacity: 0.6; margin-bottom: 40px;">Лучший курс игровой валюты</p>
-
-        <!-- Твои товары (дизайн 1 в 1 как на оригинале) -->
-        <div class="card-custom">
-            <div style="text-align: left;">
-                <div class="item-title" style="font-weight: bold; font-size: 18px;">500,000 Вирт</div>
-                <div style="color: #3f89f8; font-weight: bold;">150 ₽</div>
-            </div>
-            <button style="background: linear-gradient(to right, #3f89f8, #0f57c1); color: white; border: none; padding: 12px 24px; border-radius: 12px; font-weight: bold; cursor: pointer;">КУПИТЬ</button>
-        </div>
-
-        <div class="card-custom">
-            <div style="text-align: left;">
-                <div class="item-title" style="font-weight: bold; font-size: 18px;">1,000,000 Вирт</div>
-                <div style="color: #3f89f8; font-weight: bold;">280 ₽</div>
-            </div>
-            <button style="background: linear-gradient(to right, #3f89f8, #0f57c1); color: white; border: none; padding: 12px 24px; border-radius: 12px; font-weight: bold; cursor: pointer;">КУПИТЬ</button>
-        </div>
-
-    </div>
-
-    <!-- Твои оригинальные скрипты для поддержки дизайна (исправленные пути) -->
-    <script src="_next/static/chunks/1987c84130c2f8d0.js" async></script>
-    <script src="_next/static/chunks/9c3fa0da01deaa57.js" async></script>
 </body>
 </html>

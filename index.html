@@ -56,6 +56,20 @@ input {
   max-height: 300px;
   overflow-y: auto;
 }
+
+.discounts {
+  background: rgba(255,255,255,0.1);
+  padding: 10px;
+  border-radius: 10px;
+  margin: 10px 0;
+  font-size: 14px;
+}
+
+.old-price {
+  text-decoration: line-through;
+  color: #aaa;
+  margin-top: -5px;
+}
 </style>
 </head>
 
@@ -86,12 +100,27 @@ input {
 
 <!-- ПОКУПКА -->
 <div id="buy" class="screen card">
+
 <div onclick="goServers()">⬅ Назад</div>
 
+<h3>ПОКУПКА</h3>
+
 <input id="nickname" placeholder="Введите ник">
-<div id="amounts"></div>
+
+<input id="amountInput" type="number" placeholder="Сколько миллионов?" oninput="updatePrice()">
+
+<div class="discounts">
+  🔥 Скидки:
+  <div>от 10кк — 45₽</div>
+  <div>от 50кк — 40₽</div>
+  <div>от 100кк — 35₽</div>
+</div>
+
+<p id="priceText">Цена: 0 ₽</p>
+<p id="oldPrice" class="old-price"></p>
 
 <div class="btn" onclick="buy()">КУПИТЬ</div>
+
 </div>
 
 </div>
@@ -116,7 +145,7 @@ function switchScreen(id) {
 function goHome() { switchScreen('home'); }
 function goServers() { switchScreen('servers'); }
 
-// ===== ОТКРЫТИЕ =====
+// ===== ОТКРЫТЬ СЕРВЕРА =====
 function openServers(g) {
   game = g;
   switchScreen('servers');
@@ -169,31 +198,51 @@ function filterServers() {
 function openBuy(s) {
   server = s;
   switchScreen('buy');
-  loadAmounts();
 }
 
-function loadAmounts() {
-  const el = document.getElementById('amounts');
-  el.innerHTML = '';
+// ===== ЦЕНА СО СКИДКАМИ =====
+function updatePrice() {
+  const val = parseInt(document.getElementById('amountInput').value) || 0;
 
-  [100,300,500,1000].forEach(p => {
-    let div = document.createElement('div');
-    div.className = 'btn';
-    div.innerText = p + ' ₽';
+  let basePrice = val * 50;
+  let pricePerMillion = 50;
 
-    div.onclick = () => amount = p;
+  if (val >= 100) pricePerMillion = 35;
+  else if (val >= 50) pricePerMillion = 40;
+  else if (val >= 10) pricePerMillion = 45;
 
-    el.appendChild(div);
-  });
+  const total = val * pricePerMillion;
+
+  document.getElementById('priceText').innerText =
+    `Цена: ${total} ₽ (${pricePerMillion}₽/кк)`;
+
+  if (pricePerMillion !== 50) {
+    document.getElementById('oldPrice').innerText =
+      `Без скидки: ${basePrice} ₽`;
+  } else {
+    document.getElementById('oldPrice').innerText = '';
+  }
+
+  amount = total;
 }
 
+// ===== ПОКУПКА =====
 function buy() {
   let nick = document.getElementById('nickname').value;
+  let millions = parseInt(document.getElementById('amountInput').value);
 
   if (!nick) return alert('Введите ник');
-  if (!amount) return alert('Выберите сумму');
+  if (!millions || millions <= 0) return alert('Введите количество');
 
-  alert(`Покупка:\n${game}\n${server}\n${nick}\n${amount}₽`);
+  alert(`Покупка:
+Игра: ${game}
+Сервер: ${server}
+Ник: ${nick}
+Кол-во: ${millions}кк
+Цена: ${amount}₽`);
+
+  // 👉 ВСТАВЬ ССЫЛКУ ОПЛАТЫ
+  // window.location.href = "https://your-payment-link";
 }
 </script>
 

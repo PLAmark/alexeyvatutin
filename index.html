@@ -125,10 +125,37 @@
       justify-content: space-between;
       gap: 14px;
       min-height: 72px;
-      background: rgba(255, 255, 255, 0.08);
+      color: #ffffff;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.24);
     }
 
-    .btn-game:hover,
+    .btn-game::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0));
+      pointer-events: none;
+    }
+
+    .btn-game-br {
+      background: linear-gradient(135deg, #d33b4e, #7a1021);
+    }
+
+    .btn-game-mat {
+      background: linear-gradient(135deg, #b85cff, #5b1cd1);
+    }
+
+    .btn-game-gta {
+      background: linear-gradient(135deg, #f0b51c, #986000);
+    }
+
+    .btn-game:hover {
+      filter: brightness(1.05);
+    }
+
     .btn-secondary:hover,
     .server-btn:hover {
       background: var(--bg-soft-hover);
@@ -137,20 +164,39 @@
     .btn-primary {
       background: linear-gradient(90deg, #4da6ff, #2a7fff);
       text-align: center;
+      box-shadow: 0 12px 30px rgba(42, 127, 255, 0.24);
     }
 
     .btn-primary.center {
       text-align: center;
     }
 
+    .btn-sell {
+      background: linear-gradient(90deg, #ff7a45, #ff4d6d);
+      text-align: center;
+      box-shadow: 0 12px 30px rgba(255, 97, 107, 0.24);
+    }
+
     .btn-secondary {
       background: var(--bg-soft);
+    }
+
+    .game-left,
+    .game-arrow {
+      position: relative;
+      z-index: 1;
     }
 
     .game-left {
       display: flex;
       align-items: center;
       gap: 12px;
+    }
+
+    .game-arrow {
+      font-size: 20px;
+      font-weight: 900;
+      opacity: 0.92;
     }
 
     .game-icon,
@@ -171,6 +217,12 @@
       display: block;
     }
 
+    .btn-game .game-icon,
+    .btn-game .game-fallback {
+      background: rgba(255, 255, 255, 0.16);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
     .game-fallback {
       font-size: 18px;
       font-weight: 800;
@@ -189,8 +241,8 @@
 
     .game-note {
       font-size: 12px;
-      color: var(--text-muted);
-      font-weight: 500;
+      color: rgba(255, 255, 255, 0.82);
+      font-weight: 600;
     }
 
     .badge-row {
@@ -312,6 +364,59 @@
       margin-bottom: 12px;
     }
 
+    .delivery-box {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+
+    .delivery-toggle {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .delivery-option {
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text-main);
+      border-radius: var(--radius-sm);
+      padding: 13px 12px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+    }
+
+    .delivery-option.active {
+      background: linear-gradient(90deg, rgba(77, 166, 255, 0.95), rgba(42, 127, 255, 0.95));
+      border-color: rgba(125, 187, 255, 0.9);
+    }
+
+    .delivery-option:active {
+      transform: scale(0.985);
+    }
+
+    .delivery-extra {
+      display: none;
+      margin-bottom: 0;
+    }
+
+    .delivery-extra.show {
+      display: block;
+      margin-top: 6px;
+    }
+
+    .delivery-hint {
+      min-height: 18px;
+      margin: 2px 0 0;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
     .input-group label {
       display: block;
       font-size: 12px;
@@ -370,6 +475,10 @@
         grid-template-columns: 1fr;
       }
 
+      .delivery-toggle {
+        grid-template-columns: 1fr;
+      }
+
       .container {
         padding-left: 12px;
         padding-right: 12px;
@@ -387,7 +496,7 @@
         </p>
 
         <div class="stack">
-          <button class="btn btn-game" onclick="selectGame('br')">
+          <button class="btn btn-game btn-game-br" onclick="selectGame('br')">
             <span class="game-left">
               <span class="game-icon"><img src="black-russia.svg" alt="BLACK RUSSIA"></span>
               <span class="game-meta">
@@ -395,10 +504,10 @@
                 <span class="game-note">Покупка и продажа игровой валюты</span>
               </span>
             </span>
-            <span>›</span>
+            <span class="game-arrow">›</span>
           </button>
 
-          <button class="btn btn-game" onclick="selectGame('mat')">
+          <button class="btn btn-game btn-game-mat" onclick="selectGame('mat')">
             <span class="game-left">
               <span class="game-fallback">M</span>
               <span class="game-meta">
@@ -406,10 +515,10 @@
                 <span class="game-note">Покупка и продажа игровой валюты</span>
               </span>
             </span>
-            <span>›</span>
+            <span class="game-arrow">›</span>
           </button>
 
-          <button class="btn btn-game" onclick="selectGame('gta')">
+          <button class="btn btn-game btn-game-gta" onclick="selectGame('gta')">
             <span class="game-left">
               <span class="game-icon"><img src="gta5rp.svg" alt="GTA 5 RP"></span>
               <span class="game-meta">
@@ -417,7 +526,7 @@
                 <span class="game-note">Покупка и продажа игровой валюты</span>
               </span>
             </span>
-            <span>›</span>
+            <span class="game-arrow">›</span>
           </button>
 
           <button class="btn btn-secondary" onclick="openSupport()">Поддержка</button>
@@ -446,7 +555,7 @@
 
         <div class="stack">
           <button class="btn btn-primary center" onclick="openBuyFlow()">КУПИТЬ ВИРТЫ</button>
-          <button class="btn btn-secondary" onclick="sellVirts()">ПРОДАТЬ ВИРТЫ</button>
+          <button class="btn btn-sell" onclick="sellVirts()">ПРОДАТЬ ВИРТЫ</button>
         </div>
 
         <div class="footer">
@@ -488,9 +597,21 @@
         <div class="selected-box">
           <div class="selected-row"><span>Игра</span><strong id="buyGameName">—</strong></div>
           <div class="selected-row"><span>Сервер</span><strong id="buyServerName">—</strong></div>
+          <div class="selected-row"><span>Получение</span><strong id="buyDeliveryMethodText">Трейдом</strong></div>
         </div>
 
         <input id="nickname" class="field" placeholder="Введите игровой ник">
+
+        <div class="delivery-box">
+          <div class="section-title">Способ получения</div>
+          <div class="delivery-toggle">
+            <button type="button" id="deliveryTradeBtn" class="delivery-option active" onclick="setDeliveryMethod('trade')">Получить трейдом</button>
+            <button type="button" id="deliveryBankBtn" class="delivery-option" onclick="setDeliveryMethod('bank')">Получить банком</button>
+          </div>
+          <input id="bankAccount" class="field delivery-extra" type="text" inputmode="numeric" placeholder="Номер банковского счёта" oninput="sanitizeBankAccount()">
+          <div id="deliveryHint" class="delivery-hint">Выдача будет отмечена как трейд.</div>
+        </div>
+
         <input id="promoInput" class="field" placeholder="Промокод (необязательно)" oninput="handlePromoInput()">
         <div id="promoStatus" class="helper-text"></div>
 
@@ -620,7 +741,8 @@
       subtotal: 0,
       promoDiscount: 0,
       total: 0,
-      virtualAmount: 0
+      virtualAmount: 0,
+      deliveryMethod: 'trade'
     };
 
     // =========================
@@ -688,6 +810,40 @@
     function formatVirtual(value) {
       if (!Number.isFinite(value) || value <= 0) return '0';
       return Number(value.toFixed(2)).toLocaleString('ru-RU');
+    }
+
+    function getDeliveryMethodLabel() {
+      return state.deliveryMethod === 'bank' ? 'Банком' : 'Трейдом';
+    }
+
+    function sanitizeBankAccount() {
+      const input = document.getElementById('bankAccount');
+      input.value = input.value.replace(/[^\d]/g, '');
+    }
+
+    function setDeliveryMethod(method) {
+      state.deliveryMethod = method === 'bank' ? 'bank' : 'trade';
+
+      const tradeBtn = document.getElementById('deliveryTradeBtn');
+      const bankBtn = document.getElementById('deliveryBankBtn');
+      const bankInput = document.getElementById('bankAccount');
+      const hint = document.getElementById('deliveryHint');
+      const label = document.getElementById('buyDeliveryMethodText');
+
+      tradeBtn.classList.toggle('active', state.deliveryMethod === 'trade');
+      bankBtn.classList.toggle('active', state.deliveryMethod === 'bank');
+      bankInput.classList.toggle('show', state.deliveryMethod === 'bank');
+
+      if (state.deliveryMethod === 'bank') {
+        hint.innerText = 'Для выдачи банком укажи номер игрового банковского счёта.';
+      } else {
+        bankInput.value = '';
+        hint.innerText = 'Выдача будет отмечена как трейд.';
+      }
+
+      if (label) {
+        label.innerText = getDeliveryMethodLabel();
+      }
     }
 
     function getPromoPercent() {
@@ -775,9 +931,11 @@
       document.getElementById('promoInput').value = '';
       document.getElementById('virtualAmount').value = '';
       document.getElementById('moneyAmount').value = '';
+      document.getElementById('bankAccount').value = '';
       document.getElementById('promoStatus').className = 'helper-text';
       document.getElementById('promoStatus').innerText = '';
       state.lastEdited = 'virtual';
+      setDeliveryMethod('trade');
       updateSummary(calculateFromVirtual(0));
       renderDiscounts();
     }
@@ -841,6 +999,7 @@
       state.server = serverName;
       document.getElementById('buyGameName').innerText = currentGame().name;
       document.getElementById('buyServerName').innerText = serverName;
+      document.getElementById('buyDeliveryMethodText').innerText = getDeliveryMethodLabel();
       renderDiscounts();
       switchScreen('buy');
     }
@@ -901,10 +1060,13 @@
     function buy() {
       const nickname = document.getElementById('nickname').value.trim();
       const promoCode = document.getElementById('promoInput').value.trim().toUpperCase();
+      const bankAccount = document.getElementById('bankAccount').value.trim();
 
       if (!state.gameKey) return alert('Сначала выбери игру.');
       if (!state.server) return alert('Сначала выбери сервер.');
       if (!nickname) return alert('Введите игровой ник.');
+      if (state.deliveryMethod === 'bank' && !bankAccount) return alert('Укажите номер игрового банковского счёта.');
+      if (state.deliveryMethod === 'bank' && !/^\d+$/.test(bankAccount)) return alert('Номер банковского счёта должен состоять только из цифр.');
       if (!state.virtualAmount || state.virtualAmount <= 0) return alert('Введите количество виртов или сумму оплаты.');
 
       const payload = {
@@ -912,6 +1074,9 @@
         game: currentGame().name,
         server: state.server,
         nickname,
+        deliveryMethod: state.deliveryMethod,
+        deliveryMethodLabel: getDeliveryMethodLabel(),
+        bankAccount: state.deliveryMethod === 'bank' ? bankAccount : null,
         promoCode: promoCode || null,
         virtualAmountKK: Number(state.virtualAmount.toFixed(2)),
         ratePerKK: state.currentRate,
@@ -927,16 +1092,27 @@
       }
 
       alert(
-        `Заявка сформирована:\n\n` +
-        `Игра: ${payload.game}\n` +
-        `Сервер: ${payload.server}\n` +
-        `Ник: ${payload.nickname}\n` +
-        `Количество: ${payload.virtualAmountKK} кк\n` +
+        `Заявка сформирована:
+
+` +
+        `Игра: ${payload.game}
+` +
+        `Сервер: ${payload.server}
+` +
+        `Ник: ${payload.nickname}
+` +
+        `Получение: ${payload.deliveryMethodLabel}
+` +
+        `${payload.bankAccount ? `Счёт: ${payload.bankAccount}
+` : ''}` +
+        `Количество: ${payload.virtualAmountKK} кк
+` +
         `К оплате: ${payload.totalRub} ₽`
       );
     }
 
     initTelegram();
+    setDeliveryMethod('trade');
     updateSummary(calculateFromVirtual(0));
   </script>
 </body>

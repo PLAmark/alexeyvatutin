@@ -1,32 +1,14 @@
-<script>
 // ===== СОСТОЯНИЕ =====
 let game = '';
 let server = '';
 let amount = 0;
 
-// ===== ДАННЫЕ BLACK RUSSIA =====
-const brColors = [
-"RED","GREEN","BLUE","YELLOW","ORANGE","PURPLE","LIME","PINK",
-"CHERRY","BLACK","INDIGO","WHITE","MAGENTA","CRIMSON","GOLD",
-"AZURE","PLATINUM","AQUA","GRAY","ICE"
-];
+// ===== ДАННЫЕ =====
+const brColors = ["RED","GREEN","BLUE","YELLOW","ORANGE","PURPLE","LIME","PINK","CHERRY","BLACK","INDIGO","WHITE","MAGENTA","CRIMSON","GOLD","AZURE","PLATINUM","AQUA","GRAY","ICE"];
 
-const brCities = [
-"CHILLI","CHOCO","MOSCOW","SPB","UFA","SOCHI","KAZAN","SAMARA",
-"ROSTOV","ANAPA","EKB","KRASNODAR","ARZAMAS","NOVOSIB","GROZNY",
-"SARATOV","OMSK","IRKUTSK","VOLGOGRAD","VORONEZH","BELGOROD",
-"MAKHACHKALA","VLADIKAVKAZ","VLADIVOSTOK","KALININGRAD",
-"CHELYABINSK","KRASNOYARSK","CHEBOKSARY","KHABAROVSK","PERM",
-"TULA","RYAZAN","MURMANSK","PENZA","KURSK","ARKHANGELSK",
-"ORENBURG","KIROV","KEMEROVO","TYUMEN","TOLYATTI","IVANOVO",
-"STAVROPOL","SMOLENSK","PSKOV","BRYANSK","OREL","YAROSLAVL",
-"BARNAUL","LIPETSK","ULYANOVSK","YAKUTSK","TAMBOV","BRATSK",
-"ASTRAKHAN","CHITA","KOSTROMA","VLADIMIR","KALUGA","NOVGOROD",
-"TAGANROG","VOLOGDA","TVER","TOMSK","IZHEVSK","SURGUT",
-"PODOLSK","MAGADAN","CHEREPOVETS","NORILSK"
-];
+const brCities = ["CHILLI","CHOCO","MOSCOW","SPB","UFA","SOCHI","KAZAN","SAMARA","ROSTOV","ANAPA","EKB","KRASNODAR","ARZAMAS","NOVOSIB","GROZNY","SARATOV","OMSK","IRKUTSK","VOLGOGRAD","VORONEZH","BELGOROD","MAKHACHKALA","VLADIKAVKAZ","VLADIVOSTOK","KALININGRAD","CHELYABINSK","KRASNOYARSK","CHEBOKSARY","KHABAROVSK","PERM","TULA","RYAZAN","MURMANSK","PENZA","KURSK","ARKHANGELSK","ORENBURG","KIROV","KEMEROVO","TYUMEN","TOLYATTI","IVANOVO","STAVROPOL","SMOLENSK","PSKOV","BRYANSK","OREL","YAROSLAVL","BARNAUL","LIPETSK","ULYANOVSK","YAKUTSK","TAMBOV","BRATSK","ASTRAKHAN","CHITA","KOSTROMA","VLADIMIR","KALUGA","NOVGOROD","TAGANROG","VOLOGDA","TVER","TOMSK","IZHEVSK","SURGUT","PODOLSK","MAGADAN","CHEREPOVETS","NORILSK"];
 
-// ===== ПЕРЕКЛЮЧЕНИЕ ЭКРАНОВ =====
+// ===== НАВИГАЦИЯ =====
 function switchScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
@@ -35,14 +17,34 @@ function switchScreen(id) {
 function goHome() { switchScreen('home'); }
 function goServers() { switchScreen('servers'); }
 
-// ===== ОТКРЫТЬ СЕРВЕРА =====
+// ===== МОДАЛКА =====
 function openServers(g) {
   game = g;
-  switchScreen('servers');
-  loadServers();
+
+  document.getElementById('modal').style.display = 'flex';
+
+  document.getElementById('modalGame').innerText =
+    g === 'gta' ? 'GTA 5 RP' : 'BLACK RUSSIA';
 }
 
-// ===== ЗАГРУЗКА СЕРВЕРОВ =====
+function closeModal() {
+  document.getElementById('modal').style.display = 'none';
+}
+
+function chooseAction(type) {
+  closeModal();
+
+  if (type === 'buy') {
+    switchScreen('servers');
+    loadServers();
+  }
+
+  if (type === 'sell') {
+    alert('Продажа скоро будет доступна');
+  }
+}
+
+// ===== СЕРВЕРА =====
 function loadServers() {
   const el = document.getElementById('serversList');
 
@@ -58,7 +60,6 @@ function loadServers() {
   renderServers(list);
 }
 
-// ===== ОТРИСОВКА =====
 function renderServers(list) {
   const container = document.getElementById('serversContainer');
   container.innerHTML = '';
@@ -74,7 +75,6 @@ function renderServers(list) {
   });
 }
 
-// ===== ПОИСК =====
 function filterServers() {
   const value = document.getElementById('search').value.toLowerCase();
 
@@ -82,49 +82,53 @@ function filterServers() {
     ? ['Downtown','Strawberry','Vinewood']
     : [...brColors, ...brCities];
 
-  const filtered = all.filter(s => s.toLowerCase().includes(value));
-
-  renderServers(filtered);
+  renderServers(all.filter(s => s.toLowerCase().includes(value)));
 }
 
 // ===== ПОКУПКА =====
 function openBuy(s) {
   server = s;
   switchScreen('buy');
-  loadAmounts();
 }
 
-// ===== СУММЫ =====
-function loadAmounts() {
-  const el = document.getElementById('amounts');
-  el.innerHTML = '';
+// ===== ЦЕНА =====
+function updatePrice() {
+  const val = parseInt(document.getElementById('amountInput').value) || 0;
 
-  let prices = [100, 300, 500, 1000];
+  let base = val * 50;
+  let per = 50;
 
-  prices.forEach(p => {
-    let div = document.createElement('div');
-    div.className = 'btn';
-    div.innerText = p + ' ₽';
+  if (val >= 100) per = 35;
+  else if (val >= 50) per = 40;
+  else if (val >= 10) per = 45;
 
-    div.onclick = () => {
-      amount = p;
-      alert('Выбрано: ' + p + ' ₽');
-    };
+  let total = val * per;
 
-    el.appendChild(div);
-  });
+  document.getElementById('priceText').innerText =
+    `Цена: ${total} ₽ (${per}₽/кк)`;
+
+  document.getElementById('oldPrice').innerText =
+    per !== 50 ? `Без скидки: ${base} ₽` : '';
+
+  amount = total;
 }
 
 // ===== ПОКУПКА =====
 function buy() {
   let nick = document.getElementById('nickname').value;
+  let millions = document.getElementById('amountInput').value;
 
   if (!nick) return alert('Введите ник');
-  if (!amount) return alert('Выберите сумму');
+  if (!millions) return alert('Введите количество');
 
-  alert(`Покупка:\nИгра: ${game}\nСервер: ${server}\nНик: ${nick}\nСумма: ${amount}₽`);
-
-  // 👉 ВСТАВЬ СВОЮ ССЫЛКУ ОПЛАТЫ НИЖЕ
-  // window.location.href = "https://your-payment-link";
+  alert(`Заказ оформлен`);
 }
-</script>
+
+// ===== ПРОЧЕЕ =====
+function openSupport() {
+  window.open("https://t.me/your_support");
+}
+
+function openInfo() {
+  switchScreen('info');
+}

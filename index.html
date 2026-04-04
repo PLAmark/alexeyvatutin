@@ -1,284 +1,943 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Game Store</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#0f1725">
+  <title>Game Store</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    :root {
+      --bg-card: rgba(14, 22, 34, 0.82);
+      --bg-soft: rgba(255, 255, 255, 0.08);
+      --bg-soft-hover: rgba(255, 255, 255, 0.12);
+      --text-main: #ffffff;
+      --text-muted: rgba(255, 255, 255, 0.72);
+      --accent: #56a8ff;
+      --success: #4ade80;
+      --danger: #ff6b81;
+      --warning: #ffd166;
+      --shadow: 0 20px 50px rgba(0, 0, 0, 0.28);
+      --radius-lg: 24px;
+      --radius-md: 16px;
+      --radius-sm: 12px;
+    }
 
-<style>
-body {
-  margin: 0;
-  font-family: Arial;
-  background: url('bg.png') no-repeat center/cover;
-  color: white;
-}
+    * {
+      box-sizing: border-box;
+    }
 
-.container {
-  max-width: 400px;
-  margin: 20px auto;
-  padding: 15px;
-}
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      color: var(--text-main);
+      background:
+        linear-gradient(180deg, rgba(5, 10, 18, 0.18), rgba(5, 10, 18, 0.55)),
+        url('bg.png') no-repeat center center / cover;
+    }
 
-.screen { display: none; }
-.active { display: block; }
+    .container {
+      width: min(100%, 440px);
+      margin: 0 auto;
+      padding: 16px 14px 24px;
+    }
 
-.card {
-  background: rgba(255,255,255,0.06);
-  padding: 20px;
-  border-radius: 20px;
-  text-align: center;
-}
+    .screen {
+      display: none;
+    }
 
-.btn {
-  margin: 10px 0;
-  padding: 14px;
-  border-radius: 12px;
-  cursor: pointer;
-  font-weight: bold;
-}
+    .screen.active {
+      display: block;
+    }
 
-.gta { background: linear-gradient(90deg, orange, red); }
-.br { background: linear-gradient(90deg, #ff4b6e, red); }
+    .card {
+      background: var(--bg-card);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(20px);
+      border-radius: var(--radius-lg);
+      padding: 18px;
+    }
 
-.server-btn {
-  background: rgba(255,255,255,0.1);
-}
+    .topbar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
 
-input {
-  width: 100%;
-  padding: 12px;
-  border-radius: 10px;
-  border: none;
-  margin-bottom: 10px;
-}
+    .back-btn {
+      width: 38px;
+      height: 38px;
+      border: none;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-main);
+      font-size: 16px;
+      cursor: pointer;
+    }
 
-#serversContainer {
-  max-height: 300px;
-  overflow-y: auto;
-}
+    h1, h2, h3, p {
+      margin: 0;
+    }
 
-.discounts {
-  background: rgba(255,255,255,0.1);
-  padding: 10px;
-  border-radius: 10px;
-  margin: 10px 0;
-  font-size: 14px;
-}
+    .title {
+      font-size: 24px;
+      font-weight: 800;
+      margin-bottom: 8px;
+      letter-spacing: 0.2px;
+    }
 
-.old-price {
-  text-decoration: line-through;
-  color: #aaa;
-}
+    .subtitle {
+      font-size: 14px;
+      line-height: 1.45;
+      color: var(--text-muted);
+      margin-bottom: 18px;
+    }
 
-.footer {
-  font-size: 11px;
-  opacity: 0.7;
-  margin-top: 15px;
-}
-</style>
+    .stack {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .btn {
+      border: none;
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      color: var(--text-main);
+      font-size: 15px;
+      font-weight: 700;
+      text-align: left;
+      transition: transform 0.15s ease, background 0.15s ease, opacity 0.15s ease;
+    }
+
+    .btn:active {
+      transform: scale(0.985);
+    }
+
+    .btn-game {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      min-height: 72px;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .btn-game:hover,
+    .btn-secondary:hover,
+    .server-btn:hover {
+      background: var(--bg-soft-hover);
+    }
+
+    .btn-primary {
+      background: linear-gradient(90deg, #4da6ff, #2a7fff);
+      text-align: center;
+    }
+
+    .btn-primary.center {
+      text-align: center;
+    }
+
+    .btn-secondary {
+      background: var(--bg-soft);
+    }
+
+    .game-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .game-icon,
+    .game-fallback {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .game-icon img {
+      max-width: 28px;
+      max-height: 28px;
+      display: block;
+    }
+
+    .game-fallback {
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .game-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .game-name {
+      font-size: 16px;
+      font-weight: 800;
+    }
+
+    .game-note {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.08);
+      font-size: 12px;
+      color: var(--text-main);
+    }
+
+    .search-box,
+    .field {
+      width: 100%;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      outline: none;
+      background: rgba(255, 255, 255, 0.07);
+      color: var(--text-main);
+      border-radius: var(--radius-sm);
+      padding: 13px 14px;
+      font-size: 15px;
+      margin-bottom: 12px;
+    }
+
+    .field::placeholder,
+    .search-box::placeholder {
+      color: rgba(255, 255, 255, 0.48);
+    }
+
+    .servers-wrapper {
+      max-height: 410px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .server-btn {
+      background: rgba(255, 255, 255, 0.08);
+      margin-bottom: 10px;
+      text-align: left;
+    }
+
+    .server-btn small {
+      display: block;
+      margin-top: 4px;
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .section-title {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin: 2px 0 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+
+    .selected-box,
+    .discounts,
+    .summary-box {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+
+    .selected-row,
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .selected-row + .selected-row,
+    .summary-row + .summary-row {
+      margin-top: 10px;
+    }
+
+    .selected-row span,
+    .summary-row span {
+      color: var(--text-muted);
+    }
+
+    .discounts-title {
+      font-size: 14px;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+
+    .discount-line {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .discount-line + .discount-line {
+      margin-top: 8px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .input-group label {
+      display: block;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      font-weight: 700;
+    }
+
+    .input-group .field {
+      margin-bottom: 0;
+    }
+
+    .helper-text {
+      min-height: 18px;
+      margin: -4px 0 12px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .helper-text.success {
+      color: var(--success);
+    }
+
+    .helper-text.warning {
+      color: var(--warning);
+    }
+
+    .summary-row strong {
+      text-align: right;
+    }
+
+    .summary-row.total {
+      padding-top: 10px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 16px;
+      font-weight: 800;
+    }
+
+    .footer {
+      margin-top: 14px;
+      font-size: 12px;
+      line-height: 1.45;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    .muted-center {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    @media (max-width: 420px) {
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+
+      .container {
+        padding-left: 12px;
+        padding-right: 12px;
+      }
+    }
+  </style>
 </head>
-
 <body>
+  <div class="container">
+    <div id="home" class="screen active">
+      <div class="card">
+        <h1 class="title">Game Store</h1>
+        <p class="subtitle">
+          Выбери игру, затем нужное действие: покупка виртов или переход к менеджеру для продажи.
+        </p>
 
-<div class="container">
+        <div class="stack">
+          <button class="btn btn-game" onclick="selectGame('br')">
+            <span class="game-left">
+              <span class="game-icon"><img src="black-russia.svg" alt="BLACK RUSSIA"></span>
+              <span class="game-meta">
+                <span class="game-name">BLACK RUSSIA</span>
+                <span class="game-note">Покупка и продажа игровой валюты</span>
+              </span>
+            </span>
+            <span>›</span>
+          </button>
 
-<!-- ГЛАВНАЯ -->
-<div id="home" class="screen active card">
+          <button class="btn btn-game" onclick="selectGame('mat')">
+            <span class="game-left">
+              <span class="game-fallback">M</span>
+              <span class="game-meta">
+                <span class="game-name">MATRESHKA RP</span>
+                <span class="game-note">Покупка и продажа игровой валюты</span>
+              </span>
+            </span>
+            <span>›</span>
+          </button>
 
-<h2>Game Store</h2>
+          <button class="btn btn-game" onclick="selectGame('gta')">
+            <span class="game-left">
+              <span class="game-icon"><img src="gta5rp.svg" alt="GTA 5 RP"></span>
+              <span class="game-meta">
+                <span class="game-name">GTA 5 RP</span>
+                <span class="game-note">Покупка и продажа игровой валюты</span>
+              </span>
+            </span>
+            <span>›</span>
+          </button>
 
-<p style="font-size:13px; opacity:0.8;">
-Продажа игровой валюты для GTA 5 RP и Black Russia
-</p>
+          <button class="btn btn-secondary" onclick="openSupport()">Поддержка</button>
+          <button class="btn btn-secondary" onclick="openInfo()">О сервисе</button>
+        </div>
 
-<div class="btn gta" onclick="openServers('gta')">
-  <img src="gta5rp.svg" height="20"> GTA 5 RP
-</div>
+        <div class="footer">
+          Не является официальным продуктом игр. Все права принадлежат их владельцам.
+        </div>
+      </div>
+    </div>
 
-<div class="btn br" onclick="openServers('br')">
-  <img src="black-russia.svg" height="20"> BLACK RUSSIA
-</div>
+    <div id="actions" class="screen">
+      <div class="card">
+        <div class="topbar">
+          <button class="back-btn" onclick="goHome()">←</button>
+          <div>
+            <div class="section-title">Выбор действия</div>
+            <h2 id="actionsTitle">Игра</h2>
+          </div>
+        </div>
 
-<div class="btn" onclick="openSupport()">📞 Поддержка</div>
-<div class="btn" onclick="openInfo()">📄 О сервисе</div>
+        <div class="badge-row">
+          <div class="badge">Игра: <strong id="actionsGameBadge">—</strong></div>
+        </div>
 
-<div class="footer">
-Не является официальным продуктом игр. Все права принадлежат их владельцам.
-</div>
+        <div class="stack">
+          <button class="btn btn-primary center" onclick="openBuyFlow()">КУПИТЬ ВИРТЫ</button>
+          <button class="btn btn-secondary" onclick="sellVirts()">ПРОДАТЬ ВИРТЫ</button>
+        </div>
 
-</div>
+        <div class="footer">
+          Продажа переводит пользователя в Telegram к менеджеру. Покупка открывает выбор сервера и форму заявки.
+        </div>
+      </div>
+    </div>
 
-<!-- СЕРВЕРА -->
-<div id="servers" class="screen card">
-<div onclick="goHome()">⬅ Назад</div>
-<h3>Выбор сервера</h3>
-<div id="serversList"></div>
-</div>
+    <div id="servers" class="screen">
+      <div class="card">
+        <div class="topbar">
+          <button class="back-btn" onclick="goActions()">←</button>
+          <div>
+            <div class="section-title">Купить вирты</div>
+            <h2>Выбор сервера</h2>
+          </div>
+        </div>
 
-<!-- ПОКУПКА -->
-<div id="buy" class="screen card">
+        <div class="badge-row">
+          <div class="badge">Игра: <strong id="serversGameBadge">—</strong></div>
+        </div>
 
-<div onclick="goServers()">⬅ Назад</div>
+        <input id="serverSearch" class="search-box" placeholder="Поиск сервера..." oninput="filterServers()">
 
-<h3>Покупка</h3>
+        <div id="serversContainer" class="servers-wrapper"></div>
+      </div>
+    </div>
 
-<input id="nickname" placeholder="Введите ник">
+    <div id="buy" class="screen">
+      <div class="card">
+        <div class="topbar">
+          <button class="back-btn" onclick="goServers()">←</button>
+          <div>
+            <div class="section-title">Оформление заказа</div>
+            <h2>Покупка виртов</h2>
+          </div>
+        </div>
 
-<input id="amountInput" type="number" placeholder="Сколько миллионов?" oninput="updatePrice()">
+        <div class="selected-box">
+          <div class="selected-row"><span>Игра</span><strong id="buyGameName">—</strong></div>
+          <div class="selected-row"><span>Сервер</span><strong id="buyServerName">—</strong></div>
+        </div>
 
-<div class="discounts">
-🔥 Скидки:
-<div>от 10кк — 45₽</div>
-<div>от 50кк — 40₽</div>
-<div>от 100кк — 35₽</div>
-</div>
+        <input id="nickname" class="field" placeholder="Введите игровой ник">
+        <input id="promoInput" class="field" placeholder="Промокод (необязательно)" oninput="handlePromoInput()">
+        <div id="promoStatus" class="helper-text"></div>
 
-<p id="priceText">Цена: 0 ₽</p>
-<p id="oldPrice" class="old-price"></p>
+        <div class="grid-2">
+          <div class="input-group">
+            <label for="virtualAmount">Количество валюты (кк)</label>
+            <input id="virtualAmount" class="field" type="number" min="0" step="0.01" placeholder="Например, 10" oninput="updateFromVirtual()">
+          </div>
+          <div class="input-group">
+            <label for="moneyAmount">Сумма оплаты (₽)</label>
+            <input id="moneyAmount" class="field" type="number" min="0" step="1" placeholder="Например, 450" oninput="updateFromMoney()">
+          </div>
+        </div>
 
-<div class="btn" onclick="buy()">КУПИТЬ</div>
+        <div class="discounts">
+          <div class="discounts-title">Тарифы и скидки</div>
+          <div id="discountsList"></div>
+        </div>
 
-<div class="footer">
-Возврат возможен в случае ошибки. Покупка добровольная.
-</div>
+        <div class="summary-box">
+          <div class="summary-row"><span>Курс</span><strong id="rateText">—</strong></div>
+          <div class="summary-row"><span>Сумма без промокода</span><strong id="subtotalText">0 ₽</strong></div>
+          <div class="summary-row"><span>Скидка по промокоду</span><strong id="promoDiscountText">0 ₽</strong></div>
+          <div class="summary-row total"><span>К оплате</span><strong id="totalText">0 ₽</strong></div>
+        </div>
 
-</div>
+        <button class="btn btn-primary center" onclick="buy()">КУПИТЬ</button>
 
-<!-- ИНФО -->
-<div id="info" class="screen card">
-<div onclick="goHome()">⬅ Назад</div>
+        <div class="footer">
+          Можно ввести либо количество виртов, либо сумму в рублях — второе поле пересчитается автоматически.
+        </div>
+      </div>
+    </div>
 
-<h3>О сервисе</h3>
+    <div id="info" class="screen">
+      <div class="card">
+        <div class="topbar">
+          <button class="back-btn" onclick="goHome()">←</button>
+          <div>
+            <div class="section-title">О сервисе</div>
+            <h2>Информация</h2>
+          </div>
+        </div>
 
-<p style="font-size:13px;">
-Мы предоставляем услуги по продаже игровой валюты для популярных онлайн-игр.
-Все операции выполняются вручную или через автоматизированные системы.
-</p>
+        <p class="muted-center" style="margin-bottom: 14px;">
+          Здесь можно оформить покупку игровой валюты через mini-app и отправить заказ в Telegram WebApp.
+        </p>
+        <p class="muted-center">
+          Продажа виртов вынесена отдельной кнопкой и ведёт напрямую к менеджеру в Telegram.
+        </p>
+      </div>
+    </div>
+  </div>
 
-<p style="font-size:13px;">
-Сервис не связан с официальными разработчиками игр.
-</p>
+  <script>
+    // =========================
+    // НАСТРОЙКИ
+    // =========================
+    const SUPPORT_URL = 'https://t.me/your_support';
+    const SELL_MANAGER_URL = 'https://t.me/your_manager';
 
-</div>
+    // Промокоды можно заменить на свои.
+    // Формат: КОД: размер_скидки_в_процентах
+    const PROMO_CODES = {
+      START5: 5,
+      BONUS7: 7,
+      VIP10: 10
+    };
 
-</div>
+    const blackRussiaServers = [
+      'RED', 'GREEN', 'BLUE', 'YELLOW', 'ORANGE', 'PURPLE', 'LIME', 'PINK', 'CHERRY', 'BLACK',
+      'INDIGO', 'WHITE', 'MAGENTA', 'CRIMSON', 'GOLD', 'AZURE', 'PLATINUM', 'AQUA', 'GRAY', 'ICE',
+      'CHILLI', 'CHOCO', 'MOSCOW', 'SPB', 'UFA', 'SOCHI', 'KAZAN', 'SAMARA', 'ROSTOV', 'ANAPA',
+      'EKB', 'KRASNODAR', 'ARZAMAS', 'NOVOSIB', 'GROZNY', 'SARATOV', 'OMSK', 'IRKUTSK', 'VOLGOGRAD',
+      'VORONEZH', 'BELGOROD', 'MAKHACHKALA', 'VLADIKAVKAZ', 'VLADIVOSTOK', 'KALININGRAD', 'CHELYABINSK',
+      'KRASNOYARSK', 'CHEBOKSARY', 'KHABAROVSK', 'PERM', 'TULA', 'RYAZAN', 'MURMANSK', 'PENZA', 'KURSK',
+      'ARKHANGELSK', 'ORENBURG', 'KIROV', 'KEMEROVO', 'TYUMEN', 'TOLYATTI', 'IVANOVO', 'STAVROPOL',
+      'SMOLENSK', 'PSKOV', 'BRYANSK', 'OREL', 'YAROSLAVL', 'BARNAUL', 'LIPETSK', 'ULYANOVSK', 'YAKUTSK',
+      'TAMBOV', 'BRATSK', 'ASTRAKHAN', 'CHITA', 'KOSTROMA', 'VLADIMIR', 'KALUGA', 'NOVGOROD', 'TAGANROG',
+      'VOLOGDA', 'TVER', 'TOMSK', 'IZHEVSK', 'SURGUT', 'PODOLSK', 'MAGADAN', 'CHEREPOVETS', 'NORILSK'
+    ];
 
-<script>
-// ===== СОСТОЯНИЕ =====
-let game = '';
-let server = '';
-let amount = 0;
+    const gtaServers = [
+      'Downtown', 'Strawberry', 'Vinewood', 'Blackberry', 'Insquad', 'Sunrise', 'Rainbow', 'Richman',
+      'Eclipse', 'La Mesa', 'Burton', 'Rockford', 'Alta', 'Del Perro', 'Davis', 'Harmony', 'Redwood',
+      'Hawick', 'Grapeseed', 'Murrieta', 'Vespucci', 'Milton', 'La Puerta', 'Senora'
+    ];
 
-// ===== ДАННЫЕ =====
-const brColors = ["RED","GREEN","BLUE","YELLOW","ORANGE","PURPLE","LIME","PINK","CHERRY","BLACK","INDIGO","WHITE","MAGENTA","CRIMSON","GOLD","AZURE","PLATINUM","AQUA","GRAY","ICE"];
+    const matreshkaServers = Array.from({ length: 34 }, (_, i) => `MATRESHKA MOBILE #${i + 1}`);
 
-const brCities = ["CHILLI","CHOCO","MOSCOW","SPB","UFA","SOCHI","KAZAN","SAMARA","ROSTOV","ANAPA","EKB","KRASNODAR","ARZAMAS","NOVOSIB","GROZNY","SARATOV","OMSK","IRKUTSK","VOLGOGRAD","VORONEZH","BELGOROD","MAKHACHKALA","VLADIKAVKAZ","VLADIVOSTOK","KALININGRAD","CHELYABINSK","KRASNOYARSK","CHEBOKSARY","KHABAROVSK","PERM","TULA","RYAZAN","MURMANSK","PENZA","KURSK","ARKHANGELSK","ORENBURG","KIROV","KEMEROVO","TYUMEN","TOLYATTI","IVANOVO","STAVROPOL","SMOLENSK","PSKOV","BRYANSK","OREL","YAROSLAVL","BARNAUL","LIPETSK","ULYANOVSK","YAKUTSK","TAMBOV","BRATSK","ASTRAKHAN","CHITA","KOSTROMA","VLADIMIR","KALUGA","NOVGOROD","TAGANROG","VOLOGDA","TVER","TOMSK","IZHEVSK","SURGUT","PODOLSK","MAGADAN","CHEREPOVETS","NORILSK"];
+    const defaultPricing = [
+      { min: 100, rate: 35 },
+      { min: 50, rate: 40 },
+      { min: 10, rate: 45 },
+      { min: 0, rate: 50 }
+    ];
 
-// ===== НАВИГАЦИЯ =====
-function switchScreen(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-}
+    const games = {
+      br: {
+        name: 'BLACK RUSSIA',
+        sellUrl: SELL_MANAGER_URL,
+        servers: blackRussiaServers,
+        pricing: defaultPricing
+      },
+      mat: {
+        name: 'MATRESHKA RP',
+        sellUrl: SELL_MANAGER_URL,
+        servers: matreshkaServers,
+        pricing: defaultPricing
+      },
+      gta: {
+        name: 'GTA 5 RP',
+        sellUrl: SELL_MANAGER_URL,
+        servers: gtaServers,
+        pricing: defaultPricing
+      }
+    };
 
-function goHome() { switchScreen('home'); }
-function goServers() { switchScreen('servers'); }
+    // =========================
+    // СОСТОЯНИЕ
+    // =========================
+    const state = {
+      gameKey: '',
+      server: '',
+      lastEdited: 'virtual',
+      currentRate: 0,
+      subtotal: 0,
+      promoDiscount: 0,
+      total: 0,
+      virtualAmount: 0
+    };
 
-// ===== ОТКРЫТЬ =====
-function openServers(g) {
-  game = g;
-  switchScreen('servers');
-  loadServers();
-}
+    // =========================
+    // TELEGRAM WEBAPP
+    // =========================
+    function initTelegram() {
+      if (!window.Telegram || !window.Telegram.WebApp) return;
+      try {
+        Telegram.WebApp.ready();
+        Telegram.WebApp.expand();
+        if (Telegram.WebApp.disableVerticalSwipes) {
+          Telegram.WebApp.disableVerticalSwipes();
+        }
+      } catch (e) {
+        console.error('Telegram WebApp init error', e);
+      }
+    }
 
-function openInfo() {
-  switchScreen('info');
-}
+    // =========================
+    // ВСПОМОГАТЕЛЬНЫЕ
+    // =========================
+    function switchScreen(id) {
+      document.querySelectorAll('.screen').forEach(screen => screen.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+    }
 
-function openSupport() {
-  window.open("https://t.me/your_support");
-}
+    function goHome() {
+      switchScreen('home');
+    }
 
-// ===== СЕРВЕРА =====
-function loadServers() {
-  const el = document.getElementById('serversList');
+    function goActions() {
+      if (!state.gameKey) return goHome();
+      renderActions();
+      switchScreen('actions');
+    }
 
-  el.innerHTML = `
-    <input id="search" placeholder="Поиск сервера..." oninput="filterServers()">
-    <div id="serversContainer"></div>
-  `;
+    function goServers() {
+      if (!state.gameKey) return goHome();
+      renderServers();
+      switchScreen('servers');
+    }
 
-  let list = game === 'gta'
-    ? ['Downtown','Strawberry','Vinewood']
-    : [...brColors, ...brCities];
+    function currentGame() {
+      return games[state.gameKey];
+    }
 
-  renderServers(list);
-}
+    function openExternal(url) {
+      if (window.Telegram && Telegram.WebApp) {
+        if (url.startsWith('https://t.me/') && Telegram.WebApp.openTelegramLink) {
+          Telegram.WebApp.openTelegramLink(url);
+          return;
+        }
+        if (Telegram.WebApp.openLink) {
+          Telegram.WebApp.openLink(url);
+          return;
+        }
+      }
+      window.open(url, '_blank');
+    }
 
-function renderServers(list) {
-  const container = document.getElementById('serversContainer');
-  container.innerHTML = '';
+    function formatMoney(value) {
+      return `${Math.round(value).toLocaleString('ru-RU')} ₽`;
+    }
 
-  list.forEach(name => {
-    let div = document.createElement('div');
-    div.className = 'btn server-btn';
-    div.innerText = name;
+    function formatVirtual(value) {
+      if (!Number.isFinite(value) || value <= 0) return '0';
+      return Number(value.toFixed(2)).toLocaleString('ru-RU');
+    }
 
-    div.onclick = () => openBuy(name);
+    function getPromoPercent() {
+      const code = document.getElementById('promoInput').value.trim().toUpperCase();
+      return PROMO_CODES[code] || 0;
+    }
 
-    container.appendChild(div);
-  });
-}
+    function getPricingForVirtual(amount) {
+      const pricing = currentGame().pricing.slice().sort((a, b) => b.min - a.min);
+      const selected = pricing.find(item => amount >= item.min) || pricing[pricing.length - 1];
+      return selected.rate;
+    }
 
-// ===== ПОИСК =====
-function filterServers() {
-  const value = document.getElementById('search').value.toLowerCase();
+    function calculateFromVirtual(amount) {
+      const validAmount = Math.max(0, Number(amount) || 0);
+      const rate = getPricingForVirtual(validAmount);
+      const subtotal = validAmount * rate;
+      const promoPercent = getPromoPercent();
+      const promoDiscount = subtotal * promoPercent / 100;
+      const total = Math.max(0, subtotal - promoDiscount);
 
-  let all = game === 'gta'
-    ? ['Downtown','Strawberry','Vinewood']
-    : [...brColors, ...brCities];
+      return {
+        virtualAmount: validAmount,
+        rate,
+        subtotal,
+        promoDiscount,
+        total
+      };
+    }
 
-  renderServers(all.filter(s => s.toLowerCase().includes(value)));
-}
+    function calculateFromMoney(moneyValue) {
+      const money = Math.max(0, Number(moneyValue) || 0);
+      const promoPercent = getPromoPercent();
+      const pricing = currentGame().pricing.slice().sort((a, b) => b.min - a.min);
 
-// ===== ПОКУПКА =====
-function openBuy(s) {
-  server = s;
-  switchScreen('buy');
-}
+      for (const tier of pricing) {
+        const effectiveRate = tier.rate * (1 - promoPercent / 100);
+        if (effectiveRate <= 0) continue;
+        const virtualAmount = money / effectiveRate;
+        if (virtualAmount >= tier.min) {
+          return calculateFromVirtual(virtualAmount);
+        }
+      }
 
-// ===== ЦЕНА =====
-function updatePrice() {
-  const val = parseInt(document.getElementById('amountInput').value) || 0;
+      return calculateFromVirtual(0);
+    }
 
-  let base = val * 50;
-  let per = 50;
+    function updateSummary(result) {
+      state.currentRate = result.rate;
+      state.subtotal = result.subtotal;
+      state.promoDiscount = result.promoDiscount;
+      state.total = result.total;
+      state.virtualAmount = result.virtualAmount;
 
-  if (val >= 100) per = 35;
-  else if (val >= 50) per = 40;
-  else if (val >= 10) per = 45;
+      document.getElementById('rateText').innerText = result.virtualAmount > 0
+        ? `${result.rate} ₽ / 1кк`
+        : '—';
+      document.getElementById('subtotalText').innerText = formatMoney(result.subtotal);
+      document.getElementById('promoDiscountText').innerText = formatMoney(result.promoDiscount);
+      document.getElementById('totalText').innerText = formatMoney(result.total);
+    }
 
-  let total = val * per;
+    function renderDiscounts() {
+      const container = document.getElementById('discountsList');
+      const pricing = currentGame().pricing.slice().sort((a, b) => a.min - b.min);
 
-  document.getElementById('priceText').innerText =
-    `Цена: ${total} ₽ (${per}₽/кк)`;
+      container.innerHTML = pricing
+        .filter(item => item.min > 0)
+        .map(item => `
+          <div class="discount-line">
+            <span>от ${item.min} кк</span>
+            <strong>${item.rate} ₽ / 1кк</strong>
+          </div>
+        `)
+        .join('') + `
+          <div class="discount-line">
+            <span>до 9.99 кк</span>
+            <strong>${pricing[0].rate} ₽ / 1кк</strong>
+          </div>
+        `;
+    }
 
-  document.getElementById('oldPrice').innerText =
-    per !== 50 ? `Без скидки: ${base} ₽` : '';
+    function resetBuyForm() {
+      document.getElementById('nickname').value = '';
+      document.getElementById('promoInput').value = '';
+      document.getElementById('virtualAmount').value = '';
+      document.getElementById('moneyAmount').value = '';
+      document.getElementById('promoStatus').className = 'helper-text';
+      document.getElementById('promoStatus').innerText = '';
+      state.lastEdited = 'virtual';
+      updateSummary(calculateFromVirtual(0));
+      renderDiscounts();
+    }
 
-  amount = total;
-}
+    // =========================
+    // ГЛАВНЫЙ ПОТОК
+    // =========================
+    function selectGame(key) {
+      state.gameKey = key;
+      state.server = '';
+      renderActions();
+      resetBuyForm();
+      switchScreen('actions');
+    }
 
-// ===== ПОКУПКА =====
-function buy() {
-  let nick = document.getElementById('nickname').value;
-  let millions = document.getElementById('amountInput').value;
+    function renderActions() {
+      const game = currentGame();
+      document.getElementById('actionsTitle').innerText = game.name;
+      document.getElementById('actionsGameBadge').innerText = game.name;
+    }
 
-  if (!nick) return alert('Введите ник');
-  if (!millions) return alert('Введите количество');
+    function openBuyFlow() {
+      if (!state.gameKey) return;
+      renderServers();
+      switchScreen('servers');
+    }
 
-  alert(`Заказ принят. После оплаты свяжемся с вами.`);
-}
-</script>
+    function renderServers(filteredList) {
+      const game = currentGame();
+      if (!filteredList) {
+        document.getElementById('serverSearch').value = '';
+      }
+      const list = filteredList || game.servers;
+      document.getElementById('serversGameBadge').innerText = game.name;
 
+      const container = document.getElementById('serversContainer');
+      container.innerHTML = '';
+
+      if (!list.length) {
+        container.innerHTML = '<p class="muted-center">Ничего не найдено по этому запросу.</p>';
+        return;
+      }
+
+      list.forEach(name => {
+        const button = document.createElement('button');
+        button.className = 'btn server-btn';
+        button.innerHTML = `<strong>${name}</strong><small>Нажми, чтобы перейти к оформлению</small>`;
+        button.onclick = () => selectServer(name);
+        container.appendChild(button);
+      });
+    }
+
+    function filterServers() {
+      const value = document.getElementById('serverSearch').value.trim().toLowerCase();
+      const game = currentGame();
+      const filtered = game.servers.filter(server => server.toLowerCase().includes(value));
+      renderServers(filtered);
+    }
+
+    function selectServer(serverName) {
+      state.server = serverName;
+      document.getElementById('buyGameName').innerText = currentGame().name;
+      document.getElementById('buyServerName').innerText = serverName;
+      renderDiscounts();
+      switchScreen('buy');
+    }
+
+    function handlePromoInput() {
+      const promoEl = document.getElementById('promoStatus');
+      const code = document.getElementById('promoInput').value.trim().toUpperCase();
+
+      promoEl.className = 'helper-text';
+      promoEl.innerText = '';
+
+      if (!code) {
+        promoEl.innerText = '';
+      } else if (PROMO_CODES[code]) {
+        promoEl.className = 'helper-text success';
+        promoEl.innerText = `Промокод активирован: скидка ${PROMO_CODES[code]}%`;
+      } else {
+        promoEl.className = 'helper-text warning';
+        promoEl.innerText = 'Промокод не найден. Заказ будет оформлен без скидки.';
+      }
+
+      if (state.lastEdited === 'money') {
+        updateFromMoney();
+      } else {
+        updateFromVirtual();
+      }
+    }
+
+    function updateFromVirtual() {
+      state.lastEdited = 'virtual';
+      const virtualValue = document.getElementById('virtualAmount').value;
+      const result = calculateFromVirtual(virtualValue);
+      document.getElementById('moneyAmount').value = result.total > 0 ? Math.round(result.total) : '';
+      updateSummary(result);
+    }
+
+    function updateFromMoney() {
+      state.lastEdited = 'money';
+      const moneyValue = document.getElementById('moneyAmount').value;
+      const result = calculateFromMoney(moneyValue);
+      document.getElementById('virtualAmount').value = result.virtualAmount > 0 ? Number(result.virtualAmount.toFixed(2)).toString() : '';
+      updateSummary(result);
+    }
+
+    function sellVirts() {
+      if (!state.gameKey) return;
+      openExternal(currentGame().sellUrl);
+    }
+
+    function openSupport() {
+      openExternal(SUPPORT_URL);
+    }
+
+    function openInfo() {
+      switchScreen('info');
+    }
+
+    function buy() {
+      const nickname = document.getElementById('nickname').value.trim();
+      const promoCode = document.getElementById('promoInput').value.trim().toUpperCase();
+
+      if (!state.gameKey) return alert('Сначала выбери игру.');
+      if (!state.server) return alert('Сначала выбери сервер.');
+      if (!nickname) return alert('Введите игровой ник.');
+      if (!state.virtualAmount || state.virtualAmount <= 0) return alert('Введите количество виртов или сумму оплаты.');
+
+      const payload = {
+        type: 'buy_order',
+        game: currentGame().name,
+        server: state.server,
+        nickname,
+        promoCode: promoCode || null,
+        virtualAmountKK: Number(state.virtualAmount.toFixed(2)),
+        ratePerKK: state.currentRate,
+        subtotalRub: Math.round(state.subtotal),
+        promoDiscountRub: Math.round(state.promoDiscount),
+        totalRub: Math.round(state.total)
+      };
+
+      if (window.Telegram && Telegram.WebApp && Telegram.WebApp.sendData) {
+        Telegram.WebApp.sendData(JSON.stringify(payload));
+        alert('Заявка отправлена в бота.');
+        return;
+      }
+
+      alert(
+        `Заявка сформирована:\n\n` +
+        `Игра: ${payload.game}\n` +
+        `Сервер: ${payload.server}\n` +
+        `Ник: ${payload.nickname}\n` +
+        `Количество: ${payload.virtualAmountKK} кк\n` +
+        `К оплате: ${payload.totalRub} ₽`
+      );
+    }
+
+    initTelegram();
+    updateSummary(calculateFromVirtual(0));
+  </script>
 </body>
 </html>

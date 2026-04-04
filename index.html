@@ -5,7 +5,77 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Game Store</title>
 
-<link rel="stylesheet" href="style.css">
+<style>
+body {
+  margin: 0;
+  font-family: Arial;
+  background: url('bg.png') no-repeat center/cover;
+  color: white;
+}
+
+.container {
+  max-width: 400px;
+  margin: 20px auto;
+  padding: 15px;
+}
+
+.screen { display: none; }
+.active { display: block; }
+
+.card {
+  background: rgba(255,255,255,0.06);
+  padding: 20px;
+  border-radius: 20px;
+  text-align: center;
+}
+
+.btn {
+  margin: 10px 0;
+  padding: 14px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.gta { background: linear-gradient(90deg, orange, red); }
+.br { background: linear-gradient(90deg, #ff4b6e, red); }
+
+.server-btn {
+  background: rgba(255,255,255,0.1);
+}
+
+input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  margin-bottom: 10px;
+}
+
+#serversContainer {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.discounts {
+  background: rgba(255,255,255,0.1);
+  padding: 10px;
+  border-radius: 10px;
+  margin: 10px 0;
+  font-size: 14px;
+}
+
+.old-price {
+  text-decoration: line-through;
+  color: #aaa;
+}
+
+.footer {
+  font-size: 11px;
+  opacity: 0.7;
+  margin-top: 15px;
+}
+</style>
 </head>
 
 <body>
@@ -17,20 +87,24 @@
 
 <h2>Game Store</h2>
 
-<p class="desc">
+<p style="font-size:13px; opacity:0.8;">
 Продажа игровой валюты для GTA 5 RP и Black Russia
 </p>
 
 <div class="btn gta" onclick="openServers('gta')">
-  <img src="gta5rp.svg"> GTA 5 RP
+  <img src="gta5rp.svg" height="20"> GTA 5 RP
 </div>
 
 <div class="btn br" onclick="openServers('br')">
-  <img src="black-russia.svg"> BLACK RUSSIA
+  <img src="black-russia.svg" height="20"> BLACK RUSSIA
 </div>
 
 <div class="btn" onclick="openSupport()">📞 Поддержка</div>
 <div class="btn" onclick="openInfo()">📄 О сервисе</div>
+
+<div class="footer">
+Не является официальным продуктом игр. Все права принадлежат их владельцам.
+</div>
 
 </div>
 
@@ -64,6 +138,10 @@
 
 <div class="btn" onclick="buy()">КУПИТЬ</div>
 
+<div class="footer">
+Возврат возможен в случае ошибки. Покупка добровольная.
+</div>
+
 </div>
 
 <!-- ИНФО -->
@@ -72,37 +150,135 @@
 
 <h3>О сервисе</h3>
 
-<p>
-Мы предоставляем услуги по продаже игровой валюты.
+<p style="font-size:13px;">
+Мы предоставляем услуги по продаже игровой валюты для популярных онлайн-игр.
+Все операции выполняются вручную или через автоматизированные системы.
+</p>
+
+<p style="font-size:13px;">
+Сервис не связан с официальными разработчиками игр.
 </p>
 
 </div>
 
 </div>
 
-<!-- 🔥 МОДАЛКА -->
-<div id="modal" class="modal">
-  <div class="modal-content">
+<script>
+// ===== СОСТОЯНИЕ =====
+let game = '';
+let server = '';
+let amount = 0;
 
-    <div class="close" onclick="closeModal()">✖</div>
+// ===== ДАННЫЕ =====
+const brColors = ["RED","GREEN","BLUE","YELLOW","ORANGE","PURPLE","LIME","PINK","CHERRY","BLACK","INDIGO","WHITE","MAGENTA","CRIMSON","GOLD","AZURE","PLATINUM","AQUA","GRAY","ICE"];
 
-    <h2>ВАЛЮТА</h2>
-    <h3 id="modalGame">BLACK RUSSIA</h3>
+const brCities = ["CHILLI","CHOCO","MOSCOW","SPB","UFA","SOCHI","KAZAN","SAMARA","ROSTOV","ANAPA","EKB","KRASNODAR","ARZAMAS","NOVOSIB","GROZNY","SARATOV","OMSK","IRKUTSK","VOLGOGRAD","VORONEZH","BELGOROD","MAKHACHKALA","VLADIKAVKAZ","VLADIVOSTOK","KALININGRAD","CHELYABINSK","KRASNOYARSK","CHEBOKSARY","KHABAROVSK","PERM","TULA","RYAZAN","MURMANSK","PENZA","KURSK","ARKHANGELSK","ORENBURG","KIROV","KEMEROVO","TYUMEN","TOLYATTI","IVANOVO","STAVROPOL","SMOLENSK","PSKOV","BRYANSK","OREL","YAROSLAVL","BARNAUL","LIPETSK","ULYANOVSK","YAKUTSK","TAMBOV","BRATSK","ASTRAKHAN","CHITA","KOSTROMA","VLADIMIR","KALUGA","NOVGOROD","TAGANROG","VOLOGDA","TVER","TOMSK","IZHEVSK","SURGUT","PODOLSK","MAGADAN","CHEREPOVETS","NORILSK"];
 
-    <p>Выберите тип операции</p>
+// ===== НАВИГАЦИЯ =====
+function switchScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
 
-    <div class="btn buy-btn" onclick="chooseAction('buy')">
-      КУПИТЬ ВИРТЫ
-    </div>
+function goHome() { switchScreen('home'); }
+function goServers() { switchScreen('servers'); }
 
-    <div class="btn sell-btn" onclick="chooseAction('sell')">
-      ПРОДАТЬ ВИРТЫ
-    </div>
+// ===== ОТКРЫТЬ =====
+function openServers(g) {
+  game = g;
+  switchScreen('servers');
+  loadServers();
+}
 
-  </div>
-</div>
+function openInfo() {
+  switchScreen('info');
+}
 
-<script src="скрипт.js"></script>
+function openSupport() {
+  window.open("https://t.me/your_support");
+}
+
+// ===== СЕРВЕРА =====
+function loadServers() {
+  const el = document.getElementById('serversList');
+
+  el.innerHTML = `
+    <input id="search" placeholder="Поиск сервера..." oninput="filterServers()">
+    <div id="serversContainer"></div>
+  `;
+
+  let list = game === 'gta'
+    ? ['Downtown','Strawberry','Vinewood']
+    : [...brColors, ...brCities];
+
+  renderServers(list);
+}
+
+function renderServers(list) {
+  const container = document.getElementById('serversContainer');
+  container.innerHTML = '';
+
+  list.forEach(name => {
+    let div = document.createElement('div');
+    div.className = 'btn server-btn';
+    div.innerText = name;
+
+    div.onclick = () => openBuy(name);
+
+    container.appendChild(div);
+  });
+}
+
+// ===== ПОИСК =====
+function filterServers() {
+  const value = document.getElementById('search').value.toLowerCase();
+
+  let all = game === 'gta'
+    ? ['Downtown','Strawberry','Vinewood']
+    : [...brColors, ...brCities];
+
+  renderServers(all.filter(s => s.toLowerCase().includes(value)));
+}
+
+// ===== ПОКУПКА =====
+function openBuy(s) {
+  server = s;
+  switchScreen('buy');
+}
+
+// ===== ЦЕНА =====
+function updatePrice() {
+  const val = parseInt(document.getElementById('amountInput').value) || 0;
+
+  let base = val * 50;
+  let per = 50;
+
+  if (val >= 100) per = 35;
+  else if (val >= 50) per = 40;
+  else if (val >= 10) per = 45;
+
+  let total = val * per;
+
+  document.getElementById('priceText').innerText =
+    `Цена: ${total} ₽ (${per}₽/кк)`;
+
+  document.getElementById('oldPrice').innerText =
+    per !== 50 ? `Без скидки: ${base} ₽` : '';
+
+  amount = total;
+}
+
+// ===== ПОКУПКА =====
+function buy() {
+  let nick = document.getElementById('nickname').value;
+  let millions = document.getElementById('amountInput').value;
+
+  if (!nick) return alert('Введите ник');
+  if (!millions) return alert('Введите количество');
+
+  alert(`Заказ принят. После оплаты свяжемся с вами.`);
+}
+</script>
 
 </body>
 </html>

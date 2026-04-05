@@ -8,20 +8,16 @@
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
     :root {
-      --bg-card: rgba(10, 22, 42, 0.88);
+      --bg-card: rgba(14, 22, 34, 0.82);
       --bg-soft: rgba(255, 255, 255, 0.08);
       --bg-soft-hover: rgba(255, 255, 255, 0.12);
       --text-main: #ffffff;
-      --text-muted: rgba(255, 255, 255, 0.74);
-      --accent-start: #4da6ff;
-      --accent-end: #2a7fff;
-      --accent-border: rgba(77, 166, 255, 0.34);
-      --sell-start: #25d0a5;
-      --sell-end: #0b8f72;
+      --text-muted: rgba(255, 255, 255, 0.72);
+      --accent: #56a8ff;
       --success: #4ade80;
-      --warning: #ffd166;
       --danger: #ff6b81;
-      --shadow: 0 18px 42px rgba(0, 0, 0, 0.26);
+      --warning: #ffd166;
+      --shadow: 0 20px 50px rgba(0, 0, 0, 0.28);
       --radius-lg: 24px;
       --radius-md: 16px;
       --radius-sm: 12px;
@@ -37,14 +33,14 @@
       font-family: Arial, sans-serif;
       color: var(--text-main);
       background:
-        linear-gradient(180deg, rgba(5, 10, 18, 0.18), rgba(5, 10, 18, 0.58)),
+        linear-gradient(180deg, rgba(5, 10, 18, 0.18), rgba(5, 10, 18, 0.55)),
         url('bg.png') no-repeat center center / cover;
     }
 
     .container {
       width: min(100%, 440px);
       margin: 0 auto;
-      padding: 16px 14px 26px;
+      padding: 16px 14px 24px;
     }
 
     .screen {
@@ -57,181 +53,11 @@
 
     .card {
       background: var(--bg-card);
-      border: 1px solid rgba(255, 255, 255, 0.07);
-      border-radius: var(--radius-lg);
-      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
       box-shadow: var(--shadow);
+      backdrop-filter: blur(20px);
+      border-radius: var(--radius-lg);
       padding: 18px;
-    }
-
-    .title {
-      font-size: 24px;
-      font-weight: 800;
-      margin: 0 0 8px;
-    }
-
-    .subtitle {
-      margin: 0 0 18px;
-      color: var(--text-muted);
-      font-size: 14px;
-      line-height: 1.45;
-    }
-
-    .stack {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .btn {
-      width: 100%;
-      border: none;
-      border-radius: var(--radius-md);
-      padding: 14px 16px;
-      color: var(--text-main);
-      font-size: 15px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: transform 0.15s ease, opacity 0.15s ease, background 0.15s ease;
-    }
-
-    .btn:active {
-      transform: scale(0.985);
-    }
-
-    .btn-primary {
-      background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
-      text-align: center;
-      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
-    }
-
-    .btn-sell {
-      background: linear-gradient(90deg, var(--sell-start), var(--sell-end));
-      text-align: center;
-      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
-    }
-
-    .btn-secondary {
-      background: var(--bg-soft);
-      text-align: left;
-    }
-
-    .btn-secondary:hover,
-    .server-btn:hover {
-      background: var(--bg-soft-hover);
-    }
-
-    .btn-game {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 14px;
-      min-height: 80px;
-      color: #ffffff;
-      position: relative;
-      overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.24);
-    }
-
-    .btn-game::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0));
-      pointer-events: none;
-    }
-
-    .btn-game-br {
-      background: linear-gradient(135deg, #d33b4e, #7a1021);
-    }
-
-    .btn-game-mat {
-      background: linear-gradient(135deg, #b85cff, #5b1cd1);
-    }
-
-    .btn-game-gta {
-      background: linear-gradient(135deg, #f0b51c, #986000);
-    }
-
-    .game-left {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      position: relative;
-      z-index: 1;
-      min-width: 0;
-    }
-
-    .game-icon {
-      width: 46px;
-      height: 46px;
-      border-radius: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      background: rgba(255, 255, 255, 0.18);
-      border: 1px solid rgba(255, 255, 255, 0.14);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.16);
-    }
-
-    .game-icon img,
-    .game-icon svg {
-      width: 30px;
-      height: 30px;
-      display: block;
-      max-width: 30px;
-      max-height: 30px;
-    }
-
-    .game-icon-mat {
-      background:
-        radial-gradient(circle at center, rgba(18, 8, 36, 0.72) 0%, rgba(18, 8, 36, 0.82) 70%),
-        rgba(255,255,255,0.18);
-      border: 1px solid rgba(255, 255, 255, 0.26);
-      box-shadow:
-        0 0 0 1px rgba(255,255,255,0.06),
-        0 8px 18px rgba(44, 8, 84, 0.24),
-        inset 0 1px 0 rgba(255,255,255,0.16);
-    }
-
-    .game-meta {
-      min-width: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      text-align: left;
-    }
-
-    .game-name {
-      font-size: 16px;
-      font-weight: 800;
-      letter-spacing: 0.2px;
-      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
-    }
-
-    .game-note {
-      font-size: 12px;
-      color: rgba(255, 255, 255, 0.9);
-      font-weight: 600;
-      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.28);
-    }
-
-    .game-arrow {
-      position: relative;
-      z-index: 1;
-      font-size: 24px;
-      line-height: 1;
-      text-shadow: 0 1px 4px rgba(0,0,0,0.28);
-    }
-
-    .footer {
-      margin-top: 14px;
-      font-size: 12px;
-      line-height: 1.45;
-      color: var(--text-muted);
-      text-align: center;
     }
 
     .topbar {
@@ -250,16 +76,177 @@
       color: var(--text-main);
       font-size: 16px;
       cursor: pointer;
-      flex-shrink: 0;
     }
 
-    .section-title {
-      font-size: 13px;
+    h1, h2, h3, p {
+      margin: 0;
+    }
+
+    .title {
+      font-size: 24px;
+      font-weight: 800;
+      margin-bottom: 8px;
+      letter-spacing: 0.2px;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      line-height: 1.45;
       color: var(--text-muted);
-      margin: 0 0 4px;
+      margin-bottom: 18px;
+    }
+
+    .stack {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .btn {
+      border: none;
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      color: var(--text-main);
+      font-size: 15px;
       font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.4px;
+      text-align: left;
+      transition: transform 0.15s ease, background 0.15s ease, opacity 0.15s ease;
+    }
+
+    .btn:active {
+      transform: scale(0.985);
+    }
+
+    .btn-game {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      min-height: 72px;
+      color: #ffffff;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.24);
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.22);
+    }
+
+    .btn-game::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0));
+      pointer-events: none;
+    }
+
+    .btn-game-br {
+      background: linear-gradient(135deg, #d33b4e, #7a1021);
+    }
+
+    .btn-game-mat {
+      background: linear-gradient(135deg, #b85cff, #5b1cd1);
+    }
+
+    .btn-game-gta {
+      background: linear-gradient(135deg, #f0b51c, #986000);
+    }
+
+    .btn-game:hover {
+      filter: brightness(1.05);
+    }
+
+    .btn-secondary:hover,
+    .server-btn:hover {
+      background: var(--bg-soft-hover);
+    }
+
+    .btn-primary {
+      background: linear-gradient(90deg, #4da6ff, #2a7fff);
+      text-align: center;
+      box-shadow: 0 12px 30px rgba(42, 127, 255, 0.24);
+    }
+
+    .btn-primary.center {
+      text-align: center;
+    }
+
+    .btn-sell {
+      background: linear-gradient(90deg, #ff7a45, #ff4d6d);
+      text-align: center;
+      box-shadow: 0 12px 30px rgba(255, 97, 107, 0.24);
+    }
+
+    .btn-secondary {
+      background: var(--bg-soft);
+    }
+
+    .game-left,
+    .game-arrow {
+      position: relative;
+      z-index: 1;
+    }
+
+    .game-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .game-arrow {
+      font-size: 20px;
+      font-weight: 900;
+      opacity: 0.92;
+    }
+
+    .game-icon,
+    .game-fallback {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .game-icon img,
+    .game-icon svg {
+      max-width: 28px;
+      max-height: 28px;
+      display: block;
+    }
+
+    .btn-game .game-icon,
+    .btn-game .game-fallback {
+      background: rgba(9, 15, 25, 0.18);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.14);
+    }
+
+    .game-fallback {
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .game-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .game-name {
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: 0.2px;
+    }
+
+    .game-note {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.92);
+      font-weight: 600;
     }
 
     .badge-row {
@@ -293,8 +280,8 @@
       margin-bottom: 12px;
     }
 
-    .search-box::placeholder,
-    .field::placeholder {
+    .field::placeholder,
+    .search-box::placeholder {
       color: rgba(255, 255, 255, 0.48);
     }
 
@@ -318,8 +305,16 @@
       font-weight: 500;
     }
 
+    .section-title {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin: 2px 0 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+
     .selected-box,
-    .delivery-box,
     .discounts,
     .summary-box {
       background: rgba(255, 255, 255, 0.08);
@@ -330,64 +325,40 @@
     }
 
     .selected-row,
-    .summary-row,
-    .discount-line {
+    .summary-row {
       display: flex;
       justify-content: space-between;
       gap: 12px;
-      line-height: 1.45;
       font-size: 14px;
+      line-height: 1.45;
     }
 
     .selected-row + .selected-row,
-    .summary-row + .summary-row,
-    .discount-line + .discount-line {
+    .summary-row + .summary-row {
       margin-top: 10px;
     }
 
     .selected-row span,
-    .summary-row span,
-    .discount-line span {
+    .summary-row span {
       color: var(--text-muted);
     }
 
-    .delivery-title,
     .discounts-title {
       font-size: 14px;
       font-weight: 800;
       margin-bottom: 10px;
     }
 
-    .delivery-toggle {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-
-    .delivery-option {
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      background: rgba(255, 255, 255, 0.05);
-      color: var(--text-main);
-      border-radius: var(--radius-sm);
-      padding: 12px 10px;
-      cursor: pointer;
+    .discount-line {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
       font-size: 14px;
-      font-weight: 800;
-      text-align: center;
+      color: var(--text-muted);
     }
 
-    .delivery-option small {
-      display: block;
-      margin-top: 5px;
-      font-size: 11px;
-      font-weight: 600;
-      color: rgba(255,255,255,0.76);
-    }
-
-    .delivery-option.active {
-      background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
-      border-color: var(--accent-border);
-      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
+    .discount-line + .discount-line {
+      margin-top: 8px;
     }
 
     .grid-2 {
@@ -395,6 +366,59 @@
       grid-template-columns: 1fr 1fr;
       gap: 12px;
       margin-bottom: 12px;
+    }
+
+    .delivery-box {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+
+    .delivery-toggle {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .delivery-option {
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text-main);
+      border-radius: var(--radius-sm);
+      padding: 13px 12px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+    }
+
+    .delivery-option.active {
+      background: linear-gradient(90deg, rgba(77, 166, 255, 0.95), rgba(42, 127, 255, 0.95));
+      border-color: rgba(125, 187, 255, 0.9);
+    }
+
+    .delivery-option:active {
+      transform: scale(0.985);
+    }
+
+    .delivery-extra {
+      display: none;
+      margin-bottom: 0;
+    }
+
+    .delivery-extra.show {
+      display: block;
+      margin-top: 6px;
+    }
+
+    .delivery-hint {
+      min-height: 18px;
+      margin: 2px 0 0;
+      font-size: 12px;
+      color: var(--text-muted);
     }
 
     .input-group label {
@@ -407,10 +431,6 @@
 
     .input-group .field {
       margin-bottom: 0;
-    }
-
-    .extra-field {
-      margin-bottom: 12px;
     }
 
     .helper-text {
@@ -428,15 +448,23 @@
       color: var(--warning);
     }
 
+    .summary-row strong {
+      text-align: right;
+    }
+
     .summary-row.total {
       padding-top: 10px;
-      border-top: 1px solid rgba(255,255,255,0.08);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
       font-size: 16px;
       font-weight: 800;
     }
 
-    .hidden {
-      display: none;
+    .footer {
+      margin-top: 14px;
+      font-size: 12px;
+      line-height: 1.45;
+      color: var(--text-muted);
+      text-align: center;
     }
 
     .muted-center {
@@ -447,7 +475,10 @@
     }
 
     @media (max-width: 420px) {
-      .grid-2,
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+
       .delivery-toggle {
         grid-template-columns: 1fr;
       }
@@ -464,7 +495,9 @@
     <div id="home" class="screen active">
       <div class="card">
         <h1 class="title">Game Store</h1>
-        <p class="subtitle">Выбери игру, затем нужное действие: покупка виртов или переход к менеджеру для продажи.</p>
+        <p class="subtitle">
+          Выбери игру, затем нужное действие: покупка виртов или переход к менеджеру для продажи.
+        </p>
 
         <div class="stack">
           <button class="btn btn-game btn-game-br" onclick="selectGame('br')">
@@ -480,55 +513,7 @@
 
           <button class="btn btn-game btn-game-mat" onclick="selectGame('mat')">
             <span class="game-left">
-              <span class="game-icon game-icon-mat" aria-hidden="true">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="none">
-  <defs>
-    <linearGradient id="g1" x1="31" y1="28" x2="79" y2="188" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#E16BFF"/>
-      <stop offset="0.5" stop-color="#B326F3"/>
-      <stop offset="1" stop-color="#7A0CC9"/>
-    </linearGradient>
-    <linearGradient id="g2" x1="80" y1="30" x2="130" y2="208" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#D75EFF"/>
-      <stop offset="0.55" stop-color="#A01FE8"/>
-      <stop offset="1" stop-color="#6507B3"/>
-    </linearGradient>
-    <linearGradient id="g3" x1="128" y1="56" x2="128" y2="226" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#B03AF4"/>
-      <stop offset="0.55" stop-color="#7D16D1"/>
-      <stop offset="1" stop-color="#55109B"/>
-    </linearGradient>
-    <linearGradient id="g4" x1="177" y1="28" x2="225" y2="188" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#E16BFF"/>
-      <stop offset="0.5" stop-color="#B326F3"/>
-      <stop offset="1" stop-color="#7A0CC9"/>
-    </linearGradient>
-    <linearGradient id="g5" x1="126" y1="36" x2="192" y2="200" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#D75EFF"/>
-      <stop offset="0.55" stop-color="#A01FE8"/>
-      <stop offset="1" stop-color="#6507B3"/>
-    </linearGradient>
-  </defs>
-
-  <!-- left outer arm -->
-  <path d="M31 30H74L121 118L79 188L31 164V30Z" fill="url(#g1)"/>
-  <!-- left inner facet -->
-  <path d="M43 30H74L112 102L94 131L43 62V30Z" fill="url(#g2)" opacity="0.96"/>
-  <!-- left lower facet -->
-  <path d="M52 103L94 131L79 188L52 103Z" fill="#9E22E6" opacity="0.95"/>
-
-  <!-- center V -->
-  <path d="M74 30H103L128 96L153 30H182L128 226L74 30Z" fill="url(#g3)"/>
-  <path d="M111 102L128 146L145 102L128 198L111 102Z" fill="#C665FF" opacity="0.58"/>
-
-  <!-- right outer arm -->
-  <path d="M225 30H182L135 118L177 188L225 164V30Z" fill="url(#g4)"/>
-  <!-- right inner facet -->
-  <path d="M213 30H182L144 102L162 131L213 62V30Z" fill="url(#g5)" opacity="0.96"/>
-  <!-- right lower facet -->
-  <path d="M204 103L162 131L177 188L204 103Z" fill="#9E22E6" opacity="0.95"/>
-</svg>
-              </span>
+              <span class="game-icon"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9Im91dGVyTGVmdCIgeDE9IjEyIiB5MT0iMTIiIHgyPSIyOCIgeTI9IjUwIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI0YzQUFGRiIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjAuNDUiIHN0b3AtY29sb3I9IiNDRjYzRkYiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjODYyQ0YwIi8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJvdXRlclJpZ2h0IiB4MT0iNTIiIHkxPSIxMiIgeDI9IjM2IiB5Mj0iNTAiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjRTE4MkZGIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iMC40NSIgc3RvcC1jb2xvcj0iI0I4NEVGRiIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiM2QTI0REUiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImNlbnRlciIgeDE9IjMyIiB5MT0iMTQiIHgyPSIzMiIgeTI9IjUwIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iIzlGNDJGRiIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiM1MjFDQzciLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgPC9kZWZzPgogIDxwb2x5Z29uIHBvaW50cz0iMTAsNTAgMTYsMTQgMjUsMTQgMzEsMzIgMjQsNTAiIGZpbGw9InVybCgjb3V0ZXJMZWZ0KSIvPgogIDxwb2x5Z29uIHBvaW50cz0iNTQsNTAgNDgsMTQgMzksMTQgMzMsMzIgNDAsNTAiIGZpbGw9InVybCgjb3V0ZXJSaWdodCkiLz4KICA8cG9seWdvbiBwb2ludHM9IjI0LDE0IDMyLDMyIDQwLDE0IDQ3LDE0IDM1LDUwIDI5LDUwIDE3LDE0IiBmaWxsPSJ1cmwoI2NlbnRlcikiLz4KICA8cG9seWdvbiBwb2ludHM9IjI3LjUsMTkgMzIsMjguNSAzNi41LDE5IDMyLDM1LjUiIGZpbGw9IiMyRjBFNjIiIG9wYWNpdHk9IjAuMzgiLz4KPC9zdmc+" alt="MATRESHKA RP"></span>
               <span class="game-meta">
                 <span class="game-name">MATRESHKA RP</span>
                 <span class="game-note">Покупка и продажа игровой валюты</span>
@@ -564,7 +549,7 @@
           <button class="back-btn" onclick="goHome()">←</button>
           <div>
             <div class="section-title">Выбор действия</div>
-            <h2 id="actionsTitle" style="margin:0;">Игра</h2>
+            <h2 id="actionsTitle">Игра</h2>
           </div>
         </div>
 
@@ -573,7 +558,7 @@
         </div>
 
         <div class="stack">
-          <button class="btn btn-primary" onclick="openBuyFlow()">КУПИТЬ ВИРТЫ</button>
+          <button class="btn btn-primary center" onclick="openBuyFlow()">КУПИТЬ ВИРТЫ</button>
           <button class="btn btn-sell" onclick="sellVirts()">ПРОДАТЬ ВИРТЫ</button>
         </div>
 
@@ -589,7 +574,7 @@
           <button class="back-btn" onclick="goActions()">←</button>
           <div>
             <div class="section-title">Купить вирты</div>
-            <h2 style="margin:0;">Выбор сервера</h2>
+            <h2>Выбор сервера</h2>
           </div>
         </div>
 
@@ -598,6 +583,7 @@
         </div>
 
         <input id="serverSearch" class="search-box" placeholder="Поиск сервера..." oninput="filterServers()">
+
         <div id="serversContainer" class="servers-wrapper"></div>
       </div>
     </div>
@@ -608,35 +594,26 @@
           <button class="back-btn" onclick="goServers()">←</button>
           <div>
             <div class="section-title">Оформление заказа</div>
-            <h2 style="margin:0;">Покупка виртов</h2>
+            <h2>Покупка виртов</h2>
           </div>
         </div>
 
         <div class="selected-box">
           <div class="selected-row"><span>Игра</span><strong id="buyGameName">—</strong></div>
           <div class="selected-row"><span>Сервер</span><strong id="buyServerName">—</strong></div>
-          <div class="selected-row"><span>Получение</span><strong id="deliveryMethodText">Трейдом</strong></div>
-        </div>
-
-        <div class="delivery-box">
-          <div class="delivery-title">Способ получения</div>
-          <div class="delivery-toggle">
-            <button type="button" id="deliveryTradeBtn" class="delivery-option active" onclick="setDeliveryMethod('trade')">
-              Получить трейдом
-              <small>Передача напрямую персонажу</small>
-            </button>
-            <button type="button" id="deliveryBankBtn" class="delivery-option" onclick="setDeliveryMethod('bank')">
-              Получить банком
-              <small>Запросим игровой банковский счёт</small>
-            </button>
-          </div>
+          <div class="selected-row"><span>Получение</span><strong id="buyDeliveryMethodText">Трейдом</strong></div>
         </div>
 
         <input id="nickname" class="field" placeholder="Введите игровой ник">
 
-        <div id="bankAccountWrapper" class="input-group extra-field hidden">
-          <label for="bankAccount">Игровой банковский счёт</label>
-          <input id="bankAccount" class="field" inputmode="numeric" placeholder="Введите номер банковского счёта">
+        <div class="delivery-box">
+          <div class="section-title">Способ получения</div>
+          <div class="delivery-toggle">
+            <button type="button" id="deliveryTradeBtn" class="delivery-option active" onclick="setDeliveryMethod('trade')">Получить трейдом</button>
+            <button type="button" id="deliveryBankBtn" class="delivery-option" onclick="setDeliveryMethod('bank')">Получить банком</button>
+          </div>
+          <input id="bankAccount" class="field delivery-extra" type="text" inputmode="numeric" placeholder="Номер банковского счёта" oninput="sanitizeBankAccount()">
+          <div id="deliveryHint" class="delivery-hint">Выдача будет отмечена как трейд.</div>
         </div>
 
         <input id="promoInput" class="field" placeholder="Промокод (необязательно)" oninput="handlePromoInput()">
@@ -665,7 +642,7 @@
           <div class="summary-row total"><span>К оплате</span><strong id="totalText">0 ₽</strong></div>
         </div>
 
-        <button class="btn btn-primary" onclick="buy()">КУПИТЬ</button>
+        <button class="btn btn-primary center" onclick="buy()">КУПИТЬ</button>
 
         <div class="footer">
           Можно ввести либо количество виртов, либо сумму в рублях — второе поле пересчитается автоматически.
@@ -679,7 +656,7 @@
           <button class="back-btn" onclick="goHome()">←</button>
           <div>
             <div class="section-title">О сервисе</div>
-            <h2 style="margin:0;">Информация</h2>
+            <h2>Информация</h2>
           </div>
         </div>
 
@@ -694,9 +671,14 @@
   </div>
 
   <script>
+    // =========================
+    // НАСТРОЙКИ
+    // =========================
     const SUPPORT_URL = 'https://t.me/alexeyvatutin';
     const SELL_MANAGER_URL = 'https://t.me/alexeyvatutin';
 
+    // Промокоды можно заменить на свои.
+    // Формат: КОД: размер_скидки_в_процентах
     const PROMO_CODES = {
       START5: 5,
       BONUS7: 7,
@@ -724,67 +706,64 @@
 
     const matreshkaServers = Array.from({ length: 34 }, (_, i) => `MATRESHKA MOBILE #${i + 1}`);
 
+    const blackRussiaPricing = [
+      { min: 100, rate: 40 },
+      { min: 10, rate: 45 },
+      { min: 0, rate: 50 }
+    ];
+
+    const matreshkaPricing = [
+      { min: 100, rate: 70 },
+      { min: 10, rate: 80 },
+      { min: 0, rate: 100 }
+    ];
+
+    const gtaPricing = [
+      { min: 50, rate: 800 },
+      { min: 10, rate: 900 },
+      { min: 5, rate: 950 },
+      { min: 0, rate: 1000 }
+    ];
+
     const games = {
       br: {
         name: 'BLACK RUSSIA',
         sellUrl: SELL_MANAGER_URL,
         servers: blackRussiaServers,
-        pricing: [
-          { min: 100, rate: 40 },
-          { min: 10, rate: 45 },
-          { min: 0, rate: 50 }
-        ],
-        theme: {
-          start: '#d33b4e',
-          end: '#7a1021',
-          border: 'rgba(211, 59, 78, 0.34)'
-        }
+        pricing: blackRussiaPricing
       },
       mat: {
         name: 'MATRESHKA RP',
         sellUrl: SELL_MANAGER_URL,
         servers: matreshkaServers,
-        pricing: [
-          { min: 100, rate: 70 },
-          { min: 10, rate: 80 },
-          { min: 0, rate: 100 }
-        ],
-        theme: {
-          start: '#b85cff',
-          end: '#5b1cd1',
-          border: 'rgba(184, 92, 255, 0.34)'
-        }
+        pricing: matreshkaPricing
       },
       gta: {
         name: 'GTA 5 RP',
         sellUrl: SELL_MANAGER_URL,
         servers: gtaServers,
-        pricing: [
-          { min: 50, rate: 800 },
-          { min: 10, rate: 900 },
-          { min: 5, rate: 950 },
-          { min: 0, rate: 1000 }
-        ],
-        theme: {
-          start: '#f0b51c',
-          end: '#986000',
-          border: 'rgba(240, 181, 28, 0.34)'
-        }
+        pricing: gtaPricing
       }
     };
 
+    // =========================
+    // СОСТОЯНИЕ
+    // =========================
     const state = {
       gameKey: '',
       server: '',
-      deliveryMethod: 'trade',
       lastEdited: 'virtual',
       currentRate: 0,
       subtotal: 0,
       promoDiscount: 0,
       total: 0,
-      virtualAmount: 0
+      virtualAmount: 0,
+      deliveryMethod: 'trade'
     };
 
+    // =========================
+    // TELEGRAM WEBAPP
+    // =========================
     function initTelegram() {
       if (!window.Telegram || !window.Telegram.WebApp) return;
       try {
@@ -798,21 +777,9 @@
       }
     }
 
-    function currentGame() {
-      return games[state.gameKey] || null;
-    }
-
-    function applyTheme(key = state.gameKey) {
-      const theme = games[key]?.theme || {
-        start: '#4da6ff',
-        end: '#2a7fff',
-        border: 'rgba(77, 166, 255, 0.34)'
-      };
-      document.documentElement.style.setProperty('--accent-start', theme.start);
-      document.documentElement.style.setProperty('--accent-end', theme.end);
-      document.documentElement.style.setProperty('--accent-border', theme.border);
-    }
-
+    // =========================
+    // ВСПОМОГАТЕЛЬНЫЕ
+    // =========================
     function switchScreen(id) {
       document.querySelectorAll('.screen').forEach(screen => screen.classList.remove('active'));
       document.getElementById(id).classList.add('active');
@@ -834,6 +801,10 @@
       switchScreen('servers');
     }
 
+    function currentGame() {
+      return games[state.gameKey];
+    }
+
     function openExternal(url) {
       if (window.Telegram && Telegram.WebApp) {
         if (url.startsWith('https://t.me/') && Telegram.WebApp.openTelegramLink) {
@@ -848,94 +819,6 @@
       window.open(url, '_blank');
     }
 
-    function openSupport() {
-      openExternal(SUPPORT_URL);
-    }
-
-    function openInfo() {
-      switchScreen('info');
-    }
-
-    function selectGame(key) {
-      state.gameKey = key;
-      state.server = '';
-      applyTheme(key);
-      resetBuyForm();
-      renderActions();
-      switchScreen('actions');
-    }
-
-    function renderActions() {
-      const game = currentGame();
-      if (!game) return;
-      document.getElementById('actionsTitle').innerText = game.name;
-      document.getElementById('actionsGameBadge').innerText = game.name;
-    }
-
-    function openBuyFlow() {
-      if (!state.gameKey) return;
-      renderServers();
-      switchScreen('servers');
-    }
-
-    function renderServers(filteredList) {
-      const game = currentGame();
-      if (!game) return;
-      const list = filteredList || game.servers;
-
-      if (!filteredList) {
-        document.getElementById('serverSearch').value = '';
-      }
-
-      document.getElementById('serversGameBadge').innerText = game.name;
-      const container = document.getElementById('serversContainer');
-      container.innerHTML = '';
-
-      if (!list.length) {
-        container.innerHTML = '<p class="muted-center">Ничего не найдено по этому запросу.</p>';
-        return;
-      }
-
-      list.forEach(name => {
-        const button = document.createElement('button');
-        button.className = 'btn server-btn';
-        button.innerHTML = `<strong>${name}</strong><small>Нажми, чтобы перейти к оформлению</small>`;
-        button.onclick = () => selectServer(name);
-        container.appendChild(button);
-      });
-    }
-
-    function filterServers() {
-      const value = document.getElementById('serverSearch').value.trim().toLowerCase();
-      const game = currentGame();
-      if (!game) return;
-      const filtered = game.servers.filter(server => server.toLowerCase().includes(value));
-      renderServers(filtered);
-    }
-
-    function selectServer(serverName) {
-      state.server = serverName;
-      const game = currentGame();
-      document.getElementById('buyGameName').innerText = game.name;
-      document.getElementById('buyServerName').innerText = serverName;
-      renderDiscounts();
-      switchScreen('buy');
-    }
-
-    function setDeliveryMethod(method) {
-      const isBank = method === 'bank';
-      state.deliveryMethod = isBank ? 'bank' : 'trade';
-
-      document.getElementById('deliveryTradeBtn').classList.toggle('active', !isBank);
-      document.getElementById('deliveryBankBtn').classList.toggle('active', isBank);
-      document.getElementById('bankAccountWrapper').classList.toggle('hidden', !isBank);
-      document.getElementById('deliveryMethodText').innerText = isBank ? 'Банком' : 'Трейдом';
-
-      if (!isBank) {
-        document.getElementById('bankAccount').value = '';
-      }
-    }
-
     function formatMoney(value) {
       return `${Math.round(value).toLocaleString('ru-RU')} ₽`;
     }
@@ -945,16 +828,38 @@
       return Number(value.toFixed(2)).toLocaleString('ru-RU');
     }
 
-    function formatThreshold(value) {
-      return Number(value).toLocaleString('ru-RU');
-    }
-
-    function formatUpperBound(value) {
-      return Math.max(0, Number((value - 0.01).toFixed(2))).toLocaleString('ru-RU');
-    }
-
     function getDeliveryMethodLabel() {
-      return state.deliveryMethod === 'bank' ? 'Получить банком' : 'Получить трейдом';
+      return state.deliveryMethod === 'bank' ? 'Банком' : 'Трейдом';
+    }
+
+    function sanitizeBankAccount() {
+      const input = document.getElementById('bankAccount');
+      input.value = input.value.replace(/[^\d]/g, '');
+    }
+
+    function setDeliveryMethod(method) {
+      state.deliveryMethod = method === 'bank' ? 'bank' : 'trade';
+
+      const tradeBtn = document.getElementById('deliveryTradeBtn');
+      const bankBtn = document.getElementById('deliveryBankBtn');
+      const bankInput = document.getElementById('bankAccount');
+      const hint = document.getElementById('deliveryHint');
+      const label = document.getElementById('buyDeliveryMethodText');
+
+      tradeBtn.classList.toggle('active', state.deliveryMethod === 'trade');
+      bankBtn.classList.toggle('active', state.deliveryMethod === 'bank');
+      bankInput.classList.toggle('show', state.deliveryMethod === 'bank');
+
+      if (state.deliveryMethod === 'bank') {
+        hint.innerText = 'Для выдачи банком укажи номер игрового банковского счёта.';
+      } else {
+        bankInput.value = '';
+        hint.innerText = 'Выдача будет отмечена как трейд.';
+      }
+
+      if (label) {
+        label.innerText = getDeliveryMethodLabel();
+      }
     }
 
     function getPromoPercent() {
@@ -963,9 +868,16 @@
     }
 
     function getPricingForVirtual(amount) {
-      const pricing = currentGame().pricing.slice().sort((a, b) => b.min - a.min);
+      const game = currentGame();
+      if (!game || !Array.isArray(game.pricing) || !game.pricing.length) return 0;
+
+      const pricing = game.pricing.slice().sort((a, b) => b.min - a.min);
       const selected = pricing.find(item => amount >= item.min) || pricing[pricing.length - 1];
       return selected.rate;
+    }
+
+    function formatKkLabel(value) {
+      return Number(Number(value).toFixed(2)).toLocaleString('ru-RU');
     }
 
     function calculateFromVirtual(amount) {
@@ -988,7 +900,13 @@
     function calculateFromMoney(moneyValue) {
       const money = Math.max(0, Number(moneyValue) || 0);
       const promoPercent = getPromoPercent();
-      const pricing = currentGame().pricing.slice().sort((a, b) => b.min - a.min);
+      const game = currentGame();
+
+      if (!game || !Array.isArray(game.pricing) || !game.pricing.length) {
+        return calculateFromVirtual(0);
+      }
+
+      const pricing = game.pricing.slice().sort((a, b) => b.min - a.min);
 
       for (const tier of pricing) {
         const effectiveRate = tier.rate * (1 - promoPercent / 100);
@@ -1019,29 +937,115 @@
 
     function renderDiscounts() {
       const container = document.getElementById('discountsList');
-      const pricing = currentGame().pricing.slice().sort((a, b) => a.min - b.min);
+      const game = currentGame();
 
-      container.innerHTML = pricing.map((item, index) => {
-        const nextTier = pricing[index + 1];
-        let rangeLabel = '';
+      if (!game || !Array.isArray(game.pricing) || !game.pricing.length) {
+        container.innerHTML = '';
+        return;
+      }
 
-        if (item.min === 0 && nextTier) {
-          rangeLabel = `до ${formatUpperBound(nextTier.min)} кк`;
-        } else if (item.min === 0) {
-          rangeLabel = 'любое количество';
-        } else if (nextTier) {
-          rangeLabel = `от ${formatThreshold(item.min)} кк до ${formatUpperBound(nextTier.min)} кк`;
-        } else {
-          rangeLabel = `от ${formatThreshold(item.min)} кк`;
+      const pricing = game.pricing.slice().sort((a, b) => a.min - b.min);
+      const lines = pricing.map((item, index) => {
+        if (index === 0) {
+          const nextMin = pricing[index + 1]?.min;
+          const label = nextMin
+            ? `до ${formatKkLabel(nextMin - 0.01)} кк`
+            : 'любой объём';
+          return { label, rate: item.rate };
         }
 
-        return `
+        return {
+          label: `от ${formatKkLabel(item.min)} кк`,
+          rate: item.rate
+        };
+      });
+
+      container.innerHTML = lines
+        .map(item => `
           <div class="discount-line">
-            <span>${rangeLabel}</span>
+            <span>${item.label}</span>
             <strong>${item.rate} ₽ / 1кк</strong>
           </div>
-        `;
-      }).join('');
+        `)
+        .join('');
+    }
+
+    function resetBuyForm() {
+      document.getElementById('nickname').value = '';
+      document.getElementById('promoInput').value = '';
+      document.getElementById('virtualAmount').value = '';
+      document.getElementById('moneyAmount').value = '';
+      document.getElementById('bankAccount').value = '';
+      document.getElementById('promoStatus').className = 'helper-text';
+      document.getElementById('promoStatus').innerText = '';
+      state.lastEdited = 'virtual';
+      setDeliveryMethod('trade');
+      updateSummary(calculateFromVirtual(0));
+      renderDiscounts();
+    }
+
+    // =========================
+    // ГЛАВНЫЙ ПОТОК
+    // =========================
+    function selectGame(key) {
+      state.gameKey = key;
+      state.server = '';
+      renderActions();
+      resetBuyForm();
+      switchScreen('actions');
+    }
+
+    function renderActions() {
+      const game = currentGame();
+      document.getElementById('actionsTitle').innerText = game.name;
+      document.getElementById('actionsGameBadge').innerText = game.name;
+    }
+
+    function openBuyFlow() {
+      if (!state.gameKey) return;
+      renderServers();
+      switchScreen('servers');
+    }
+
+    function renderServers(filteredList) {
+      const game = currentGame();
+      if (!filteredList) {
+        document.getElementById('serverSearch').value = '';
+      }
+      const list = filteredList || game.servers;
+      document.getElementById('serversGameBadge').innerText = game.name;
+
+      const container = document.getElementById('serversContainer');
+      container.innerHTML = '';
+
+      if (!list.length) {
+        container.innerHTML = '<p class="muted-center">Ничего не найдено по этому запросу.</p>';
+        return;
+      }
+
+      list.forEach(name => {
+        const button = document.createElement('button');
+        button.className = 'btn server-btn';
+        button.innerHTML = `<strong>${name}</strong><small>Нажми, чтобы перейти к оформлению</small>`;
+        button.onclick = () => selectServer(name);
+        container.appendChild(button);
+      });
+    }
+
+    function filterServers() {
+      const value = document.getElementById('serverSearch').value.trim().toLowerCase();
+      const game = currentGame();
+      const filtered = game.servers.filter(server => server.toLowerCase().includes(value));
+      renderServers(filtered);
+    }
+
+    function selectServer(serverName) {
+      state.server = serverName;
+      document.getElementById('buyGameName').innerText = currentGame().name;
+      document.getElementById('buyServerName').innerText = serverName;
+      document.getElementById('buyDeliveryMethodText').innerText = getDeliveryMethodLabel();
+      renderDiscounts();
+      switchScreen('buy');
     }
 
     function handlePromoInput() {
@@ -1061,8 +1065,6 @@
         promoEl.innerText = 'Промокод не найден. Заказ будет оформлен без скидки.';
       }
 
-      if (!state.gameKey) return;
-
       if (state.lastEdited === 'money') {
         updateFromMoney();
       } else {
@@ -1072,7 +1074,6 @@
 
     function updateFromVirtual() {
       state.lastEdited = 'virtual';
-      if (!state.gameKey) return;
       const virtualValue = document.getElementById('virtualAmount').value;
       const result = calculateFromVirtual(virtualValue);
       document.getElementById('moneyAmount').value = result.total > 0 ? Math.round(result.total) : '';
@@ -1081,57 +1082,40 @@
 
     function updateFromMoney() {
       state.lastEdited = 'money';
-      if (!state.gameKey) return;
       const moneyValue = document.getElementById('moneyAmount').value;
       const result = calculateFromMoney(moneyValue);
       document.getElementById('virtualAmount').value = result.virtualAmount > 0 ? Number(result.virtualAmount.toFixed(2)).toString() : '';
       updateSummary(result);
     }
 
-    function resetBuyForm() {
-      document.getElementById('nickname').value = '';
-      document.getElementById('bankAccount').value = '';
-      document.getElementById('promoInput').value = '';
-      document.getElementById('virtualAmount').value = '';
-      document.getElementById('moneyAmount').value = '';
-      document.getElementById('promoStatus').className = 'helper-text';
-      document.getElementById('promoStatus').innerText = '';
-      state.lastEdited = 'virtual';
-      setDeliveryMethod('trade');
-      updateSummary({
-        rate: 0,
-        subtotal: 0,
-        promoDiscount: 0,
-        total: 0,
-        virtualAmount: 0
-      });
+    function sellVirts() {
+      if (!state.gameKey) return;
+      openExternal(currentGame().sellUrl);
     }
 
-    function sellVirts() {
-      const game = currentGame();
-      if (!game) return;
-      openExternal(game.sellUrl);
+    function openSupport() {
+      openExternal(SUPPORT_URL);
+    }
+
+    function openInfo() {
+      switchScreen('info');
     }
 
     function buy() {
-      const game = currentGame();
       const nickname = document.getElementById('nickname').value.trim();
-      const bankAccount = document.getElementById('bankAccount').value.trim();
       const promoCode = document.getElementById('promoInput').value.trim().toUpperCase();
+      const bankAccount = document.getElementById('bankAccount').value.trim();
 
-      if (!game) return alert('Сначала выбери игру.');
+      if (!state.gameKey) return alert('Сначала выбери игру.');
       if (!state.server) return alert('Сначала выбери сервер.');
       if (!nickname) return alert('Введите игровой ник.');
-      if (state.deliveryMethod === 'bank' && !/^\d+$/.test(bankAccount)) {
-        return alert('Введите корректный номер игрового банковского счёта.');
-      }
-      if (!state.virtualAmount || state.virtualAmount <= 0) {
-        return alert('Введите количество виртов или сумму оплаты.');
-      }
+      if (state.deliveryMethod === 'bank' && !bankAccount) return alert('Укажите номер игрового банковского счёта.');
+      if (state.deliveryMethod === 'bank' && !/^\d+$/.test(bankAccount)) return alert('Номер банковского счёта должен состоять только из цифр.');
+      if (!state.virtualAmount || state.virtualAmount <= 0) return alert('Введите количество виртов или сумму оплаты.');
 
       const payload = {
         type: 'buy_order',
-        game: game.name,
+        game: currentGame().name,
         server: state.server,
         nickname,
         deliveryMethod: state.deliveryMethod,
@@ -1152,20 +1136,34 @@
       }
 
       alert(
-        `Заявка сформирована:\n\n` +
-        `Игра: ${payload.game}\n` +
-        `Сервер: ${payload.server}\n` +
-        `Ник: ${payload.nickname}\n` +
-        `Получение: ${payload.deliveryMethodLabel}\n` +
-        `${payload.bankAccount ? `Банк. счёт: ${payload.bankAccount}\n` : ''}` +
-        `Количество: ${payload.virtualAmountKK} кк\n` +
+        `Заявка сформирована:
+
+` +
+        `Игра: ${payload.game}
+` +
+        `Сервер: ${payload.server}
+` +
+        `Ник: ${payload.nickname}
+` +
+        `Получение: ${payload.deliveryMethodLabel}
+` +
+        `${payload.bankAccount ? `Счёт: ${payload.bankAccount}
+` : ''}` +
+        `Количество: ${payload.virtualAmountKK} кк
+` +
         `К оплате: ${payload.totalRub} ₽`
       );
     }
 
     initTelegram();
-    applyTheme();
-    resetBuyForm();
+    setDeliveryMethod('trade');
+    updateSummary({
+      virtualAmount: 0,
+      rate: 0,
+      subtotal: 0,
+      promoDiscount: 0,
+      total: 0
+    });
   </script>
 </body>
 </html>

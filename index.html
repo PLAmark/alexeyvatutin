@@ -128,8 +128,17 @@
       color: #ffffff;
       position: relative;
       overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.14);
       box-shadow: 0 12px 28px rgba(0, 0, 0, 0.24);
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.26);
+    }
+
+    .btn-game::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(4, 10, 18, 0.42) 0%, rgba(4, 10, 18, 0.22) 38%, rgba(4, 10, 18, 0.04) 74%, rgba(4, 10, 18, 0) 100%);
+      pointer-events: none;
     }
 
     .btn-game::after {
@@ -141,15 +150,15 @@
     }
 
     .btn-game-br {
-      background: linear-gradient(135deg, #d33b4e, #7a1021);
+      background: linear-gradient(110deg, #591018 0%, #8f1624 42%, #d43b4e 100%);
     }
 
     .btn-game-mat {
-      background: linear-gradient(135deg, #b85cff, #5b1cd1);
+      background: linear-gradient(110deg, #35114d 0%, #5c23a0 42%, #b05bff 100%);
     }
 
     .btn-game-gta {
-      background: linear-gradient(135deg, #f0b51c, #986000);
+      background: linear-gradient(110deg, #5b4307 0%, #9f7300 42%, #f0b51c 100%);
     }
 
     .btn-game:hover {
@@ -219,8 +228,9 @@
 
     .btn-game .game-icon,
     .btn-game .game-fallback {
-      background: rgba(255, 255, 255, 0.16);
+      background: rgba(9, 15, 25, 0.24);
       border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
     }
 
     .game-fallback {
@@ -237,12 +247,15 @@
     .game-name {
       font-size: 16px;
       font-weight: 800;
+      letter-spacing: 0.2px;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.34), 0 1px 0 rgba(0, 0, 0, 0.5);
     }
 
     .game-note {
       font-size: 12px;
-      color: rgba(255, 255, 255, 0.82);
+      color: rgba(255, 255, 255, 0.92);
       font-weight: 600;
+      text-shadow: 0 1px 6px rgba(0, 0, 0, 0.28);
     }
 
     .badge-row {
@@ -670,8 +683,8 @@
     // =========================
     // НАСТРОЙКИ
     // =========================
-    const SUPPORT_URL = 'https://t.me/alexeyvatutin';
-    const SELL_MANAGER_URL = 'https://t.me/alexeyvatutin';
+    const SUPPORT_URL = 'https://t.me/your_support';
+    const SELL_MANAGER_URL = 'https://t.me/your_manager';
 
     // Промокоды можно заменить на свои.
     // Формат: КОД: размер_скидки_в_процентах
@@ -702,11 +715,23 @@
 
     const matreshkaServers = Array.from({ length: 34 }, (_, i) => `MATRESHKA MOBILE #${i + 1}`);
 
-    const defaultPricing = [
-      { min: 100, rate: 35 },
-      { min: 50, rate: 40 },
+    const blackRussiaPricing = [
+      { min: 100, rate: 40 },
       { min: 10, rate: 45 },
       { min: 0, rate: 50 }
+    ];
+
+    const matreshkaPricing = [
+      { min: 100, rate: 70 },
+      { min: 10, rate: 80 },
+      { min: 0, rate: 100 }
+    ];
+
+    const gtaPricing = [
+      { min: 50, rate: 800 },
+      { min: 10, rate: 900 },
+      { min: 5, rate: 950 },
+      { min: 0, rate: 1000 }
     ];
 
     const games = {
@@ -714,19 +739,19 @@
         name: 'BLACK RUSSIA',
         sellUrl: SELL_MANAGER_URL,
         servers: blackRussiaServers,
-        pricing: defaultPricing
+        pricing: blackRussiaPricing
       },
       mat: {
         name: 'MATRESHKA RP',
         sellUrl: SELL_MANAGER_URL,
         servers: matreshkaServers,
-        pricing: defaultPricing
+        pricing: matreshkaPricing
       },
       gta: {
         name: 'GTA 5 RP',
         sellUrl: SELL_MANAGER_URL,
         servers: gtaServers,
-        pricing: defaultPricing
+        pricing: gtaPricing
       }
     };
 
@@ -852,9 +877,16 @@
     }
 
     function getPricingForVirtual(amount) {
-      const pricing = currentGame().pricing.slice().sort((a, b) => b.min - a.min);
+      const game = currentGame();
+      if (!game || !Array.isArray(game.pricing) || !game.pricing.length) return 0;
+
+      const pricing = game.pricing.slice().sort((a, b) => b.min - a.min);
       const selected = pricing.find(item => amount >= item.min) || pricing[pricing.length - 1];
       return selected.rate;
+    }
+
+    function formatKkLabel(value) {
+      return Number(Number(value).toFixed(2)).toLocaleString('ru-RU');
     }
 
     function calculateFromVirtual(amount) {
@@ -877,7 +909,13 @@
     function calculateFromMoney(moneyValue) {
       const money = Math.max(0, Number(moneyValue) || 0);
       const promoPercent = getPromoPercent();
-      const pricing = currentGame().pricing.slice().sort((a, b) => b.min - a.min);
+      const game = currentGame();
+
+      if (!game || !Array.isArray(game.pricing) || !game.pricing.length) {
+        return calculateFromVirtual(0);
+      }
+
+      const pricing = game.pricing.slice().sort((a, b) => b.min - a.min);
 
       for (const tier of pricing) {
         const effectiveRate = tier.rate * (1 - promoPercent / 100);
@@ -908,22 +946,37 @@
 
     function renderDiscounts() {
       const container = document.getElementById('discountsList');
-      const pricing = currentGame().pricing.slice().sort((a, b) => a.min - b.min);
+      const game = currentGame();
 
-      container.innerHTML = pricing
-        .filter(item => item.min > 0)
+      if (!game || !Array.isArray(game.pricing) || !game.pricing.length) {
+        container.innerHTML = '';
+        return;
+      }
+
+      const pricing = game.pricing.slice().sort((a, b) => a.min - b.min);
+      const lines = pricing.map((item, index) => {
+        if (index === 0) {
+          const nextMin = pricing[index + 1]?.min;
+          const label = nextMin
+            ? `до ${formatKkLabel(nextMin - 0.01)} кк`
+            : 'любой объём';
+          return { label, rate: item.rate };
+        }
+
+        return {
+          label: `от ${formatKkLabel(item.min)} кк`,
+          rate: item.rate
+        };
+      });
+
+      container.innerHTML = lines
         .map(item => `
           <div class="discount-line">
-            <span>от ${item.min} кк</span>
+            <span>${item.label}</span>
             <strong>${item.rate} ₽ / 1кк</strong>
           </div>
         `)
-        .join('') + `
-          <div class="discount-line">
-            <span>до 9.99 кк</span>
-            <strong>${pricing[0].rate} ₽ / 1кк</strong>
-          </div>
-        `;
+        .join('');
     }
 
     function resetBuyForm() {
@@ -1113,7 +1166,13 @@
 
     initTelegram();
     setDeliveryMethod('trade');
-    updateSummary(calculateFromVirtual(0));
+    updateSummary({
+      virtualAmount: 0,
+      rate: 0,
+      subtotal: 0,
+      promoDiscount: 0,
+      total: 0
+    });
   </script>
 </body>
 </html>

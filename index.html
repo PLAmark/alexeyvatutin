@@ -4,17 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="theme-color" content="#0f1725">
-  <title>Бот Ватутина</title>
-  <link rel="icon" href="favicon.ico">
-  <link rel="stylesheet" href="style.css">
+  <title>@alexeyvatutin_bot</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <script src="script.js" defer></script>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="container">
+  <div class="container">
     <div id="home" class="screen active">
       <div class="card">
-        <h1 class="title">Алексей Ватутин</h1>
+        <h1 class="title">@alexeyvatutin_bot</h1>
         <p class="subtitle">
           Выбери игру, затем нужное действие: покупка виртов или переход к менеджеру для продажи.
         </p>
@@ -22,7 +20,9 @@
         <div class="stack">
           <button class="btn btn-game btn-game-br" onclick="selectGame('br')">
             <span class="game-left">
-              <span class="game-icon"><img src="black-russia.svg" alt="BLACK RUSSIA"></span>
+              <span class="game-icon">
+                <img src="black-russia.svg" alt="BLACK RUSSIA">
+              </span>
               <span class="game-meta">
                 <span class="game-name">BLACK RUSSIA</span>
                 <span class="game-note">Покупка и продажа игровой валюты</span>
@@ -33,9 +33,9 @@
 
           <button class="btn btn-game btn-game-mat" onclick="selectGame('mat')">
             <span class="game-left">
-              <span class="game-icon game-icon-mat">
-  <img src="matreshka.svg" alt="MATRESHKA RP">
-</span>
+              <span class="game-icon">
+                <img src="matreshka.svg" alt="MATRESHKA RP">
+              </span>
               <span class="game-meta">
                 <span class="game-name">MATRESHKA RP</span>
                 <span class="game-note">Покупка и продажа игровой валюты</span>
@@ -46,7 +46,9 @@
 
           <button class="btn btn-game btn-game-gta" onclick="selectGame('gta')">
             <span class="game-left">
-              <span class="game-icon"><img src="gta5rp.svg" alt="GTA 5 RP"></span>
+              <span class="game-icon">
+                <img src="gta5rp.svg" alt="GTA 5 RP">
+              </span>
               <span class="game-meta">
                 <span class="game-name">GTA 5 RP</span>
                 <span class="game-note">Покупка и продажа игровой валюты</span>
@@ -105,7 +107,6 @@
         </div>
 
         <input id="serverSearch" class="search-box" placeholder="Поиск сервера..." oninput="filterServers()">
-
         <div id="serversContainer" class="servers-wrapper"></div>
       </div>
     </div>
@@ -131,8 +132,12 @@
         <div class="delivery-box">
           <div class="section-title">Способ получения</div>
           <div class="delivery-toggle">
-            <button type="button" id="deliveryTradeBtn" class="delivery-option active" onclick="setDeliveryMethod('trade')">Получить трейдом</button>
-            <button type="button" id="deliveryBankBtn" class="delivery-option" onclick="setDeliveryMethod('bank')">Получить банком</button>
+            <button type="button" id="deliveryTradeBtn" class="delivery-option active" onclick="setDeliveryMethod('trade')">
+              Получить трейдом
+            </button>
+            <button type="button" id="deliveryBankBtn" class="delivery-option" onclick="setDeliveryMethod('bank')">
+              Получить банком
+            </button>
           </div>
           <input id="bankAccount" class="field delivery-extra" type="text" inputmode="numeric" placeholder="Номер банковского счёта" oninput="sanitizeBankAccount()">
           <div id="deliveryHint" class="delivery-hint">Выдача будет отмечена как трейд.</div>
@@ -182,14 +187,101 @@
           </div>
         </div>
 
-        <p class="muted-center" style="margin-bottom: 14px;">
-          Здесь можно оформить покупку игровой валюты через mini-app и отправить заказ в Telegram WebApp.
-        </p>
-        <p class="muted-center">
-          Продажа виртов вынесена отдельной кнопкой и ведёт напрямую к менеджеру в Telegram.
-        </p>
+        <div class="info-box">
+          <div class="info-box-title">О сервисе</div>
+          <div class="info-box-text">
+            Через mini-app можно оформить заказ на цифровые игровые товары и услуги.
+            Подробные условия использования сервиса размещены в разделах ниже.
+          </div>
+        </div>
+
+        <div class="stack">
+          <button class="btn btn-secondary" onclick="openPrivacyPolicy()">Политика конфиденциальности</button>
+          <button class="btn btn-secondary" onclick="openUserAgreement()">Пользовательское соглашение</button>
+          <button class="btn btn-secondary" onclick="openSupport()">Поддержка</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="privacy" class="screen">
+      <div class="card">
+        <div class="topbar">
+          <button class="back-btn" onclick="goInfo()">←</button>
+          <div>
+            <div class="section-title">О сервисе</div>
+            <h2>Политика конфиденциальности</h2>
+          </div>
+        </div>
+
+        <div class="legal-text">
+Политика конфиденциальности
+
+1. Общие положения
+Настоящая политика конфиденциальности определяет порядок обработки информации пользователей сервиса @alexeyvatutin_bot и mini-app.
+
+2. Какие данные могут использоваться
+- Telegram username и технические данные Telegram;
+- игровой ник;
+- выбранная игра, сервер, объём заказа;
+- промокод;
+- способ получения заказа;
+- номер игрового банковского счёта, если выбран способ получения банком.
+
+3. Для чего используются данные
+- оформление и обработка заказа;
+- связь с пользователем;
+- предоставление поддержки;
+- улучшение работы сервиса;
+- предотвращение злоупотреблений.
+
+4. Передача третьим лицам
+Данные могут передаваться только в объёме, необходимом для обработки платежей, исполнения требований законодательства или защиты сервиса.
+
+5. Контакты
+По вопросам обработки данных: @alexeyvatutin
+        </div>
+      </div>
+    </div>
+
+    <div id="agreement" class="screen">
+      <div class="card">
+        <div class="topbar">
+          <button class="back-btn" onclick="goInfo()">←</button>
+          <div>
+            <div class="section-title">О сервисе</div>
+            <h2>Пользовательское соглашение</h2>
+          </div>
+        </div>
+
+        <div class="legal-text">
+Пользовательское соглашение
+
+1. Общие положения
+Сервис @alexeyvatutin_bot и mini-app предоставляет возможность оформления заказов на цифровые игровые товары и услуги.
+
+2. Обязанности пользователя
+Пользователь обязуется:
+- указывать корректные данные при оформлении заказа;
+- проверять игру, сервер, ник и параметры заказа;
+- не использовать сервис в противоправных целях;
+- не нарушать работу сервиса.
+
+3. Порядок оформления заказа
+Пользователь самостоятельно оформляет заказ через интерфейс mini-app. Заказ передаётся в обработку после подтверждения и/или оплаты.
+
+4. Ответственность
+Сервис не несёт ответственности за ошибки пользователя в нике, сервере, способе получения или иных параметрах заказа.
+
+5. Ограничение ответственности
+Сервис не отвечает за технические сбои Telegram, платёжных систем, игровых платформ и иных внешних сервисов.
+
+6. Поддержка
+По всем вопросам: @alexeyvatutin
+        </div>
       </div>
     </div>
   </div>
+
+  <script src="script.js"></script>
 </body>
 </html>

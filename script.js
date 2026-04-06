@@ -93,9 +93,11 @@ const state = {
 // =========================
 function initTelegram() {
   if (!window.Telegram || !window.Telegram.WebApp) return;
+
   try {
     Telegram.WebApp.ready();
     Telegram.WebApp.expand();
+
     if (Telegram.WebApp.disableVerticalSwipes) {
       Telegram.WebApp.disableVerticalSwipes();
     }
@@ -108,8 +110,14 @@ function initTelegram() {
 // ВСПОМОГАТЕЛЬНЫЕ
 // =========================
 function switchScreen(id) {
-  document.querySelectorAll('.screen').forEach(screen => screen.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.screen').forEach((screen) => {
+    screen.classList.remove('active');
+  });
+
+  const nextScreen = document.getElementById(id);
+  if (nextScreen) {
+    nextScreen.classList.add('active');
+  }
 }
 
 function goHome() {
@@ -117,15 +125,27 @@ function goHome() {
 }
 
 function goActions() {
-  if (!state.gameKey) return goHome();
+  if (!state.gameKey) {
+    goHome();
+    return;
+  }
+
   renderActions();
   switchScreen('actions');
 }
 
 function goServers() {
-  if (!state.gameKey) return goHome();
+  if (!state.gameKey) {
+    goHome();
+    return;
+  }
+
   renderServers();
   switchScreen('servers');
+}
+
+function goInfo() {
+  switchScreen('info');
 }
 
 function currentGame() {
@@ -138,11 +158,13 @@ function openExternal(url) {
       Telegram.WebApp.openTelegramLink(url);
       return;
     }
+
     if (Telegram.WebApp.openLink) {
       Telegram.WebApp.openLink(url);
       return;
     }
   }
+
   window.open(url, '_blank');
 }
 
@@ -151,7 +173,10 @@ function formatMoney(value) {
 }
 
 function formatVirtual(value) {
-  if (!Number.isFinite(value) || value <= 0) return '0';
+  if (!Number.isFinite(value) || value <= 0) {
+    return '0';
+  }
+
   return Number(value.toFixed(2)).toLocaleString('ru-RU');
 }
 
@@ -161,6 +186,8 @@ function getDeliveryMethodLabel() {
 
 function sanitizeBankAccount() {
   const input = document.getElementById('bankAccount');
+  if (!input) return;
+
   input.value = input.value.replace(/[^\d]/g, '');
 }
 
@@ -173,15 +200,30 @@ function setDeliveryMethod(method) {
   const hint = document.getElementById('deliveryHint');
   const label = document.getElementById('buyDeliveryMethodText');
 
-  tradeBtn.classList.toggle('active', state.deliveryMethod === 'trade');
-  bankBtn.classList.toggle('active', state.deliveryMethod === 'bank');
-  bankInput.classList.toggle('show', state.deliveryMethod === 'bank');
+  if (tradeBtn) {
+    tradeBtn.classList.toggle('active', state.deliveryMethod === 'trade');
+  }
+
+  if (bankBtn) {
+    bankBtn.classList.toggle('active', state.deliveryMethod === 'bank');
+  }
+
+  if (bankInput) {
+    bankInput.classList.toggle('show', state.deliveryMethod === 'bank');
+  }
 
   if (state.deliveryMethod === 'bank') {
-    hint.innerText = 'Для выдачи банком укажи номер игрового банковского счёта.';
+    if (hint) {
+      hint.innerText = 'Для выдачи банком укажи номер игрового банковского счёта.';
+    }
   } else {
-    bankInput.value = '';
-    hint.innerText = 'Выдача будет отмечена как трейд.';
+    if (bankInput) {
+      bankInput.value = '';
+    }
+
+    if (hint) {
+      hint.innerText = 'Выдача будет отмечена как трейд.';
+    }
   }
 
   if (label) {
@@ -190,16 +232,23 @@ function setDeliveryMethod(method) {
 }
 
 function getPromoPercent() {
-  const code = document.getElementById('promoInput').value.trim().toUpperCase();
+  const promoInput = document.getElementById('promoInput');
+  if (!promoInput) return 0;
+
+  const code = promoInput.value.trim().toUpperCase();
   return PROMO_CODES[code] || 0;
 }
 
 function getPricingForVirtual(amount) {
   const game = currentGame();
-  if (!game || !Array.isArray(game.pricing) || !game.pricing.length) return 0;
+
+  if (!game || !Array.isArray(game.pricing) || !game.pricing.length) {
+    return 0;
+  }
 
   const pricing = game.pricing.slice().sort((a, b) => b.min - a.min);
-  const selected = pricing.find(item => amount >= item.min) || pricing[pricing.length - 1];
+  const selected = pricing.find((item) => amount >= item.min) || pricing[pricing.length - 1];
+
   return selected.rate;
 }
 
@@ -237,8 +286,11 @@ function calculateFromMoney(moneyValue) {
 
   for (const tier of pricing) {
     const effectiveRate = tier.rate * (1 - promoPercent / 100);
+
     if (effectiveRate <= 0) continue;
+
     const virtualAmount = money / effectiveRate;
+
     if (virtualAmount >= tier.min) {
       return calculateFromVirtual(virtualAmount);
     }
@@ -254,17 +306,33 @@ function updateSummary(result) {
   state.total = result.total;
   state.virtualAmount = result.virtualAmount;
 
-  document.getElementById('rateText').innerText = result.virtualAmount > 0
-    ? `${result.rate} ₽ / 1кк`
-    : '—';
-  document.getElementById('subtotalText').innerText = formatMoney(result.subtotal);
-  document.getElementById('promoDiscountText').innerText = formatMoney(result.promoDiscount);
-  document.getElementById('totalText').innerText = formatMoney(result.total);
+  const rateText = document.getElementById('rateText');
+  const subtotalText = document.getElementById('subtotalText');
+  const promoDiscountText = document.getElementById('promoDiscountText');
+  const totalText = document.getElementById('totalText');
+
+  if (rateText) {
+    rateText.innerText = result.virtualAmount > 0 ? `${result.rate} ₽ / 1кк` : '—';
+  }
+
+  if (subtotalText) {
+    subtotalText.innerText = formatMoney(result.subtotal);
+  }
+
+  if (promoDiscountText) {
+    promoDiscountText.innerText = formatMoney(result.promoDiscount);
+  }
+
+  if (totalText) {
+    totalText.innerText = formatMoney(result.total);
+  }
 }
 
 function renderDiscounts() {
   const container = document.getElementById('discountsList');
   const game = currentGame();
+
+  if (!container) return;
 
   if (!game || !Array.isArray(game.pricing) || !game.pricing.length) {
     container.innerHTML = '';
@@ -272,12 +340,12 @@ function renderDiscounts() {
   }
 
   const pricing = game.pricing.slice().sort((a, b) => a.min - b.min);
+
   const lines = pricing.map((item, index) => {
     if (index === 0) {
       const nextMin = pricing[index + 1]?.min;
-      const label = nextMin
-        ? `до ${formatKkLabel(nextMin - 0.01)} кк`
-        : 'любой объём';
+      const label = nextMin ? `до ${formatKkLabel(nextMin - 0.01)} кк` : 'любой объём';
+
       return { label, rate: item.rate };
     }
 
@@ -288,7 +356,7 @@ function renderDiscounts() {
   });
 
   container.innerHTML = lines
-    .map(item => `
+    .map((item) => `
       <div class="discount-line">
         <span>${item.label}</span>
         <strong>${item.rate} ₽ / 1кк</strong>
@@ -298,13 +366,24 @@ function renderDiscounts() {
 }
 
 function resetBuyForm() {
-  document.getElementById('nickname').value = '';
-  document.getElementById('promoInput').value = '';
-  document.getElementById('virtualAmount').value = '';
-  document.getElementById('moneyAmount').value = '';
-  document.getElementById('bankAccount').value = '';
-  document.getElementById('promoStatus').className = 'helper-text';
-  document.getElementById('promoStatus').innerText = '';
+  const nickname = document.getElementById('nickname');
+  const promoInput = document.getElementById('promoInput');
+  const virtualAmount = document.getElementById('virtualAmount');
+  const moneyAmount = document.getElementById('moneyAmount');
+  const bankAccount = document.getElementById('bankAccount');
+  const promoStatus = document.getElementById('promoStatus');
+
+  if (nickname) nickname.value = '';
+  if (promoInput) promoInput.value = '';
+  if (virtualAmount) virtualAmount.value = '';
+  if (moneyAmount) moneyAmount.value = '';
+  if (bankAccount) bankAccount.value = '';
+
+  if (promoStatus) {
+    promoStatus.className = 'helper-text';
+    promoStatus.innerText = '';
+  }
+
   state.lastEdited = 'virtual';
   setDeliveryMethod('trade');
   updateSummary(calculateFromVirtual(0));
@@ -317,6 +396,7 @@ function resetBuyForm() {
 function selectGame(key) {
   state.gameKey = key;
   state.server = '';
+
   renderActions();
   resetBuyForm();
   switchScreen('actions');
@@ -324,25 +404,46 @@ function selectGame(key) {
 
 function renderActions() {
   const game = currentGame();
-  document.getElementById('actionsTitle').innerText = game.name;
-  document.getElementById('actionsGameBadge').innerText = game.name;
+  if (!game) return;
+
+  const actionsTitle = document.getElementById('actionsTitle');
+  const actionsGameBadge = document.getElementById('actionsGameBadge');
+
+  if (actionsTitle) {
+    actionsTitle.innerText = game.name;
+  }
+
+  if (actionsGameBadge) {
+    actionsGameBadge.innerText = game.name;
+  }
 }
 
 function openBuyFlow() {
   if (!state.gameKey) return;
+
   renderServers();
   switchScreen('servers');
 }
 
 function renderServers(filteredList) {
   const game = currentGame();
-  if (!filteredList) {
-    document.getElementById('serverSearch').value = '';
-  }
-  const list = filteredList || game.servers;
-  document.getElementById('serversGameBadge').innerText = game.name;
+  if (!game) return;
 
+  const serverSearch = document.getElementById('serverSearch');
+  const serversGameBadge = document.getElementById('serversGameBadge');
   const container = document.getElementById('serversContainer');
+
+  if (!filteredList && serverSearch) {
+    serverSearch.value = '';
+  }
+
+  if (serversGameBadge) {
+    serversGameBadge.innerText = game.name;
+  }
+
+  if (!container) return;
+
+  const list = filteredList || game.servers;
   container.innerHTML = '';
 
   if (!list.length) {
@@ -350,7 +451,7 @@ function renderServers(filteredList) {
     return;
   }
 
-  list.forEach(name => {
+  list.forEach((name) => {
     const button = document.createElement('button');
     button.className = 'btn server-btn';
     button.innerHTML = `<strong>${name}</strong><small>Нажми, чтобы перейти к оформлению</small>`;
@@ -360,24 +461,47 @@ function renderServers(filteredList) {
 }
 
 function filterServers() {
-  const value = document.getElementById('serverSearch').value.trim().toLowerCase();
+  const serverSearch = document.getElementById('serverSearch');
   const game = currentGame();
-  const filtered = game.servers.filter(server => server.toLowerCase().includes(value));
+
+  if (!serverSearch || !game) return;
+
+  const value = serverSearch.value.trim().toLowerCase();
+  const filtered = game.servers.filter((server) => server.toLowerCase().includes(value));
+
   renderServers(filtered);
 }
 
 function selectServer(serverName) {
   state.server = serverName;
-  document.getElementById('buyGameName').innerText = currentGame().name;
-  document.getElementById('buyServerName').innerText = serverName;
-  document.getElementById('buyDeliveryMethodText').innerText = getDeliveryMethodLabel();
+
+  const buyGameName = document.getElementById('buyGameName');
+  const buyServerName = document.getElementById('buyServerName');
+  const buyDeliveryMethodText = document.getElementById('buyDeliveryMethodText');
+  const game = currentGame();
+
+  if (buyGameName && game) {
+    buyGameName.innerText = game.name;
+  }
+
+  if (buyServerName) {
+    buyServerName.innerText = serverName;
+  }
+
+  if (buyDeliveryMethodText) {
+    buyDeliveryMethodText.innerText = getDeliveryMethodLabel();
+  }
+
   renderDiscounts();
   switchScreen('buy');
 }
 
 function handlePromoInput() {
   const promoEl = document.getElementById('promoStatus');
-  const code = document.getElementById('promoInput').value.trim().toUpperCase();
+  const promoInput = document.getElementById('promoInput');
+  if (!promoEl || !promoInput) return;
+
+  const code = promoInput.value.trim().toUpperCase();
 
   promoEl.className = 'helper-text';
   promoEl.innerText = '';
@@ -401,23 +525,37 @@ function handlePromoInput() {
 
 function updateFromVirtual() {
   state.lastEdited = 'virtual';
-  const virtualValue = document.getElementById('virtualAmount').value;
-  const result = calculateFromVirtual(virtualValue);
-  document.getElementById('moneyAmount').value = result.total > 0 ? Math.round(result.total) : '';
+
+  const virtualAmount = document.getElementById('virtualAmount');
+  const moneyAmount = document.getElementById('moneyAmount');
+  if (!virtualAmount || !moneyAmount) return;
+
+  const result = calculateFromVirtual(virtualAmount.value);
+  moneyAmount.value = result.total > 0 ? Math.round(result.total) : '';
+
   updateSummary(result);
 }
 
 function updateFromMoney() {
   state.lastEdited = 'money';
-  const moneyValue = document.getElementById('moneyAmount').value;
-  const result = calculateFromMoney(moneyValue);
-  document.getElementById('virtualAmount').value = result.virtualAmount > 0 ? Number(result.virtualAmount.toFixed(2)).toString() : '';
+
+  const virtualAmount = document.getElementById('virtualAmount');
+  const moneyAmount = document.getElementById('moneyAmount');
+  if (!virtualAmount || !moneyAmount) return;
+
+  const result = calculateFromMoney(moneyAmount.value);
+  virtualAmount.value = result.virtualAmount > 0 ? Number(result.virtualAmount.toFixed(2)).toString() : '';
+
   updateSummary(result);
 }
 
 function sellVirts() {
   if (!state.gameKey) return;
-  openExternal(currentGame().sellUrl);
+
+  const game = currentGame();
+  if (!game) return;
+
+  openExternal(game.sellUrl);
 }
 
 function openSupport() {
@@ -428,21 +566,57 @@ function openInfo() {
   switchScreen('info');
 }
 
-function buy() {
-  const nickname = document.getElementById('nickname').value.trim();
-  const promoCode = document.getElementById('promoInput').value.trim().toUpperCase();
-  const bankAccount = document.getElementById('bankAccount').value.trim();
+function openPrivacyPolicy() {
+  switchScreen('privacy');
+}
 
-  if (!state.gameKey) return alert('Сначала выбери игру.');
-  if (!state.server) return alert('Сначала выбери сервер.');
-  if (!nickname) return alert('Введите игровой ник.');
-  if (state.deliveryMethod === 'bank' && !bankAccount) return alert('Укажите номер игрового банковского счёта.');
-  if (state.deliveryMethod === 'bank' && !/^\d+$/.test(bankAccount)) return alert('Номер банковского счёта должен состоять только из цифр.');
-  if (!state.virtualAmount || state.virtualAmount <= 0) return alert('Введите количество виртов или сумму оплаты.');
+function openUserAgreement() {
+  switchScreen('agreement');
+}
+
+function buy() {
+  const game = currentGame();
+  const nicknameInput = document.getElementById('nickname');
+  const promoInput = document.getElementById('promoInput');
+  const bankAccountInput = document.getElementById('bankAccount');
+
+  if (!game) {
+    alert('Сначала выбери игру.');
+    return;
+  }
+
+  const nickname = nicknameInput ? nicknameInput.value.trim() : '';
+  const promoCode = promoInput ? promoInput.value.trim().toUpperCase() : '';
+  const bankAccount = bankAccountInput ? bankAccountInput.value.trim() : '';
+
+  if (!state.server) {
+    alert('Сначала выбери сервер.');
+    return;
+  }
+
+  if (!nickname) {
+    alert('Введите игровой ник.');
+    return;
+  }
+
+  if (state.deliveryMethod === 'bank' && !bankAccount) {
+    alert('Укажите номер игрового банковского счёта.');
+    return;
+  }
+
+  if (state.deliveryMethod === 'bank' && !/^\d+$/.test(bankAccount)) {
+    alert('Номер банковского счёта должен состоять только из цифр.');
+    return;
+  }
+
+  if (!state.virtualAmount || state.virtualAmount <= 0) {
+    alert('Введите количество виртов или сумму оплаты.');
+    return;
+  }
 
   const payload = {
     type: 'buy_order',
-    game: currentGame().name,
+    game: game.name,
     server: state.server,
     nickname,
     deliveryMethod: state.deliveryMethod,
@@ -474,6 +648,9 @@ function buy() {
   );
 }
 
+// =========================
+// ИНИЦИАЛИЗАЦИЯ
+// =========================
 initTelegram();
 setDeliveryMethod('trade');
 updateSummary({

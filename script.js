@@ -9,7 +9,7 @@ const SELL_MANAGER_URL = 'https://t.me/alexeyvatutin';
 const PROMO_CODES = {
   START5: 5,
   BONUS7: 7,
-  VIP10: 10
+  VIP10: 10,
 };
 
 const blackRussiaServers = [
@@ -17,18 +17,19 @@ const blackRussiaServers = [
   'INDIGO', 'WHITE', 'MAGENTA', 'CRIMSON', 'GOLD', 'AZURE', 'PLATINUM', 'AQUA', 'GRAY', 'ICE',
   'CHILLI', 'CHOCO', 'MOSCOW', 'SPB', 'UFA', 'SOCHI', 'KAZAN', 'SAMARA', 'ROSTOV', 'ANAPA',
   'EKB', 'KRASNODAR', 'ARZAMAS', 'NOVOSIB', 'GROZNY', 'SARATOV', 'OMSK', 'IRKUTSK', 'VOLGOGRAD',
-  'VORONEZH', 'BELGOROD', 'MAKHACHKALA', 'VLADIKAVKAZ', 'VLADIVOSTOK', 'KALININGRAD', 'CHELYABINSK',
-  'KRASNOYARSK', 'CHEBOKSARY', 'KHABAROVSK', 'PERM', 'TULA', 'RYAZAN', 'MURMANSK', 'PENZA', 'KURSK',
-  'ARKHANGELSK', 'ORENBURG', 'KIROV', 'KEMEROVO', 'TYUMEN', 'TOLYATTI', 'IVANOVO', 'STAVROPOL',
-  'SMOLENSK', 'PSKOV', 'BRYANSK', 'OREL', 'YAROSLAVL', 'BARNAUL', 'LIPETSK', 'ULYANOVSK', 'YAKUTSK',
-  'TAMBOV', 'BRATSK', 'ASTRAKHAN', 'CHITA', 'KOSTROMA', 'VLADIMIR', 'KALUGA', 'NOVGOROD', 'TAGANROG',
-  'VOLOGDA', 'TVER', 'TOMSK', 'IZHEVSK', 'SURGUT', 'PODOLSK', 'MAGADAN', 'CHEREPOVETS', 'NORILSK'
+  'VORONEZH', 'BELGOROD', 'MAKHACHKALA', 'VLADIKAVKAZ', 'VLADIVOSTOK', 'KALININGRAD',
+  'CHELYABINSK', 'KRASNOYARSK', 'CHEBOKSARY', 'KHABAROVSK', 'PERM', 'TULA', 'RYAZAN', 'MURMANSK',
+  'PENZA', 'KURSK', 'ARKHANGELSK', 'ORENBURG', 'KIROV', 'KEMEROVO', 'TYUMEN', 'TOLYATTI',
+  'IVANOVO', 'STAVROPOL', 'SMOLENSK', 'PSKOV', 'BRYANSK', 'OREL', 'YAROSLAVL', 'BARNAUL',
+  'LIPETSK', 'ULYANOVSK', 'YAKUTSK', 'TAMBOV', 'BRATSK', 'ASTRAKHAN', 'CHITA', 'KOSTROMA',
+  'VLADIMIR', 'KALUGA', 'NOVGOROD', 'TAGANROG', 'VOLOGDA', 'TVER', 'TOMSK', 'IZHEVSK', 'SURGUT',
+  'PODOLSK', 'MAGADAN', 'CHEREPOVETS', 'NORILSK',
 ];
 
 const gtaServers = [
   'Downtown', 'Strawberry', 'Vinewood', 'Blackberry', 'Insquad', 'Sunrise', 'Rainbow', 'Richman',
   'Eclipse', 'La Mesa', 'Burton', 'Rockford', 'Alta', 'Del Perro', 'Davis', 'Harmony', 'Redwood',
-  'Hawick', 'Grapeseed', 'Murrieta', 'Vespucci', 'Milton', 'La Puerta', 'Senora'
+  'Hawick', 'Grapeseed', 'Murrieta', 'Vespucci', 'Milton', 'La Puerta', 'Senora',
 ];
 
 const matreshkaServers = Array.from({ length: 34 }, (_, i) => `MATRESHKA MOBILE #${i + 1}`);
@@ -36,20 +37,20 @@ const matreshkaServers = Array.from({ length: 34 }, (_, i) => `MATRESHKA MOBILE 
 const blackRussiaPricing = [
   { min: 100, rate: 40 },
   { min: 10, rate: 45 },
-  { min: 0, rate: 50 }
+  { min: 0, rate: 50 },
 ];
 
 const matreshkaPricing = [
   { min: 100, rate: 70 },
   { min: 10, rate: 80 },
-  { min: 0, rate: 100 }
+  { min: 0, rate: 100 },
 ];
 
 const gtaPricing = [
   { min: 50, rate: 800 },
   { min: 10, rate: 900 },
   { min: 5, rate: 950 },
-  { min: 0, rate: 1000 }
+  { min: 0, rate: 1000 },
 ];
 
 const games = {
@@ -57,20 +58,20 @@ const games = {
     name: 'BLACK RUSSIA',
     sellUrl: SELL_MANAGER_URL,
     servers: blackRussiaServers,
-    pricing: blackRussiaPricing
+    pricing: blackRussiaPricing,
   },
   mat: {
     name: 'MATRESHKA RP',
     sellUrl: SELL_MANAGER_URL,
     servers: matreshkaServers,
-    pricing: matreshkaPricing
+    pricing: matreshkaPricing,
   },
   gta: {
     name: 'GTA 5 RP',
     sellUrl: SELL_MANAGER_URL,
     servers: gtaServers,
-    pricing: gtaPricing
-  }
+    pricing: gtaPricing,
+  },
 };
 
 // =========================
@@ -85,7 +86,7 @@ const state = {
   promoDiscount: 0,
   total: 0,
   virtualAmount: 0,
-  deliveryMethod: 'trade'
+  deliveryMethod: 'trade',
 };
 
 // =========================
@@ -269,7 +270,7 @@ function calculateFromVirtual(amount) {
     rate,
     subtotal,
     promoDiscount,
-    total
+    total,
   };
 }
 
@@ -290,7 +291,6 @@ function calculateFromMoney(moneyValue) {
     if (effectiveRate <= 0) continue;
 
     const virtualAmount = money / effectiveRate;
-
     if (virtualAmount >= tier.min) {
       return calculateFromVirtual(virtualAmount);
     }
@@ -345,21 +345,20 @@ function renderDiscounts() {
     if (index === 0) {
       const nextMin = pricing[index + 1]?.min;
       const label = nextMin ? `до ${formatKkLabel(nextMin - 0.01)} кк` : 'любой объём';
-
       return { label, rate: item.rate };
     }
 
     return {
       label: `от ${formatKkLabel(item.min)} кк`,
-      rate: item.rate
+      rate: item.rate,
     };
   });
 
   container.innerHTML = lines
     .map((item) => `
-      <div class="discount-line">
+      <div class="discount-row">
         <span>${item.label}</span>
-        <strong>${item.rate} ₽ / 1кк</strong>
+        <span>${item.rate} ₽ / 1кк</span>
       </div>
     `)
     .join('');
@@ -396,7 +395,6 @@ function resetBuyForm() {
 function selectGame(key) {
   state.gameKey = key;
   state.server = '';
-
   renderActions();
   resetBuyForm();
   switchScreen('actions');
@@ -447,14 +445,17 @@ function renderServers(filteredList) {
   container.innerHTML = '';
 
   if (!list.length) {
-    container.innerHTML = '<p class="muted-center">Ничего не найдено по этому запросу.</p>';
+    container.innerHTML = '<div class="empty-state">Ничего не найдено по этому запросу.</div>';
     return;
   }
 
   list.forEach((name) => {
     const button = document.createElement('button');
     button.className = 'btn server-btn';
-    button.innerHTML = `<strong>${name}</strong><small>Нажми, чтобы перейти к оформлению</small>`;
+    button.innerHTML = `
+      <span>${name}</span>
+      <small>Нажми, чтобы перейти к оформлению</small>
+    `;
     button.onclick = () => selectServer(name);
     container.appendChild(button);
   });
@@ -463,12 +464,10 @@ function renderServers(filteredList) {
 function filterServers() {
   const serverSearch = document.getElementById('serverSearch');
   const game = currentGame();
-
   if (!serverSearch || !game) return;
 
   const value = serverSearch.value.trim().toLowerCase();
   const filtered = game.servers.filter((server) => server.toLowerCase().includes(value));
-
   renderServers(filtered);
 }
 
@@ -499,10 +498,10 @@ function selectServer(serverName) {
 function handlePromoInput() {
   const promoEl = document.getElementById('promoStatus');
   const promoInput = document.getElementById('promoInput');
+
   if (!promoEl || !promoInput) return;
 
   const code = promoInput.value.trim().toUpperCase();
-
   promoEl.className = 'helper-text';
   promoEl.innerText = '';
 
@@ -513,7 +512,7 @@ function handlePromoInput() {
     promoEl.innerText = `Промокод активирован: скидка ${PROMO_CODES[code]}%`;
   } else {
     promoEl.className = 'helper-text warning';
-    promoEl.innerText = 'Промокод не найден. Заказ будет оформлен без скидки.';
+    promoEl.innerText = 'Промокод не найден.\nЗаказ будет оформлен без скидки.';
   }
 
   if (state.lastEdited === 'money') {
@@ -532,7 +531,6 @@ function updateFromVirtual() {
 
   const result = calculateFromVirtual(virtualAmount.value);
   moneyAmount.value = result.total > 0 ? Math.round(result.total) : '';
-
   updateSummary(result);
 }
 
@@ -545,7 +543,6 @@ function updateFromMoney() {
 
   const result = calculateFromMoney(moneyAmount.value);
   virtualAmount.value = result.virtualAmount > 0 ? Number(result.virtualAmount.toFixed(2)).toString() : '';
-
   updateSummary(result);
 }
 
@@ -614,20 +611,31 @@ function buy() {
     return;
   }
 
+  const amountKk = Number(state.virtualAmount.toFixed(2));
+  const deliveryLabel = getDeliveryMethodLabel();
+
   const payload = {
     type: 'buy_order',
+
+    // Ключи, которые ждёт bot.py
     game: game.name,
     server: state.server,
-    nickname,
+    nickname: nickname,
+    promo: promoCode || '',
+    amount_kk: amountKk,
+    delivery_type: deliveryLabel,
+    bank_account: state.deliveryMethod === 'bank' ? bankAccount : '',
+
+    // Доп. ключи для совместимости и логов
     deliveryMethod: state.deliveryMethod,
-    deliveryMethodLabel: getDeliveryMethodLabel(),
-    bankAccount: state.deliveryMethod === 'bank' ? bankAccount : null,
-    promoCode: promoCode || null,
-    virtualAmountKK: Number(state.virtualAmount.toFixed(2)),
+    deliveryMethodLabel: deliveryLabel,
+    bankAccount: state.deliveryMethod === 'bank' ? bankAccount : '',
+    promoCode: promoCode || '',
+    virtualAmountKK: amountKk,
     ratePerKK: state.currentRate,
     subtotalRub: Math.round(state.subtotal),
     promoDiscountRub: Math.round(state.promoDiscount),
-    totalRub: Math.round(state.total)
+    totalRub: Math.round(state.total),
   };
 
   if (window.Telegram && Telegram.WebApp && Telegram.WebApp.sendData) {
@@ -641,9 +649,9 @@ function buy() {
     `Игра: ${payload.game}\n` +
     `Сервер: ${payload.server}\n` +
     `Ник: ${payload.nickname}\n` +
-    `Получение: ${payload.deliveryMethodLabel}\n` +
-    `${payload.bankAccount ? `Счёт: ${payload.bankAccount}\n` : ''}` +
-    `Количество: ${payload.virtualAmountKK} кк\n` +
+    `Получение: ${payload.delivery_type}\n` +
+    `${payload.bank_account ? `Счёт: ${payload.bank_account}\n` : ''}` +
+    `Количество: ${payload.amount_kk} кк\n` +
     `К оплате: ${payload.totalRub} ₽`
   );
 }
@@ -658,5 +666,5 @@ updateSummary({
   rate: 0,
   subtotal: 0,
   promoDiscount: 0,
-  total: 0
+  total: 0,
 });

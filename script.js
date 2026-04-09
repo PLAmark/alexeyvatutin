@@ -3,6 +3,7 @@
 // =========================
 const SUPPORT_URL = 'https://t.me/alexeyvatutin';
 const SELL_MANAGER_URL = 'https://t.me/alexeyvatutin';
+const BACKEND_BASE_URL = 'https://ringtone-exists-textile-logging.trycloudflare.com';
 
 // Промокоды можно заменить на свои.
 // Формат: КОД: размер_скидки_в_процентах

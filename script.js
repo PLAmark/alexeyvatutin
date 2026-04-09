@@ -3,7 +3,6 @@
 // =========================
 const SUPPORT_URL = 'https://t.me/alexeyvatutin';
 const SELL_MANAGER_URL = 'https://t.me/alexeyvatutin';
-const BACKEND_BASE_URL = 'https://ringtone-exists-textile-logging.trycloudflare.com';
 
 // Промокоды можно заменить на свои.
 // Формат: КОД: размер_скидки_в_процентах
@@ -572,7 +571,7 @@ function openUserAgreement() {
   switchScreen('agreement');
 }
 
-async function buy() {
+function buy() {
   const game = currentGame();
   const nicknameInput = document.getElementById('nickname');
   const promoInput = document.getElementById('promoInput');
@@ -612,42 +611,11 @@ async function buy() {
     return;
   }
 
+  const amountKk = Number(state.virtualAmount.toFixed(2));
+  const deliveryLabel = getDeliveryMethodLabel();
+
   const payload = {
-    game: game.name,
-    server: state.server,
-    nickname: nickname,
-    promo: promoCode || '',
-    amount_kk: Number(state.virtualAmount.toFixed(2)),
-    delivery_type: state.deliveryMethod === 'bank' ? 'Банком' : 'Трейдом',
-    bank_account: state.deliveryMethod === 'bank' ? bankAccount : ''
-  };
-
-  try {
-    const headers = {
-      'Content-Type': 'application/json'
-    };
-
-    if (window.Telegram && Telegram.WebApp && Telegram.WebApp.initData) {
-      headers['X-Telegram-Init-Data'] = Telegram.WebApp.initData;
-    }
-
-    const response = await fetch(`${BACKEND_BASE_URL}/api/create-order`, {
-      method: 'POST',
-      headers,
-      body: JSON.stringify(payload)
-    });
-
-    const data = await response.json();
-
-    if (!response.ok || !data.ok) {
-      throw new Error(data.error || 'Не удалось создать заказ');
-    }
-
-    window.location.href = data.payment_url;
-  } catch (error) {
-    alert(`Не удалось создать заказ: ${error.message}`);
-  }
-}
+    type: 'buy_order',
 
     // Ключи, которые ждёт bot.py
     game: game.name,
@@ -700,4 +668,3 @@ updateSummary({
   promoDiscount: 0,
   total: 0,
 });
-

@@ -646,7 +646,11 @@ async function buy() {
       throw new Error(data.error || 'Не удалось создать заказ');
     }
 
-    window.location.href = data.payment_url;
+    if (window.Telegram && Telegram.WebApp && Telegram.WebApp.openLink) {
+      Telegram.WebApp.openLink(data.payment_url);
+    } else {
+      window.open(data.payment_url, '_blank');
+    }
   } catch (error) {
     alert(`Не удалось создать заказ: ${error.message}`);
   }

@@ -572,7 +572,7 @@ function openUserAgreement() {
   switchScreen('agreement');
 }
 
-function buy() {
+async function buy() {
   const game = currentGame();
   const nicknameInput = document.getElementById('nickname');
   const promoInput = document.getElementById('promoInput');
@@ -616,45 +616,40 @@ function buy() {
   const deliveryLabel = getDeliveryMethodLabel();
 
   const payload = {
-    type: 'buy_order',
-
-    // Ключи, которые ждёт bot.py
     game: game.name,
     server: state.server,
     nickname: nickname,
     promo: promoCode || '',
     amount_kk: amountKk,
     delivery_type: deliveryLabel,
-    bank_account: state.deliveryMethod === 'bank' ? bankAccount : '',
-
-    // Доп. ключи для совместимости и логов
-    deliveryMethod: state.deliveryMethod,
-    deliveryMethodLabel: deliveryLabel,
-    bankAccount: state.deliveryMethod === 'bank' ? bankAccount : '',
-    promoCode: promoCode || '',
-    virtualAmountKK: amountKk,
-    ratePerKK: state.currentRate,
-    subtotalRub: Math.round(state.subtotal),
-    promoDiscountRub: Math.round(state.promoDiscount),
-    totalRub: Math.round(state.total),
+    bank_account: state.deliveryMethod === 'bank' ? bankAccount : ''
   };
 
-  if (window.Telegram && Telegram.WebApp && Telegram.WebApp.sendData) {
-    Telegram.WebApp.sendData(JSON.stringify(payload));
-    alert('Заявка отправлена в бота.');
-    return;
-  }
+  try {
+    const headers = {
+      'Content-Type': 'application/json'
+    };
 
-  alert(
-    `Заявка сформирована:\n\n` +
-    `Игра: ${payload.game}\n` +
-    `Сервер: ${payload.server}\n` +
-    `Ник: ${payload.nickname}\n` +
-    `Получение: ${payload.delivery_type}\n` +
-    `${payload.bank_account ? `Счёт: ${payload.bank_account}\n` : ''}` +
-    `Количество: ${payload.amount_kk} кк\n` +
-    `К оплате: ${payload.totalRub} ₽`
-  );
+    if (window.Telegram && Telegram.WebApp && Telegram.WebApp.initData) {
+      headers['X-Telegram-Init-Data'] = Telegram.WebApp.initData;
+    }
+
+    const response = await fetch(`${BACKEND_BASE_URL}/api/create-order`, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(payload)
+    });
+
+    const data = await response.json();
+
+    if (!response.ok || !data.ok) {
+      throw new Error(data.error || 'Не удалось создать заказ');
+    }
+
+    window.location.href = data.payment_url;
+  } catch (error) {
+    alert(`Не удалось создать заказ: ${error.message}`);
+  }
 }
 
 // =========================

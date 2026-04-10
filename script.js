@@ -4,6 +4,7 @@
 const SUPPORT_URL = 'https://t.me/alexeyvatutin';
 const SELL_MANAGER_URL = 'https://t.me/alexeyvatutin';
 const BACKEND_BASE_URL = 'https://knives-writing-fighters-reserved.trycloudflare.com';
+const ACCESS_RESTRICTED_TEXT = 'Доступ к mini-app временно ограничен.';
 
 // Промокоды можно заменить на свои.
 // Формат: КОД: размер_скидки_в_процентах
@@ -54,24 +55,70 @@ const gtaPricing = [
   { min: 0, rate: 1000 },
 ];
 
+const standoffPricing = [
+  { min: 0, rate: 0.55 },
+];
+
 const games = {
   br: {
     name: 'BLACK RUSSIA',
     sellUrl: SELL_MANAGER_URL,
     servers: blackRussiaServers,
     pricing: blackRussiaPricing,
+    actionBuyText: 'КУПИТЬ ВИРТЫ',
+    actionSellText: 'ПРОДАТЬ ВИРТЫ',
+    buyTitle: 'Купить вирты',
+    amountLabel: 'Количество валюты (кк)',
+    amountPlaceholder: 'Например, 10',
+    buySubmitText: 'КУПИТЬ',
+    rateSuffix: '₽ / 1кк',
+    goldMode: false,
+    autoSelectServer: '',
   },
   mat: {
     name: 'MATRESHKA RP',
     sellUrl: SELL_MANAGER_URL,
     servers: matreshkaServers,
     pricing: matreshkaPricing,
+    actionBuyText: 'КУПИТЬ ВИРТЫ',
+    actionSellText: 'ПРОДАТЬ ВИРТЫ',
+    buyTitle: 'Купить вирты',
+    amountLabel: 'Количество валюты (кк)',
+    amountPlaceholder: 'Например, 10',
+    buySubmitText: 'КУПИТЬ',
+    rateSuffix: '₽ / 1кк',
+    goldMode: false,
+    autoSelectServer: '',
   },
   gta: {
     name: 'GTA 5 RP',
     sellUrl: SELL_MANAGER_URL,
     servers: gtaServers,
     pricing: gtaPricing,
+    actionBuyText: 'КУПИТЬ ВИРТЫ',
+    actionSellText: 'ПРОДАТЬ ВИРТЫ',
+    buyTitle: 'Купить вирты',
+    amountLabel: 'Количество валюты (кк)',
+    amountPlaceholder: 'Например, 10',
+    buySubmitText: 'КУПИТЬ',
+    rateSuffix: '₽ / 1кк',
+    goldMode: false,
+    autoSelectServer: '',
+  },
+  so2: {
+    name: 'STANDOFF 2',
+    sellUrl: SELL_MANAGER_URL,
+    servers: ['STANDOFF 2'],
+    pricing: standoffPricing,
+    actionBuyText: 'КУПИТЬ ГОЛДУ',
+    actionSellText: 'ПРОДАТЬ ГОЛДУ',
+    buyTitle: 'Купить голду',
+    amountLabel: 'Количество голды',
+    amountPlaceholder: 'Например, 100',
+    buySubmitText: 'КУПИТЬ ГОЛДУ',
+    rateSuffix: '₽ за 1 голду',
+    goldMode: true,
+    autoSelectServer: 'STANDOFF 2',
   },
 };
 
@@ -137,8 +184,15 @@ function goActions() {
 }
 
 function goServers() {
+  const game = currentGame();
+
   if (!state.gameKey) {
     goHome();
+    return;
+  }
+
+  if (game && game.autoSelectServer) {
+    goActions();
     return;
   }
 
@@ -172,14 +226,6 @@ function openExternal(url) {
 
 function formatMoney(value) {
   return `${Math.round(value).toLocaleString('ru-RU')} ₽`;
-}
-
-function formatVirtual(value) {
-  if (!Number.isFinite(value) || value <= 0) {
-    return '0';
-  }
-
-  return Number(value.toFixed(2)).toLocaleString('ru-RU');
 }
 
 function getDeliveryMethodLabel() {
@@ -254,8 +300,18 @@ function getPricingForVirtual(amount) {
   return selected.rate;
 }
 
-function formatKkLabel(value) {
-  return Number(Number(value).toFixed(2)).toLocaleString('ru-RU');
+function formatAmountValue(value) {
+  const num = Number(value);
+  if (!Number.isFinite(num)) return '0';
+  if (Number.isInteger(num)) return num.toLocaleString('ru-RU');
+  return Number(num.toFixed(2)).toLocaleString('ru-RU');
+}
+
+function formatTierLabel(min, goldMode) {
+  if (goldMode) {
+    return `от ${formatAmountValue(min)} голды`;
+  }
+  return `от ${formatAmountValue(min)} кк`;
 }
 
 function calculateFromVirtual(amount) {
@@ -311,9 +367,10 @@ function updateSummary(result) {
   const subtotalText = document.getElementById('subtotalText');
   const promoDiscountText = document.getElementById('promoDiscountText');
   const totalText = document.getElementById('totalText');
+  const game = currentGame();
 
   if (rateText) {
-    rateText.innerText = result.virtualAmount > 0 ? `${result.rate} ₽ / 1кк` : '—';
+    rateText.innerText = result.virtualAmount > 0 ? `${result.rate} ${game?.rateSuffix || '₽ / 1кк'}` : '—';
   }
 
   if (subtotalText) {
@@ -340,17 +397,27 @@ function renderDiscounts() {
     return;
   }
 
+  if (game.goldMode) {
+    container.innerHTML = `
+      <div class="discount-row"><span>1 голда</span><span>0.55 ₽</span></div>
+      <div class="discount-row"><span>100 голды</span><span>55 ₽</span></div>
+      <div class="discount-row"><span>500 голды</span><span>275 ₽</span></div>
+      <div class="discount-row"><span>1000 голды</span><span>550 ₽</span></div>
+    `;
+    return;
+  }
+
   const pricing = game.pricing.slice().sort((a, b) => a.min - b.min);
 
   const lines = pricing.map((item, index) => {
     if (index === 0) {
       const nextMin = pricing[index + 1]?.min;
-      const label = nextMin ? `до ${formatKkLabel(nextMin - 0.01)} кк` : 'любой объём';
+      const label = nextMin ? `до ${formatAmountValue(nextMin - 0.01)} кк` : 'любой объём';
       return { label, rate: item.rate };
     }
 
     return {
-      label: `от ${formatKkLabel(item.min)} кк`,
+      label: formatTierLabel(item.min, false),
       rate: item.rate,
     };
   });
@@ -385,9 +452,193 @@ function resetBuyForm() {
   }
 
   state.lastEdited = 'virtual';
+  applyGameUiTexts();
   setDeliveryMethod('trade');
   updateSummary(calculateFromVirtual(0));
   renderDiscounts();
+}
+
+function injectDynamicStyles() {
+  if (document.getElementById('dynamic-so2-styles')) return;
+
+  const style = document.createElement('style');
+  style.id = 'dynamic-so2-styles';
+  style.textContent = `
+    .btn-game-so2 {
+      background: linear-gradient(135deg, #394252, #151a22);
+      box-shadow:
+        0 12px 28px rgba(0, 0, 0, 0.24),
+        0 0 18px rgba(207, 160, 58, 0.14),
+        0 0 34px rgba(207, 160, 58, 0.10);
+    }
+
+    .btn-game-so2:hover {
+      filter: brightness(1.05);
+    }
+
+    .btn-gold {
+      background: linear-gradient(90deg, #f3c74d, #ba7b00) !important;
+      color: #241700 !important;
+      text-align: center;
+      box-shadow: 0 12px 30px rgba(186, 123, 0, 0.25);
+    }
+
+    .discount-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .discount-row + .discount-row {
+      margin-top: 8px;
+    }
+
+    .restricted-wrap {
+      width: min(100%, 440px);
+      margin: 0 auto;
+      padding: 16px 14px 24px;
+    }
+
+    .restricted-card {
+      background: rgba(14, 22, 34, 0.82);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.28);
+      backdrop-filter: blur(20px);
+      border-radius: 24px;
+      padding: 18px;
+      color: #fff;
+    }
+
+    .restricted-card h2 {
+      margin: 0 0 10px;
+      font-size: 22px;
+      font-weight: 800;
+    }
+
+    .restricted-card p {
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.5;
+      color: rgba(255, 255, 255, 0.78);
+    }
+  `;
+  document.head.appendChild(style);
+}
+
+function ensureStandoffButton() {
+  if (document.querySelector('.btn-game-so2')) return;
+
+  const gtaButton = document.querySelector('.btn-game-gta');
+  if (!gtaButton) return;
+
+  const button = document.createElement('button');
+  button.className = 'btn btn-game btn-game-so2';
+  button.type = 'button';
+  button.innerHTML = `
+    <span class="game-left">
+      <span class="game-icon">
+        <img src="standoff.svg" alt="STANDOFF 2">
+      </span>
+      <span class="game-meta">
+        <span class="game-name">STANDOFF 2</span>
+        <span class="game-note">Покупка и продажа голды</span>
+      </span>
+    </span>
+    <span class="game-arrow">›</span>
+  `;
+  button.addEventListener('click', () => selectGame('so2'));
+
+  gtaButton.insertAdjacentElement('afterend', button);
+}
+
+function applyGameUiTexts() {
+  const game = currentGame();
+  if (!game) return;
+
+  const actionsScreen = document.getElementById('actions');
+  const serversScreen = document.getElementById('servers');
+  const buyScreen = document.getElementById('buy');
+
+  if (actionsScreen) {
+    const actionButtons = actionsScreen.querySelectorAll('.stack > .btn');
+    const actionsFooter = actionsScreen.querySelector('.footer');
+
+    if (actionButtons.length >= 2) {
+      actionButtons[0].innerText = game.actionBuyText;
+      actionButtons[0].classList.toggle('btn-gold', !!game.goldMode);
+      actionButtons[0].classList.toggle('btn-primary', !game.goldMode);
+      actionButtons[0].classList.add('center');
+
+      actionButtons[1].innerText = game.actionSellText;
+    }
+
+    if (actionsFooter) {
+      actionsFooter.innerText = game.autoSelectServer
+        ? 'Продажа переводит пользователя в Telegram к менеджеру. Покупка открывает форму заявки.'
+        : 'Продажа переводит пользователя в Telegram к менеджеру. Покупка открывает выбор сервера и форму заявки.';
+    }
+  }
+
+  if (serversScreen) {
+    const sectionTitle = serversScreen.querySelector('.section-title');
+    const heading = serversScreen.querySelector('h2');
+
+    if (sectionTitle) {
+      sectionTitle.innerText = game.buyTitle;
+    }
+
+    if (heading) {
+      heading.innerText = game.autoSelectServer ? 'Подтверждение товара' : 'Выбор сервера';
+    }
+  }
+
+  if (buyScreen) {
+    const sectionTitle = buyScreen.querySelector('.section-title');
+    const heading = buyScreen.querySelector('h2');
+    const rows = buyScreen.querySelectorAll('.selected-box .selected-row');
+    const amountLabel = buyScreen.querySelector('label[for="virtualAmount"]');
+    const amountInput = document.getElementById('virtualAmount');
+    const submitBtn = buyScreen.querySelector('button[onclick="buy()"]') || buyScreen.querySelector('.btn-primary, .btn-gold');
+    const footer = buyScreen.querySelector('.footer');
+
+    if (sectionTitle) {
+      sectionTitle.innerText = 'Оформление заказа';
+    }
+
+    if (heading) {
+      heading.innerText = game.buyTitle;
+    }
+
+    if (rows.length >= 2) {
+      const secondLabel = rows[1].querySelector('span');
+      if (secondLabel) {
+        secondLabel.innerText = game.autoSelectServer ? 'Товар' : 'Сервер';
+      }
+    }
+
+    if (amountLabel) {
+      amountLabel.innerText = game.amountLabel;
+    }
+
+    if (amountInput) {
+      amountInput.placeholder = game.amountPlaceholder;
+    }
+
+    if (submitBtn) {
+      submitBtn.innerText = game.buySubmitText;
+      submitBtn.classList.toggle('btn-gold', !!game.goldMode);
+      submitBtn.classList.toggle('btn-primary', !game.goldMode);
+      submitBtn.classList.add('center');
+    }
+
+    if (footer) {
+      footer.innerText = game.goldMode
+        ? 'Можно ввести количество голды или сумму в рублях — второе поле пересчитается автоматически.'
+        : 'Можно ввести либо количество виртов, либо сумму в рублях — второе поле пересчитается автоматически.';
+    }
+  }
 }
 
 // =========================
@@ -415,10 +666,20 @@ function renderActions() {
   if (actionsGameBadge) {
     actionsGameBadge.innerText = game.name;
   }
+
+  applyGameUiTexts();
 }
 
 function openBuyFlow() {
   if (!state.gameKey) return;
+
+  const game = currentGame();
+  if (!game) return;
+
+  if (game.autoSelectServer) {
+    selectServer(game.autoSelectServer);
+    return;
+  }
 
   renderServers();
   switchScreen('servers');
@@ -427,6 +688,11 @@ function openBuyFlow() {
 function renderServers(filteredList) {
   const game = currentGame();
   if (!game) return;
+
+  if (game.autoSelectServer) {
+    selectServer(game.autoSelectServer);
+    return;
+  }
 
   const serverSearch = document.getElementById('serverSearch');
   const serversGameBadge = document.getElementById('serversGameBadge');
@@ -492,6 +758,7 @@ function selectServer(serverName) {
     buyDeliveryMethodText.innerText = getDeliveryMethodLabel();
   }
 
+  applyGameUiTexts();
   renderDiscounts();
   switchScreen('buy');
 }
@@ -583,6 +850,10 @@ async function buy() {
     return;
   }
 
+  if (game.autoSelectServer && !state.server) {
+    state.server = game.autoSelectServer;
+  }
+
   const nickname = nicknameInput ? nicknameInput.value.trim() : '';
   const promoCode = promoInput ? promoInput.value.trim().toUpperCase() : '';
   const bankAccount = bankAccountInput ? bankAccountInput.value.trim() : '';
@@ -608,11 +879,11 @@ async function buy() {
   }
 
   if (!state.virtualAmount || state.virtualAmount <= 0) {
-    alert('Введите количество виртов или сумму оплаты.');
+    alert('Введите количество валюты или сумму оплаты.');
     return;
   }
 
-  const amountKk = Number(state.virtualAmount.toFixed(2));
+  const amountValue = Number(state.virtualAmount.toFixed(2));
   const deliveryLabel = getDeliveryMethodLabel();
 
   const payload = {
@@ -620,7 +891,7 @@ async function buy() {
     server: state.server,
     nickname: nickname,
     promo: promoCode || '',
-    amount_kk: amountKk,
+    amount_kk: amountValue,
     delivery_type: deliveryLabel,
     bank_account: state.deliveryMethod === 'bank' ? bankAccount : ''
   };
@@ -649,22 +920,69 @@ async function buy() {
     if (window.Telegram && Telegram.WebApp && Telegram.WebApp.openLink) {
       Telegram.WebApp.openLink(data.payment_url);
     } else {
-      window.open(data.payment_url, '_blank');
+      window.open(data.payment_url, '_blank', 'noopener,noreferrer');
     }
   } catch (error) {
     alert(`Не удалось создать заказ: ${error.message}`);
   }
 }
 
-// =========================
-// ИНИЦИАЛИЗАЦИЯ
-// =========================
-initTelegram();
-setDeliveryMethod('trade');
-updateSummary({
-  virtualAmount: 0,
-  rate: 0,
-  subtotal: 0,
-  promoDiscount: 0,
-  total: 0,
-});
+async function checkAccess() {
+  if (!(window.Telegram && Telegram.WebApp && Telegram.WebApp.initData)) {
+    return;
+  }
+
+  try {
+    const response = await fetch(`${BACKEND_BASE_URL}/api/access`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Telegram-Init-Data': Telegram.WebApp.initData
+      },
+      body: '{}'
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      console.error('Access check failed', data);
+      return;
+    }
+
+    if (data.allowed === false) {
+      document.body.innerHTML = `
+        <div class="restricted-wrap">
+          <div class="restricted-card">
+            <h2>Доступ ограничен</h2>
+            <p>${data.message || ACCESS_RESTRICTED_TEXT}</p>
+          </div>
+        </div>
+      `;
+    }
+  } catch (e) {
+    console.error('Access check error', e);
+  }
+}
+
+function bootstrap() {
+  injectDynamicStyles();
+  ensureStandoffButton();
+  initTelegram();
+  applyGameUiTexts();
+  setDeliveryMethod('trade');
+  updateSummary({
+    virtualAmount: 0,
+    rate: 0,
+    subtotal: 0,
+    promoDiscount: 0,
+    total: 0,
+  });
+  renderDiscounts();
+  checkAccess();
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', bootstrap);
+} else {
+  bootstrap();
+}

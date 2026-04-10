@@ -953,7 +953,7 @@ async function checkAccess() {
       document.body.innerHTML = `
         <div class="restricted-wrap">
           <div class="restricted-card">
-            <h2>Доступ ограничен</h2>
+            <h2>Ведутся технические работы</h2>
             <p>${data.message || ACCESS_RESTRICTED_TEXT}</p>
           </div>
         </div>

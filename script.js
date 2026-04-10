@@ -4,7 +4,7 @@
 const SUPPORT_URL = 'https://t.me/alexeyvatutin';
 const SELL_MANAGER_URL = 'https://t.me/alexeyvatutin';
 const BACKEND_BASE_URL = 'https://knives-writing-fighters-reserved.trycloudflare.com';
-const ACCESS_RESTRICTED_TEXT = 'Ведутся технические работы, приносим свои извинения';
+const ACCESS_RESTRICTED_TEXT = 'Бот пока что не работает. Оформить заказ можно вручную';
 
 // Промокоды можно заменить на свои.
 // Формат: КОД: размер_скидки_в_процентах

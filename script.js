@@ -548,9 +548,9 @@ function applyGameUiTexts() {
       actionButtons[1].innerText = game.actionSellText;
     }
 
-   if (actionsFooter) {
-  actionsFooter.innerText = 'Покупка открывает оформление заказа. Продажа оформляется как заявка менеджеру в Telegram.';
-}
+    if (actionsFooter) {
+      actionsFooter.innerText = 'Покупка открывает оформление заказа. Продажа оформляется как заявка менеджеру в Telegram.';
+    }
   }
 
   if (serversScreen) {

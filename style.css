@@ -545,26 +545,28 @@ p {
 /* Информационный блок на главном экране */
 .home-info-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-  margin: 2px 0 0;
+  gap: 9px;
+  margin: 2px 0 2px;
 }
 
 .home-info-card {
-  min-height: 150px;
-  padding: 12px 11px;
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  min-height: auto;
+  padding: 12px 13px;
   border-radius: var(--radius-md);
   background:
     linear-gradient(180deg, rgba(86, 168, 255, 0.08), rgba(255, 255, 255, 0.045)),
     rgba(255, 255, 255, 0.055);
   border: 1px solid rgba(255, 255, 255, 0.075);
-  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.16);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.14);
 }
 
 .home-info-icon {
   width: 34px;
   height: 34px;
-  margin-bottom: 10px;
+  flex: 0 0 34px;
   border-radius: 12px;
   display: inline-flex;
   align-items: center;
@@ -576,8 +578,8 @@ p {
 }
 
 .home-info-icon svg {
-  width: 20px;
-  height: 20px;
+  width: 19px;
+  height: 19px;
   fill: none;
   stroke: currentColor;
   stroke-width: 1.8;
@@ -586,16 +588,16 @@ p {
 }
 
 .home-info-title {
-  margin-bottom: 6px;
-  font-size: 13px;
+  margin-bottom: 3px;
+  font-size: 14px;
   line-height: 1.2;
   font-weight: 800;
   color: var(--text-main);
 }
 
 .home-info-text {
-  font-size: 11.5px;
-  line-height: 1.42;
+  font-size: 12px;
+  line-height: 1.35;
   color: var(--text-muted);
 }
 

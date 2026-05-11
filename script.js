@@ -527,32 +527,6 @@ function injectDynamicStyles() {
   document.head.appendChild(style);
 }
 
-function ensureStandoffButton() {
-  if (document.querySelector('.btn-game-so2')) return;
-
-  const gtaButton = document.querySelector('.btn-game-gta');
-  if (!gtaButton) return;
-
-  const button = document.createElement('button');
-  button.className = 'btn btn-game btn-game-so2';
-  button.type = 'button';
-  button.innerHTML = `
-    <span class="game-left">
-      <span class="game-icon">
-        <img src="standoff.svg" alt="STANDOFF 2">
-      </span>
-      <span class="game-meta">
-        <span class="game-name">STANDOFF 2</span>
-        <span class="game-note">Покупка и продажа голды</span>
-      </span>
-    </span>
-    <span class="game-arrow">›</span>
-  `;
-  button.addEventListener('click', () => selectGame('so2'));
-
-  gtaButton.insertAdjacentElement('afterend', button);
-}
-
 function applyGameUiTexts() {
   const game = currentGame();
   if (!game) return;
@@ -966,7 +940,6 @@ async function checkAccess() {
 
 function bootstrap() {
   injectDynamicStyles();
-  ensureStandoffButton();
   initTelegram();
   applyGameUiTexts();
   setDeliveryMethod('trade');

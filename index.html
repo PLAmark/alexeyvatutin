@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#0f1725">
   <title>Бот Ватутина</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <link rel="stylesheet" href="./style.css?v=13">
+  <link rel="stylesheet" href="./style.css?v=14">
 </head>
 <body>
   <div class="container">
@@ -70,43 +70,38 @@
             <span class="game-arrow">›</span>
           </button>
 
-          <div class="home-info-grid" aria-label="Информация о заказе">
-            <div class="home-info-card">
-              <span class="home-info-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24">
-                  <path d="M8 4h8a2 2 0 0 1 2 2v14H6V6a2 2 0 0 1 2-2Z"></path>
-                  <path d="M9 9h6"></path>
-                  <path d="M9 13h6"></path>
-                  <path d="M9 17h4"></path>
-                  <path d="M10 2h4"></path>
-                </svg>
-              </span>
-              <div class="home-info-title">Как проходит заказ</div>
-              <div class="home-info-text">Выберите игру, сервер и способ получения.</div>
-            </div>
 
-            <div class="home-info-card">
-              <span class="home-info-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24">
-                  <path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7Z"></path>
-                  <path d="M3 10h18"></path>
-                  <path d="M7 15h4"></path>
-                </svg>
-              </span>
-              <div class="home-info-title">Оплата и доставка</div>
-              <div class="home-info-text">Цифровой товар передаётся внутри выбранной игры.</div>
-            </div>
 
-            <div class="home-info-card">
-              <span class="home-info-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24">
-                  <path d="M12 3 19 6v5c0 4.5-2.8 8-7 10-4.2-2-7-5.5-7-10V6l7-3Z"></path>
-                  <path d="m9 12 2 2 4-4"></path>
+          <div class="quick-info-grid" aria-label="Информация о заказе">
+            <button class="quick-info-tile" type="button" onclick="openOrderGuide()">
+              <span class="quick-info-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M8 4h8a2 2 0 0 1 2 2v14H6V6a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="1.8"/>
+                  <path d="M9 9h6M9 13h6M9 17h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
                 </svg>
               </span>
-              <div class="home-info-title">Возврат и отмена</div>
-              <div class="home-info-text">Отмена доступна до начала выполнения заказа.</div>
-            </div>
+              <span class="quick-info-title">Как заказать</span>
+            </button>
+
+            <button class="quick-info-tile" type="button" onclick="openDeliveryInfo()">
+              <span class="quick-info-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M4 7h16v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7Z" stroke="currentColor" stroke-width="1.8"/>
+                  <path d="M4 10h16M8 15h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                </svg>
+              </span>
+              <span class="quick-info-title">Доставка</span>
+            </button>
+
+            <button class="quick-info-tile" type="button" onclick="openRefundInfo()">
+              <span class="quick-info-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M12 3 19 6v5c0 4.4-2.8 8.3-7 10-4.2-1.7-7-5.6-7-10V6l7-3Z" stroke="currentColor" stroke-width="1.8"/>
+                  <path d="m8.8 12 2.1 2.1 4.4-4.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+              <span class="quick-info-title">Возврат</span>
+            </button>
           </div>
 
           <button class="btn btn-secondary" onclick="openSupport()">Поддержка</button>
@@ -230,6 +225,86 @@
       </div>
     </div>
 
+
+
+    <div id="orderGuide" class="screen">
+      <div class="card">
+        <div class="topbar">
+          <button class="back-btn" onclick="goHome()">←</button>
+          <div>
+            <div class="section-title">Информация</div>
+            <h2>Как проходит заказ</h2>
+          </div>
+        </div>
+
+        <div class="info-box">
+          <div class="info-box-title">Порядок оформления</div>
+          <div class="info-box-text">
+            Выберите игру, сервер, количество игровой валюты и способ получения. После оформления заказ передаётся в обработку, а данные проверяются менеджером.
+          </div>
+        </div>
+
+        <div class="info-box">
+          <div class="info-box-title">Что нужно указать</div>
+          <div class="info-box-text">
+            Для оформления потребуются игровой ник, выбранный сервер, объём заказа и способ получения: трейдом или через игровой банк, если такой способ доступен.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="deliveryInfo" class="screen">
+      <div class="card">
+        <div class="topbar">
+          <button class="back-btn" onclick="goHome()">←</button>
+          <div>
+            <div class="section-title">Информация</div>
+            <h2>Оплата и доставка</h2>
+          </div>
+        </div>
+
+        <div class="info-box">
+          <div class="info-box-title">Цифровой товар</div>
+          <div class="info-box-text">
+            Товар является цифровым. Физическая доставка не осуществляется. Передача выполняется внутри выбранной игры на указанном сервере.
+          </div>
+        </div>
+
+        <div class="info-box">
+          <div class="info-box-title">Способ получения</div>
+          <div class="info-box-text">
+            Доступные способы получения: трейдом или через игровой банк, если такой способ предусмотрен для выбранной игры и сервера.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="refundInfo" class="screen">
+      <div class="card">
+        <div class="topbar">
+          <button class="back-btn" onclick="goHome()">←</button>
+          <div>
+            <div class="section-title">Информация</div>
+            <h2>Возврат и отмена</h2>
+          </div>
+        </div>
+
+        <div class="info-box">
+          <div class="info-box-title">Отмена заказа</div>
+          <div class="info-box-text">
+            Заказ можно отменить до начала выполнения. Если заказ уже выполнен и цифровой товар передан покупателю, возврат невозможен, кроме случаев ошибки со стороны сервиса.
+          </div>
+        </div>
+
+        <div class="info-box">
+          <div class="info-box-title">Если заказ не выполнен</div>
+          <div class="info-box-text">
+            Если заказ не может быть выполнен по техническим причинам, покупателю предлагается возврат средств или согласование другого способа выполнения.
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div id="info" class="screen">
       <div class="card">
         <div class="topbar">
@@ -336,6 +411,6 @@
     </div>
   </div>
 
-  <script src="./script.js?v=13"></script>
+  <script src="./script.js?v=14"></script>
 </body>
 </html>

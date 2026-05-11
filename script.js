@@ -803,6 +803,18 @@ function openInfo() {
   switchScreen('info');
 }
 
+function openOrderGuide() {
+  switchScreen('orderGuide');
+}
+
+function openDeliveryInfo() {
+  switchScreen('deliveryInfo');
+}
+
+function openRefundInfo() {
+  switchScreen('refundInfo');
+}
+
 function openPrivacyPolicy() {
   switchScreen('privacy');
 }

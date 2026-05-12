@@ -158,7 +158,61 @@ function initTelegram() {
 // =========================
 // ВСПОМОГАТЕЛЬНЫЕ
 // =========================
+function blurActiveInput() {
+  const active = document.activeElement;
+
+  if (
+    active &&
+    (active.tagName === 'INPUT' ||
+      active.tagName === 'TEXTAREA' ||
+      active.tagName === 'SELECT')
+  ) {
+    active.blur();
+  }
+}
+
+function setupKeyboardAutoClose() {
+  const inputSelector = 'input, textarea, select';
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter' && event.target.matches(inputSelector)) {
+      event.preventDefault();
+      event.target.blur();
+    }
+  });
+
+  document.addEventListener(
+    'touchstart',
+    (event) => {
+      const active = document.activeElement;
+
+      if (
+        active &&
+        active.matches(inputSelector) &&
+        !event.target.closest(inputSelector)
+      ) {
+        active.blur();
+      }
+    },
+    { passive: true }
+  );
+
+  document.addEventListener('mousedown', (event) => {
+    const active = document.activeElement;
+
+    if (
+      active &&
+      active.matches(inputSelector) &&
+      !event.target.closest(inputSelector)
+    ) {
+      active.blur();
+    }
+  });
+}
+
 function switchScreen(id) {
+  blurActiveInput();
+
   document.querySelectorAll('.screen').forEach((screen) => {
     screen.classList.remove('active');
   });
@@ -824,6 +878,8 @@ function openUserAgreement() {
 }
 
 async function buy() {
+  blurActiveInput();
+
   const game = currentGame();
   const nicknameInput = document.getElementById('nickname');
   const promoInput = document.getElementById('promoInput');
@@ -950,6 +1006,7 @@ async function checkAccess() {
 
 function bootstrap() {
   injectDynamicStyles();
+  setupKeyboardAutoClose();
   initTelegram();
   applyGameUiTexts();
   setDeliveryMethod('trade');

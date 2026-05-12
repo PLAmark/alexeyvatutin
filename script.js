@@ -3,7 +3,7 @@
 // =========================
 const SUPPORT_URL = 'https://t.me/alexeyvatutin';
 const SELL_MANAGER_URL = 'https://t.me/alexeyvatutin';
-const BACKEND_BASE_URL = 'https://knives-writing-fighters-reserved.trycloudflare.com';
+const BACKEND_BASE_URL = 'https://api.alexeyvatutin.com';
 const ACCESS_RESTRICTED_TEXT = 'Оформить заказ можно вручную.';
 
 // Промокоды можно заменить на свои.

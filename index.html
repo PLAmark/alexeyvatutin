@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#0f1725">
   <title>Бот Ватутина</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <link rel="stylesheet" href="./style.css?v=14">
+  <link rel="stylesheet" href="./style.css?v=16">
 </head>
 <body>
   <div class="container">
@@ -154,7 +154,7 @@
           <div class="badge">Игра: <strong id="serversGameBadge">—</strong></div>
         </div>
 
-        <input id="serverSearch" class="search-box" placeholder="Поиск сервера..." oninput="filterServers()">
+        <input id="serverSearch" class="search-box" placeholder="Поиск сервера..." oninput="filterServers()" enterkeyhint="search" autocomplete="off">
         <div id="serversContainer" class="servers-wrapper"></div>
       </div>
     </div>
@@ -175,7 +175,7 @@
           <div class="selected-row"><span>Получение</span><strong id="buyDeliveryMethodText">Трейдом</strong></div>
         </div>
 
-        <input id="nickname" class="field" placeholder="Введите игровой ник">
+        <input id="nickname" class="field" placeholder="Введите игровой ник" enterkeyhint="done" autocomplete="off" autocapitalize="none" spellcheck="false">
 
         <div class="delivery-box">
           <div class="section-title">Способ получения</div>
@@ -187,21 +187,21 @@
               Получить банком
             </button>
           </div>
-          <input id="bankAccount" class="field delivery-extra" type="text" inputmode="numeric" placeholder="Номер банковского счёта" oninput="sanitizeBankAccount()">
+          <input id="bankAccount" class="field delivery-extra" type="text" inputmode="numeric" placeholder="Номер банковского счёта" oninput="sanitizeBankAccount()" enterkeyhint="done" autocomplete="off">
           <div id="deliveryHint" class="delivery-hint">Выдача будет отмечена как трейд.</div>
         </div>
 
-        <input id="promoInput" class="field" placeholder="Промокод (необязательно)" oninput="handlePromoInput()">
+        <input id="promoInput" class="field" placeholder="Промокод (необязательно)" oninput="handlePromoInput()" enterkeyhint="done" autocomplete="off" autocapitalize="characters" spellcheck="false">
         <div id="promoStatus" class="helper-text"></div>
 
         <div class="grid-2">
           <div class="input-group">
             <label for="virtualAmount">Количество валюты (кк)</label>
-            <input id="virtualAmount" class="field" type="number" min="0" step="0.01" placeholder="Например, 10" oninput="updateFromVirtual()">
+            <input id="virtualAmount" class="field" type="number" min="0" step="0.01" placeholder="Например, 10" oninput="updateFromVirtual()" enterkeyhint="done" autocomplete="off">
           </div>
           <div class="input-group">
             <label for="moneyAmount">Сумма оплаты (₽)</label>
-            <input id="moneyAmount" class="field" type="number" min="0" step="1" placeholder="Например, 450" oninput="updateFromMoney()">
+            <input id="moneyAmount" class="field" type="number" min="0" step="1" placeholder="Например, 450" oninput="updateFromMoney()" enterkeyhint="done" autocomplete="off">
           </div>
         </div>
 
@@ -411,6 +411,6 @@
     </div>
   </div>
 
-  <script src="./script.js?v=15"></script>
+  <script src="./script.js?v=16"></script>
 </body>
 </html>

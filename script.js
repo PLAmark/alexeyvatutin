@@ -513,28 +513,16 @@ function resetBuyForm() {
 }
 
 function injectDynamicStyles() {
-  if (document.getElementById('dynamic-so2-styles')) return;
+  if (document.getElementById('dynamic-runtime-styles')) return;
 
   const style = document.createElement('style');
-  style.id = 'dynamic-so2-styles';
+  style.id = 'dynamic-runtime-styles';
   style.textContent = `
-    .btn-game-so2 {
-      background: linear-gradient(135deg, #394252, #151a22);
-      box-shadow:
-        0 12px 28px rgba(0, 0, 0, 0.24),
-        0 0 18px rgba(207, 160, 58, 0.14),
-        0 0 34px rgba(207, 160, 58, 0.10);
-    }
-
-    .btn-game-so2:hover {
-      filter: brightness(1.05);
-    }
-
     .btn-gold {
-      background: linear-gradient(90deg, #f3c74d, #ba7b00) !important;
-      color: #241700 !important;
+      background: linear-gradient(135deg, #f4c35d, #b67512) !important;
+      color: #1e1405 !important;
       text-align: center;
-      box-shadow: 0 12px 30px rgba(186, 123, 0, 0.25);
+      box-shadow: 0 14px 32px rgba(182, 117, 18, 0.24);
     }
 
     .discount-row {
@@ -556,10 +544,10 @@ function injectDynamicStyles() {
     }
 
     .restricted-card {
-      background: rgba(14, 22, 34, 0.82);
+      background: rgba(9, 17, 30, 0.86);
       border: 1px solid rgba(255, 255, 255, 0.08);
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.28);
-      backdrop-filter: blur(20px);
+      box-shadow: 0 22px 60px rgba(0, 0, 0, 0.30);
+      backdrop-filter: blur(18px);
       border-radius: 24px;
       padding: 18px;
       color: #fff;
@@ -711,6 +699,28 @@ function openBuyFlow() {
   switchScreen('servers');
 }
 
+
+function getServerColor(serverName) {
+  const colors = {
+    RED: '#ff4545',
+    GREEN: '#73d65f',
+    BLUE: '#43a7ff',
+    YELLOW: '#ffd84d',
+    ORANGE: '#ff8a2b',
+    PURPLE: '#9b5cff',
+    WHITE: '#f2f5f8',
+    GRAY: '#9aa4b2',
+    PINK: '#ff65b3',
+    BLACK: '#202631',
+    LIME: '#a7ff4d',
+    CHERRY: '#c91944',
+    GOLD: '#f5be45',
+    AQUA: '#49d9e6'
+  };
+
+  return colors[String(serverName).toUpperCase()] || '#5aa9ff';
+}
+
 function renderServers(filteredList) {
   const game = currentGame();
   if (!game) return;
@@ -746,8 +756,11 @@ function renderServers(filteredList) {
     const button = document.createElement('button');
     button.className = 'btn server-btn';
     button.innerHTML = `
-      <span>${name}</span>
-      <small>Нажми, чтобы перейти к оформлению</small>
+      <span class="server-main">
+        <span class="server-dot" style="--server-color: ${getServerColor(name)}"></span>
+        <span class="server-name">${name}</span>
+      </span>
+      <span class="server-arrow">›</span>
     `;
     button.onclick = () => selectServer(name);
     container.appendChild(button);

@@ -1,806 +1,1044 @@
-:root {
-  --page-bg-1: #0c2140;
-  --page-bg-2: #06111f;
-  --card: rgba(9, 22, 38, 0.86);
-  --panel: rgba(255, 255, 255, 0.065);
-  --panel-strong: rgba(255, 255, 255, 0.095);
-  --panel-hover: rgba(255, 255, 255, 0.12);
-  --line: rgba(255, 255, 255, 0.105);
-  --line-strong: rgba(255, 255, 255, 0.16);
-  --text-main: #ffffff;
-  --text-muted: rgba(255, 255, 255, 0.66);
-  --text-soft: rgba(255, 255, 255, 0.46);
-  --accent: #2f8cff;
-  --accent-2: #1b63ee;
-  --success: #4ade80;
-  --danger: #ff6f54;
-  --warning: #ffd166;
-  --shadow: 0 22px 55px rgba(0, 0, 0, 0.30);
-  --radius-lg: 24px;
-  --radius-md: 15px;
-  --radius-sm: 11px;
-}
-
-* {
-  box-sizing: border-box;
-  -webkit-tap-highlight-color: transparent;
-}
-
-html {
-  min-height: 100%;
-  background: var(--page-bg-2);
-}
-
-body {
-  margin: 0;
-  min-height: 100vh;
-  font-family: Arial, sans-serif;
-  color: var(--text-main);
-  background:
-    radial-gradient(circle at 50% -12%, rgba(63, 139, 255, 0.22), transparent 34%),
-    radial-gradient(circle at 0% 10%, rgba(64, 124, 205, 0.18), transparent 26%),
-    linear-gradient(180deg, var(--page-bg-1), var(--page-bg-2) 54%, #050d18 100%);
-  overflow-x: hidden;
-}
-
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  background:
-    linear-gradient(90deg, rgba(255,255,255,0.035), transparent 18%, transparent 82%, rgba(255,255,255,0.025)),
-    radial-gradient(circle at 70% 40%, rgba(64, 147, 255, 0.08), transparent 32%);
-  opacity: 0.8;
-}
-
-.container {
-  width: min(100%, 440px);
-  margin: 0 auto;
-  padding: 14px 12px 24px;
-  position: relative;
-  z-index: 1;
-}
-
-.screen {
-  display: none;
-}
-
-.screen.active {
-  display: block;
-  animation: screenEnter 0.22s ease both;
-}
-
-@keyframes screenEnter {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.card {
-  min-height: calc(100vh - 28px);
-  background: linear-gradient(180deg, rgba(13, 32, 55, 0.92), rgba(7, 18, 32, 0.91));
-  border: 1px solid var(--line);
-  box-shadow: var(--shadow);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  border-radius: var(--radius-lg);
-  padding: 20px 18px 18px;
-  overflow: hidden;
-}
-
-#home .card,
-#actions .card,
-#servers .card,
-#buy .card {
-  background:
-    radial-gradient(circle at 78% 0%, rgba(42, 119, 234, 0.18), transparent 30%),
-    linear-gradient(180deg, rgba(12, 31, 54, 0.94), rgba(6, 17, 31, 0.94));
-}
-
-.topbar {
-  display: grid;
-  grid-template-columns: 38px 1fr;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 16px;
-}
-
-.back-btn {
-  width: 36px;
-  height: 36px;
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  background: var(--panel);
-  color: var(--text-main);
-  font-size: 19px;
-  line-height: 1;
-  cursor: pointer;
-  display: grid;
-  place-items: center;
-  transition: transform 0.14s ease, background 0.14s ease, border-color 0.14s ease;
-}
-
-.back-btn:active {
-  transform: scale(0.95);
-}
-
-h1,
-h2,
-h3,
-p {
-  margin: 0;
-}
-
-h2 {
-  font-size: 26px;
-  line-height: 1.08;
-  font-weight: 900;
-  letter-spacing: -0.35px;
-}
-
-.title {
-  max-width: 340px;
-  font-size: 27px;
-  line-height: 1.18;
-  font-weight: 900;
-  letter-spacing: -0.45px;
-  margin-bottom: 8px;
-}
-
-.subtitle {
-  max-width: 330px;
-  font-size: 14px;
-  line-height: 1.45;
-  color: var(--text-muted);
-  margin-bottom: 18px;
-}
-
-.stack {
-  display: flex;
-  flex-direction: column;
-  gap: 11px;
-}
-
-.btn {
-  border: 1px solid transparent;
-  width: 100%;
-  padding: 14px 16px;
-  border-radius: var(--radius-md);
-  cursor: pointer;
-  color: var(--text-main);
-  font-size: 15px;
-  font-weight: 800;
-  text-align: left;
-  background: var(--panel);
-  transition:
-    transform 0.15s ease,
-    background 0.15s ease,
-    opacity 0.15s ease,
-    box-shadow 0.18s ease,
-    border-color 0.18s ease,
-    filter 0.18s ease;
-}
-
-.btn:active {
-  transform: scale(0.98);
-}
-
-.btn:hover,
-.btn-secondary:hover,
-.server-btn:hover {
-  background: var(--panel-hover);
-  border-color: var(--line-strong);
-}
-
-.btn-game {
-  min-height: 68px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  position: relative;
-  overflow: hidden;
-  color: #fff;
-  background: linear-gradient(90deg, rgba(255,255,255,0.075), rgba(255,255,255,0.045)) !important;
-  border: 1px solid var(--line);
-  box-shadow: none !important;
-  text-shadow: none;
-}
-
-.btn-game::before {
-  content: '';
-  position: absolute;
-  inset: 0 auto 0 0;
-  width: 3px;
-  background: var(--game-accent, rgba(255,255,255,0.22));
-  opacity: 0.9;
-}
-
-.btn-game::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at 0% 50%, var(--game-glow, transparent), transparent 44%);
-  pointer-events: none;
-  opacity: 0.55;
-}
-
-.btn-game-br { --game-accent: #ff5048; --game-glow: rgba(255, 80, 72, 0.28); }
-.btn-game-mat { --game-accent: #8c54ff; --game-glow: rgba(140, 84, 255, 0.28); }
-.btn-game-gta { --game-accent: #f3ba38; --game-glow: rgba(243, 186, 56, 0.22); }
-.btn-game.btn-game-so2 { --game-accent: #9aa8b8; --game-glow: rgba(154, 168, 184, 0.18); background: linear-gradient(90deg, rgba(255,255,255,0.075), rgba(255,255,255,0.045)) !important; box-shadow: none !important; }
-
-.btn-game:hover {
-  transform: translateY(-1px);
-  filter: brightness(1.04);
-}
-
-.game-left,
-.game-arrow,
-.game-meta,
-.game-icon {
-  position: relative;
-  z-index: 1;
-}
-
-.game-left {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  min-width: 0;
-}
-
-.game-arrow {
-  font-size: 26px;
-  line-height: 1;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.82);
-}
-
-.game-icon,
-.game-fallback {
-  width: 44px;
-  height: 44px;
-  border-radius: 13px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  background: rgba(7, 16, 28, 0.38);
-  border: 1px solid var(--line);
-}
-
-.game-icon img,
-.game-icon svg {
-  max-width: 30px;
-  max-height: 30px;
-  display: block;
-  object-fit: contain;
-}
-
-.btn-game .game-icon,
-.btn-game .game-fallback {
-  box-shadow: none;
-}
-
-.btn-game-mat .game-icon {
-  background: rgba(76, 34, 124, 0.34);
-}
-
-.btn-game-mat .game-icon img {
-  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.35));
-}
-
-.game-meta {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  min-width: 0;
-}
-
-.game-name {
-  font-size: 16px;
-  line-height: 1.1;
-  font-weight: 900;
-  letter-spacing: 0.1px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.game-note {
-  font-size: 12px;
-  line-height: 1.2;
-  color: rgba(255, 255, 255, 0.72);
-  font-weight: 600;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.quick-info-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 9px;
-  margin-top: 4px;
-}
-
-.quick-info-tile {
-  min-height: 86px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-md);
-  background: var(--panel);
-  color: var(--text-main);
-  padding: 12px 8px 10px;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-  transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
-}
-
-.quick-info-tile:active {
-  transform: scale(0.98);
-}
-
-.quick-info-tile:hover {
-  background: var(--panel-hover);
-  border-color: var(--line-strong);
-}
-
-.quick-info-icon {
-  width: 34px;
-  height: 34px;
-  border-radius: 12px;
-  display: grid;
-  place-items: center;
-  color: #58a9ff;
-  background: rgba(47, 140, 255, 0.10);
-  border: 1px solid rgba(88, 169, 255, 0.22);
-}
-
-.quick-info-icon svg {
-  width: 18px;
-  height: 18px;
-  stroke: currentColor;
-}
-
-.quick-info-title {
-  font-size: 12px;
-  line-height: 1.15;
-  font-weight: 850;
-  text-align: center;
-}
-
-.btn-secondary {
-  background: var(--panel);
-  border-color: var(--line);
-  min-height: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.btn-secondary::after {
-  content: '›';
-  font-size: 24px;
-  line-height: 1;
-  color: rgba(255, 255, 255, 0.72);
-  font-weight: 500;
-}
-
-.btn-primary,
-.btn-sell,
-.btn-gold {
-  min-height: 52px;
-  text-align: center;
-  border-color: rgba(255, 255, 255, 0.12);
-}
-
-.btn-primary {
-  background: linear-gradient(180deg, #3997ff, #1d64ea);
-  box-shadow: 0 12px 24px rgba(35, 111, 238, 0.24);
-}
-
-.btn-primary.center {
-  text-align: center;
-}
-
-.btn-sell {
-  background: linear-gradient(180deg, #ff7952, #e94435);
-  box-shadow: 0 12px 24px rgba(233, 68, 53, 0.20);
-  text-align: center;
-}
-
-.btn-gold {
-  background: linear-gradient(180deg, #f2c044, #b87a0e) !important;
-  color: #211706 !important;
-  box-shadow: 0 12px 24px rgba(184, 122, 14, 0.20);
-}
-
-#actions .card {
-  display: flex;
-  flex-direction: column;
-}
-
-#actions .badge-row {
-  margin-bottom: auto;
-}
-
-#actions .stack {
-  background: var(--panel);
-  border: 1px solid var(--line);
-  border-radius: 18px;
-  padding: 14px;
-  margin-top: 118px;
-}
-
-#actions .footer {
-  margin-top: 18px;
-}
-
-.badge-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 14px;
-}
-
-.badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 12px;
-  border-radius: 999px;
-  background: var(--panel);
-  border: 1px solid var(--line);
-  font-size: 12px;
-  color: var(--text-muted);
-}
-
-.badge strong {
-  color: var(--text-main);
-}
-
-.search-box,
-.field {
-  width: 100%;
-  border: 1px solid var(--line);
-  outline: none;
-  background: var(--panel);
-  color: var(--text-main);
-  border-radius: var(--radius-sm);
-  padding: 13px 14px;
-  font-size: 15px;
-  margin-bottom: 12px;
-  transition: border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
-}
-
-.field:focus,
-.search-box:focus {
-  border-color: rgba(66, 154, 255, 0.72);
-  background: rgba(255, 255, 255, 0.085);
-  box-shadow: 0 0 0 3px rgba(47, 140, 255, 0.10);
-}
-
-.field::placeholder,
-.search-box::placeholder {
-  color: rgba(255, 255, 255, 0.42);
-}
-
-.servers-wrapper {
-  max-height: 410px;
-  overflow-y: auto;
-  padding-right: 3px;
-  scrollbar-color: rgba(255, 255, 255, 0.36) transparent;
-}
-
-.servers-wrapper::-webkit-scrollbar {
-  width: 4px;
-}
-
-.servers-wrapper::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.28);
-  border-radius: 99px;
-}
-
-.server-btn {
-  min-height: 56px;
-  margin-bottom: 9px;
-  padding: 14px 14px;
-  display: grid;
-  grid-template-columns: 12px 1fr 20px;
-  align-items: center;
-  gap: 10px;
-  background: var(--panel);
-  border-color: var(--line);
-  text-align: left;
-}
-
-.server-dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 999px;
-  background: var(--server-color, var(--accent));
-  box-shadow: 0 0 12px color-mix(in srgb, var(--server-color, #56a8ff) 45%, transparent);
-}
-
-.server-name {
-  font-size: 15px;
-  font-weight: 850;
-}
-
-.server-arrow {
-  font-size: 22px;
-  color: rgba(255, 255, 255, 0.72);
-  line-height: 1;
-}
-
-.server-btn small {
-  display: none;
-}
-
-.empty-state {
-  padding: 16px;
-  border-radius: var(--radius-md);
-  color: var(--text-muted);
-  background: var(--panel);
-  border: 1px solid var(--line);
-  font-size: 14px;
-}
-
-.section-title {
-  font-size: 12px;
-  color: var(--text-muted);
-  margin: 0 0 7px;
-  font-weight: 850;
-  text-transform: uppercase;
-  letter-spacing: 0.55px;
-}
-
-.selected-box,
-.discounts,
-.summary-box,
-.legal-text,
-.info-box,
-.delivery-box {
-  background: var(--panel);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-md);
-  padding: 14px;
-  margin-bottom: 12px;
-}
-
-.selected-row,
-.summary-row {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  font-size: 14px;
-  line-height: 1.45;
-}
-
-.selected-row + .selected-row,
-.summary-row + .summary-row {
-  margin-top: 10px;
-}
-
-.selected-row span,
-.summary-row span {
-  color: var(--text-muted);
-}
-
-.selected-row strong,
-.summary-row strong {
-  text-align: right;
-}
-
-.discounts-title {
-  font-size: 14px;
-  font-weight: 900;
-  margin-bottom: 10px;
-}
-
-.discount-line,
-.discount-row {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  font-size: 14px;
-  color: var(--text-muted);
-}
-
-.discount-line + .discount-line,
-.discount-row + .discount-row {
-  margin-top: 8px;
-}
-
-.grid-2 {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-bottom: 12px;
-}
-
-.delivery-box {
-  padding: 14px;
-}
-
-.delivery-toggle {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 9px;
-  margin-bottom: 9px;
-}
-
-.delivery-option {
-  border: 1px solid var(--line);
-  background: rgba(255, 255, 255, 0.045);
-  color: var(--text-main);
-  border-radius: var(--radius-sm);
-  padding: 12px 10px;
-  font-size: 13px;
-  font-weight: 850;
-  cursor: pointer;
-  transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
-}
-
-.delivery-option.active {
-  background: linear-gradient(180deg, #3997ff, #1d64ea);
-  border-color: rgba(106, 174, 255, 0.75);
-  box-shadow: 0 10px 22px rgba(35, 111, 238, 0.22);
-}
-
-.delivery-option:active {
-  transform: scale(0.98);
-}
-
-.delivery-extra {
-  display: none;
-  margin-bottom: 0;
-}
-
-.delivery-extra.show {
-  display: block;
-  margin-top: 6px;
-}
-
-.delivery-hint {
-  min-height: 18px;
-  margin: 2px 0 0;
-  font-size: 12px;
-  color: var(--text-muted);
-}
-
-.input-group label {
-  display: block;
-  font-size: 12px;
-  color: var(--text-muted);
-  margin-bottom: 6px;
-  font-weight: 800;
-}
-
-.input-group .field {
-  margin-bottom: 0;
-}
-
-.helper-text {
-  min-height: 18px;
-  margin: -4px 0 12px;
-  font-size: 12px;
-  color: var(--text-muted);
-}
-
-.helper-text.success {
-  color: var(--success);
-}
-
-.helper-text.warning {
-  color: var(--warning);
-}
-
-.summary-box {
-  padding: 14px;
-}
-
-.summary-row.total {
-  padding-top: 11px;
-  border-top: 1px solid var(--line);
-  font-size: 17px;
-  font-weight: 900;
-}
-
-.summary-row.total strong {
-  color: #58a9ff;
-}
-
-.legal-text {
-  font-size: 14px;
-  line-height: 1.55;
-  color: rgba(255, 255, 255, 0.88);
-  white-space: pre-line;
-}
-
-.info-box-title {
-  font-size: 15px;
-  font-weight: 900;
-  margin-bottom: 8px;
-}
-
-.info-box-text {
-  font-size: 14px;
-  line-height: 1.5;
-  color: rgba(255, 255, 255, 0.86);
-}
-
-.footer {
-  margin-top: 14px;
-  font-size: 12px;
-  line-height: 1.45;
-  color: var(--text-muted);
-  text-align: center;
-}
-
-#home .footer {
-  color: rgba(255, 255, 255, 0.60);
-  padding: 0 8px;
-}
-
-.muted-center {
-  text-align: center;
-  color: var(--text-muted);
-  font-size: 13px;
-  line-height: 1.45;
-}
-
-@media (max-width: 420px) {
-  .container {
-    padding-left: 10px;
-    padding-right: 10px;
-  }
-
-  .card {
-    padding: 18px 16px 16px;
-    border-radius: 22px;
-  }
-
-  .title {
-    font-size: 26px;
-  }
-
-  .grid-2 {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .delivery-toggle {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .quick-info-grid {
-    gap: 8px;
-  }
-
-  .quick-info-title {
-    font-size: 12px;
+// =========================
+// НАСТРОЙКИ
+// =========================
+const SUPPORT_URL = 'https://t.me/alexeyvatutin';
+const SELL_MANAGER_URL = 'https://t.me/alexeyvatutin';
+const BACKEND_BASE_URL = 'https://api.alexeyvatutin.com';
+const ACCESS_RESTRICTED_TEXT = 'Оформить заказ можно вручную.';
+
+// Промокоды можно заменить на свои.
+// Формат: КОД: размер_скидки_в_процентах
+const PROMO_CODES = {
+  START5: 5,
+  BONUS7: 7,
+  VIP10: 10,
+};
+
+const blackRussiaServers = [
+  'RED', 'GREEN', 'BLUE', 'YELLOW', 'ORANGE', 'PURPLE', 'LIME', 'PINK', 'CHERRY', 'BLACK',
+  'INDIGO', 'WHITE', 'MAGENTA', 'CRIMSON', 'GOLD', 'AZURE', 'PLATINUM', 'AQUA', 'GRAY', 'ICE',
+  'CHILLI', 'CHOCO', 'MOSCOW', 'SPB', 'UFA', 'SOCHI', 'KAZAN', 'SAMARA', 'ROSTOV', 'ANAPA',
+  'EKB', 'KRASNODAR', 'ARZAMAS', 'NOVOSIB', 'GROZNY', 'SARATOV', 'OMSK', 'IRKUTSK', 'VOLGOGRAD',
+  'VORONEZH', 'BELGOROD', 'MAKHACHKALA', 'VLADIKAVKAZ', 'VLADIVOSTOK', 'KALININGRAD',
+  'CHELYABINSK', 'KRASNOYARSK', 'CHEBOKSARY', 'KHABAROVSK', 'PERM', 'TULA', 'RYAZAN', 'MURMANSK',
+  'PENZA', 'KURSK', 'ARKHANGELSK', 'ORENBURG', 'KIROV', 'KEMEROVO', 'TYUMEN', 'TOLYATTI',
+  'IVANOVO', 'STAVROPOL', 'SMOLENSK', 'PSKOV', 'BRYANSK', 'OREL', 'YAROSLAVL', 'BARNAUL',
+  'LIPETSK', 'ULYANOVSK', 'YAKUTSK', 'TAMBOV', 'BRATSK', 'ASTRAKHAN', 'CHITA', 'KOSTROMA',
+  'VLADIMIR', 'KALUGA', 'NOVGOROD', 'TAGANROG', 'VOLOGDA', 'TVER', 'TOMSK', 'IZHEVSK', 'SURGUT',
+  'PODOLSK', 'MAGADAN', 'CHEREPOVETS', 'NORILSK',
+];
+
+const gtaServers = [
+  'Downtown', 'Strawberry', 'Vinewood', 'Blackberry', 'Insquad', 'Sunrise', 'Rainbow', 'Richman',
+  'Eclipse', 'La Mesa', 'Burton', 'Rockford', 'Alta', 'Del Perro', 'Davis', 'Harmony', 'Redwood',
+  'Hawick', 'Grapeseed', 'Murrieta', 'Vespucci', 'Milton', 'La Puerta', 'Senora',
+];
+
+const matreshkaServers = Array.from({ length: 34 }, (_, i) => `MATRESHKA MOBILE #${i + 1}`);
+
+const blackRussiaPricing = [
+  { min: 100, rate: 40 },
+  { min: 10, rate: 45 },
+  { min: 0, rate: 50 },
+];
+
+const matreshkaPricing = [
+  { min: 100, rate: 70 },
+  { min: 10, rate: 80 },
+  { min: 0, rate: 100 },
+];
+
+const gtaPricing = [
+  { min: 50, rate: 800 },
+  { min: 10, rate: 900 },
+  { min: 5, rate: 950 },
+  { min: 0, rate: 1000 },
+];
+
+const standoffPricing = [
+  { min: 0, rate: 0.55 },
+];
+
+const games = {
+  br: {
+    name: 'BLACK RUSSIA',
+    sellUrl: SELL_MANAGER_URL,
+    servers: blackRussiaServers,
+    pricing: blackRussiaPricing,
+    actionBuyText: 'КУПИТЬ ВИРТЫ',
+    actionSellText: 'ПРОДАТЬ ВИРТЫ',
+    buyTitle: 'Купить вирты',
+    amountLabel: 'Количество валюты (кк)',
+    amountPlaceholder: 'Например, 10',
+    buySubmitText: 'КУПИТЬ',
+    rateSuffix: '₽ / 1кк',
+    goldMode: false,
+    autoSelectServer: '',
+  },
+  mat: {
+    name: 'MATRESHKA RP',
+    sellUrl: SELL_MANAGER_URL,
+    servers: matreshkaServers,
+    pricing: matreshkaPricing,
+    actionBuyText: 'КУПИТЬ ВИРТЫ',
+    actionSellText: 'ПРОДАТЬ ВИРТЫ',
+    buyTitle: 'Купить вирты',
+    amountLabel: 'Количество валюты (кк)',
+    amountPlaceholder: 'Например, 10',
+    buySubmitText: 'КУПИТЬ',
+    rateSuffix: '₽ / 1кк',
+    goldMode: false,
+    autoSelectServer: '',
+  },
+  gta: {
+    name: 'GTA 5 RP',
+    sellUrl: SELL_MANAGER_URL,
+    servers: gtaServers,
+    pricing: gtaPricing,
+    actionBuyText: 'КУПИТЬ ВИРТЫ',
+    actionSellText: 'ПРОДАТЬ ВИРТЫ',
+    buyTitle: 'Купить вирты',
+    amountLabel: 'Количество валюты (кк)',
+    amountPlaceholder: 'Например, 10',
+    buySubmitText: 'КУПИТЬ',
+    rateSuffix: '₽ / 1кк',
+    goldMode: false,
+    autoSelectServer: '',
+  },
+  so2: {
+    name: 'STANDOFF 2',
+    sellUrl: SELL_MANAGER_URL,
+    servers: ['STANDOFF 2'],
+    pricing: standoffPricing,
+    actionBuyText: 'КУПИТЬ ГОЛДУ',
+    actionSellText: 'ПРОДАТЬ ГОЛДУ',
+    buyTitle: 'Купить голду',
+    amountLabel: 'Количество голды',
+    amountPlaceholder: 'Например, 100',
+    buySubmitText: 'КУПИТЬ ГОЛДУ',
+    rateSuffix: '₽ за 1 голду',
+    goldMode: true,
+    autoSelectServer: 'STANDOFF 2',
+  },
+};
+
+// =========================
+// СОСТОЯНИЕ
+// =========================
+const state = {
+  gameKey: '',
+  server: '',
+  lastEdited: 'virtual',
+  currentRate: 0,
+  subtotal: 0,
+  promoDiscount: 0,
+  total: 0,
+  virtualAmount: 0,
+  deliveryMethod: 'trade',
+};
+
+// =========================
+// TELEGRAM WEBAPP
+// =========================
+function initTelegram() {
+  if (!window.Telegram || !window.Telegram.WebApp) return;
+
+  try {
+    Telegram.WebApp.ready();
+    Telegram.WebApp.expand();
+
+    if (Telegram.WebApp.disableVerticalSwipes) {
+      Telegram.WebApp.disableVerticalSwipes();
+    }
+  } catch (e) {
+    console.error('Telegram WebApp init error', e);
   }
 }
 
-@media (max-width: 360px) {
-  .grid-2,
-  .delivery-toggle {
-    grid-template-columns: 1fr;
+// =========================
+// ВСПОМОГАТЕЛЬНЫЕ
+// =========================
+function blurActiveInput() {
+  const active = document.activeElement;
+
+  if (
+    active &&
+    (active.tagName === 'INPUT' ||
+      active.tagName === 'TEXTAREA' ||
+      active.tagName === 'SELECT')
+  ) {
+    active.blur();
+  }
+}
+
+function setupKeyboardAutoClose() {
+  const inputSelector = 'input, textarea, select';
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter' && event.target.matches(inputSelector)) {
+      event.preventDefault();
+      event.target.blur();
+    }
+  });
+
+  document.addEventListener(
+    'touchstart',
+    (event) => {
+      const active = document.activeElement;
+
+      if (
+        active &&
+        active.matches(inputSelector) &&
+        !event.target.closest(inputSelector)
+      ) {
+        active.blur();
+      }
+    },
+    { passive: true }
+  );
+
+  document.addEventListener('mousedown', (event) => {
+    const active = document.activeElement;
+
+    if (
+      active &&
+      active.matches(inputSelector) &&
+      !event.target.closest(inputSelector)
+    ) {
+      active.blur();
+    }
+  });
+}
+
+function switchScreen(id) {
+  blurActiveInput();
+
+  document.querySelectorAll('.screen').forEach((screen) => {
+    screen.classList.remove('active');
+  });
+
+  const nextScreen = document.getElementById(id);
+  if (nextScreen) {
+    nextScreen.classList.add('active');
+  }
+}
+
+function goHome() {
+  switchScreen('home');
+}
+
+function goActions() {
+  if (!state.gameKey) {
+    goHome();
+    return;
   }
 
-  .quick-info-grid {
-    grid-template-columns: 1fr;
+  renderActions();
+  switchScreen('actions');
+}
+
+function goServers() {
+  const game = currentGame();
+
+  if (!state.gameKey) {
+    goHome();
+    return;
   }
 
-  .quick-info-tile {
-    min-height: 52px;
-    flex-direction: row;
-    justify-content: flex-start;
-    padding: 11px 12px;
+  if (game && game.autoSelectServer) {
+    goActions();
+    return;
   }
+
+  renderServers();
+  switchScreen('servers');
+}
+
+function goInfo() {
+  switchScreen('info');
+}
+
+function currentGame() {
+  return games[state.gameKey];
+}
+
+function openExternal(url) {
+  if (window.Telegram && Telegram.WebApp) {
+    if (url.startsWith('https://t.me/') && Telegram.WebApp.openTelegramLink) {
+      Telegram.WebApp.openTelegramLink(url);
+      return;
+    }
+
+    if (Telegram.WebApp.openLink) {
+      Telegram.WebApp.openLink(url);
+      return;
+    }
+  }
+
+  window.open(url, '_blank');
+}
+
+function formatMoney(value) {
+  return `${Math.round(value).toLocaleString('ru-RU')} ₽`;
+}
+
+function getDeliveryMethodLabel() {
+  return state.deliveryMethod === 'bank' ? 'Банком' : 'Трейдом';
+}
+
+function sanitizeBankAccount() {
+  const input = document.getElementById('bankAccount');
+  if (!input) return;
+
+  input.value = input.value.replace(/[^\d]/g, '');
+}
+
+function setDeliveryMethod(method) {
+  state.deliveryMethod = method === 'bank' ? 'bank' : 'trade';
+
+  const tradeBtn = document.getElementById('deliveryTradeBtn');
+  const bankBtn = document.getElementById('deliveryBankBtn');
+  const bankInput = document.getElementById('bankAccount');
+  const hint = document.getElementById('deliveryHint');
+  const label = document.getElementById('buyDeliveryMethodText');
+
+  if (tradeBtn) {
+    tradeBtn.classList.toggle('active', state.deliveryMethod === 'trade');
+  }
+
+  if (bankBtn) {
+    bankBtn.classList.toggle('active', state.deliveryMethod === 'bank');
+  }
+
+  if (bankInput) {
+    bankInput.classList.toggle('show', state.deliveryMethod === 'bank');
+  }
+
+  if (state.deliveryMethod === 'bank') {
+    if (hint) {
+      hint.innerText = 'Для выдачи банком укажи номер игрового банковского счёта.';
+    }
+  } else {
+    if (bankInput) {
+      bankInput.value = '';
+    }
+
+    if (hint) {
+      hint.innerText = 'Выдача будет отмечена как трейд.';
+    }
+  }
+
+  if (label) {
+    label.innerText = getDeliveryMethodLabel();
+  }
+}
+
+function getPromoPercent() {
+  const promoInput = document.getElementById('promoInput');
+  if (!promoInput) return 0;
+
+  const code = promoInput.value.trim().toUpperCase();
+  return PROMO_CODES[code] || 0;
+}
+
+function getPricingForVirtual(amount) {
+  const game = currentGame();
+
+  if (!game || !Array.isArray(game.pricing) || !game.pricing.length) {
+    return 0;
+  }
+
+  const pricing = game.pricing.slice().sort((a, b) => b.min - a.min);
+  const selected = pricing.find((item) => amount >= item.min) || pricing[pricing.length - 1];
+
+  return selected.rate;
+}
+
+function formatAmountValue(value) {
+  const num = Number(value);
+  if (!Number.isFinite(num)) return '0';
+  if (Number.isInteger(num)) return num.toLocaleString('ru-RU');
+  return Number(num.toFixed(2)).toLocaleString('ru-RU');
+}
+
+function formatTierLabel(min, goldMode) {
+  if (goldMode) {
+    return `от ${formatAmountValue(min)} голды`;
+  }
+  return `от ${formatAmountValue(min)} кк`;
+}
+
+function calculateFromVirtual(amount) {
+  const validAmount = Math.max(0, Number(amount) || 0);
+  const rate = getPricingForVirtual(validAmount);
+  const subtotal = validAmount * rate;
+  const promoPercent = getPromoPercent();
+  const promoDiscount = subtotal * promoPercent / 100;
+  const total = Math.max(0, subtotal - promoDiscount);
+
+  return {
+    virtualAmount: validAmount,
+    rate,
+    subtotal,
+    promoDiscount,
+    total,
+  };
+}
+
+function calculateFromMoney(moneyValue) {
+  const money = Math.max(0, Number(moneyValue) || 0);
+  const promoPercent = getPromoPercent();
+  const game = currentGame();
+
+  if (!game || !Array.isArray(game.pricing) || !game.pricing.length) {
+    return calculateFromVirtual(0);
+  }
+
+  const pricing = game.pricing.slice().sort((a, b) => b.min - a.min);
+
+  for (const tier of pricing) {
+    const effectiveRate = tier.rate * (1 - promoPercent / 100);
+
+    if (effectiveRate <= 0) continue;
+
+    const virtualAmount = money / effectiveRate;
+    if (virtualAmount >= tier.min) {
+      return calculateFromVirtual(virtualAmount);
+    }
+  }
+
+  return calculateFromVirtual(0);
+}
+
+function updateSummary(result) {
+  state.currentRate = result.rate;
+  state.subtotal = result.subtotal;
+  state.promoDiscount = result.promoDiscount;
+  state.total = result.total;
+  state.virtualAmount = result.virtualAmount;
+
+  const rateText = document.getElementById('rateText');
+  const subtotalText = document.getElementById('subtotalText');
+  const promoDiscountText = document.getElementById('promoDiscountText');
+  const totalText = document.getElementById('totalText');
+  const game = currentGame();
+
+  if (rateText) {
+    rateText.innerText = result.virtualAmount > 0 ? `${result.rate} ${game?.rateSuffix || '₽ / 1кк'}` : '—';
+  }
+
+  if (subtotalText) {
+    subtotalText.innerText = formatMoney(result.subtotal);
+  }
+
+  if (promoDiscountText) {
+    promoDiscountText.innerText = formatMoney(result.promoDiscount);
+  }
+
+  if (totalText) {
+    totalText.innerText = formatMoney(result.total);
+  }
+}
+
+function renderDiscounts() {
+  const container = document.getElementById('discountsList');
+  const game = currentGame();
+
+  if (!container) return;
+
+  if (!game || !Array.isArray(game.pricing) || !game.pricing.length) {
+    container.innerHTML = '';
+    return;
+  }
+
+  if (game.goldMode) {
+    container.innerHTML = `
+      <div class="discount-row"><span>1 голда</span><span>0.55 ₽</span></div>
+      <div class="discount-row"><span>100 голды</span><span>55 ₽</span></div>
+      <div class="discount-row"><span>500 голды</span><span>275 ₽</span></div>
+      <div class="discount-row"><span>1000 голды</span><span>550 ₽</span></div>
+    `;
+    return;
+  }
+
+  const pricing = game.pricing.slice().sort((a, b) => a.min - b.min);
+
+  const lines = pricing.map((item, index) => {
+    if (index === 0) {
+      const nextMin = pricing[index + 1]?.min;
+      const label = nextMin ? `до ${formatAmountValue(nextMin - 0.01)} кк` : 'любой объём';
+      return { label, rate: item.rate };
+    }
+
+    return {
+      label: formatTierLabel(item.min, false),
+      rate: item.rate,
+    };
+  });
+
+  container.innerHTML = lines
+    .map((item) => `
+      <div class="discount-row">
+        <span>${item.label}</span>
+        <span>${item.rate} ₽ / 1кк</span>
+      </div>
+    `)
+    .join('');
+}
+
+function resetBuyForm() {
+  const nickname = document.getElementById('nickname');
+  const promoInput = document.getElementById('promoInput');
+  const virtualAmount = document.getElementById('virtualAmount');
+  const moneyAmount = document.getElementById('moneyAmount');
+  const bankAccount = document.getElementById('bankAccount');
+  const promoStatus = document.getElementById('promoStatus');
+
+  if (nickname) nickname.value = '';
+  if (promoInput) promoInput.value = '';
+  if (virtualAmount) virtualAmount.value = '';
+  if (moneyAmount) moneyAmount.value = '';
+  if (bankAccount) bankAccount.value = '';
+
+  if (promoStatus) {
+    promoStatus.className = 'helper-text';
+    promoStatus.innerText = '';
+  }
+
+  state.lastEdited = 'virtual';
+  applyGameUiTexts();
+  setDeliveryMethod('trade');
+  updateSummary(calculateFromVirtual(0));
+  renderDiscounts();
+}
+
+function injectDynamicStyles() {
+  if (document.getElementById('dynamic-so2-styles')) return;
+
+  const style = document.createElement('style');
+  style.id = 'dynamic-so2-styles';
+  style.textContent = `
+
+    .btn-gold {
+      background: linear-gradient(90deg, #f3c74d, #ba7b00) !important;
+      color: #241700 !important;
+      text-align: center;
+      box-shadow: 0 12px 30px rgba(186, 123, 0, 0.25);
+    }
+
+    .discount-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .discount-row + .discount-row {
+      margin-top: 8px;
+    }
+
+    .restricted-wrap {
+      width: min(100%, 440px);
+      margin: 0 auto;
+      padding: 16px 14px 24px;
+    }
+
+    .restricted-card {
+      background: rgba(14, 22, 34, 0.82);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.28);
+      backdrop-filter: blur(20px);
+      border-radius: 24px;
+      padding: 18px;
+      color: #fff;
+    }
+
+    .restricted-card h2 {
+      margin: 0 0 10px;
+      font-size: 22px;
+      font-weight: 800;
+    }
+
+    .restricted-card p {
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.5;
+      color: rgba(255, 255, 255, 0.78);
+    }
+  `;
+  document.head.appendChild(style);
+}
+
+function applyGameUiTexts() {
+  const game = currentGame();
+  if (!game) return;
+
+  const actionsScreen = document.getElementById('actions');
+  const serversScreen = document.getElementById('servers');
+  const buyScreen = document.getElementById('buy');
+
+  if (actionsScreen) {
+    const actionButtons = actionsScreen.querySelectorAll('.stack > .btn');
+    const actionsFooter = actionsScreen.querySelector('.footer');
+
+    if (actionButtons.length >= 2) {
+      actionButtons[0].innerText = game.actionBuyText;
+      actionButtons[0].classList.toggle('btn-gold', !!game.goldMode);
+      actionButtons[0].classList.toggle('btn-primary', !game.goldMode);
+      actionButtons[0].classList.add('center');
+
+      actionButtons[1].innerText = game.actionSellText;
+    }
+
+    if (actionsFooter) {
+      actionsFooter.innerText = 'Покупка открывает оформление заказа. Продажа оформляется как заявка менеджеру в Telegram.';
+    }
+  }
+
+  if (serversScreen) {
+    const sectionTitle = serversScreen.querySelector('.section-title');
+    const heading = serversScreen.querySelector('h2');
+
+    if (sectionTitle) {
+      sectionTitle.innerText = game.buyTitle;
+    }
+
+    if (heading) {
+      heading.innerText = game.autoSelectServer ? 'Подтверждение товара' : 'Выбор сервера';
+    }
+  }
+
+  if (buyScreen) {
+    const sectionTitle = buyScreen.querySelector('.section-title');
+    const heading = buyScreen.querySelector('h2');
+    const rows = buyScreen.querySelectorAll('.selected-box .selected-row');
+    const amountLabel = buyScreen.querySelector('label[for="virtualAmount"]');
+    const amountInput = document.getElementById('virtualAmount');
+    const submitBtn = buyScreen.querySelector('button[onclick="buy()"]') || buyScreen.querySelector('.btn-primary, .btn-gold');
+    const footer = buyScreen.querySelector('.footer');
+
+    if (sectionTitle) {
+      sectionTitle.innerText = 'Оформление заказа';
+    }
+
+    if (heading) {
+      heading.innerText = game.buyTitle;
+    }
+
+    if (rows.length >= 2) {
+      const secondLabel = rows[1].querySelector('span');
+      if (secondLabel) {
+        secondLabel.innerText = game.autoSelectServer ? 'Товар' : 'Сервер';
+      }
+    }
+
+    if (amountLabel) {
+      amountLabel.innerText = game.amountLabel;
+    }
+
+    if (amountInput) {
+      amountInput.placeholder = game.amountPlaceholder;
+    }
+
+    if (submitBtn) {
+      submitBtn.innerText = game.buySubmitText;
+      submitBtn.classList.toggle('btn-gold', !!game.goldMode);
+      submitBtn.classList.toggle('btn-primary', !game.goldMode);
+      submitBtn.classList.add('center');
+    }
+
+    if (footer) {
+      footer.innerText = game.goldMode
+        ? 'Можно ввести количество голды или сумму в рублях — второе поле пересчитается автоматически.'
+        : 'Можно ввести либо количество виртов, либо сумму в рублях — второе поле пересчитается автоматически.';
+    }
+  }
+}
+
+// =========================
+// ГЛАВНЫЙ ПОТОК
+// =========================
+function selectGame(key) {
+  state.gameKey = key;
+  state.server = '';
+  renderActions();
+  resetBuyForm();
+  switchScreen('actions');
+}
+
+function renderActions() {
+  const game = currentGame();
+  if (!game) return;
+
+  const actionsTitle = document.getElementById('actionsTitle');
+  const actionsGameBadge = document.getElementById('actionsGameBadge');
+
+  if (actionsTitle) {
+    actionsTitle.innerText = game.name;
+  }
+
+  if (actionsGameBadge) {
+    actionsGameBadge.innerText = game.name;
+  }
+
+  applyGameUiTexts();
+}
+
+function openBuyFlow() {
+  if (!state.gameKey) return;
+
+  const game = currentGame();
+  if (!game) return;
+
+  if (game.autoSelectServer) {
+    selectServer(game.autoSelectServer);
+    return;
+  }
+
+  renderServers();
+  switchScreen('servers');
+}
+
+function getServerColor(serverName) {
+  const colorMap = {
+    RED: '#ff4242',
+    GREEN: '#65d66e',
+    BLUE: '#38a7ff',
+    YELLOW: '#ffd44d',
+    ORANGE: '#ff8a2a',
+    PURPLE: '#9b5cff',
+    WHITE: '#f1f5f9',
+    GRAY: '#9aa4b2',
+    PINK: '#ff63b5',
+    BLACK: '#6b7280',
+    LIME: '#a3e635',
+    CHERRY: '#ef4444',
+    GOLD: '#f5c451',
+    AZURE: '#38bdf8',
+    AQUA: '#22d3ee',
+    ICE: '#bae6fd',
+    CHILLI: '#fb923c',
+    CHOCO: '#a16207',
+  };
+
+  return colorMap[String(serverName).toUpperCase()] || '#56a8ff';
+}
+
+function renderServers(filteredList) {
+  const game = currentGame();
+  if (!game) return;
+
+  if (game.autoSelectServer) {
+    selectServer(game.autoSelectServer);
+    return;
+  }
+
+  const serverSearch = document.getElementById('serverSearch');
+  const serversGameBadge = document.getElementById('serversGameBadge');
+  const container = document.getElementById('serversContainer');
+
+  if (!filteredList && serverSearch) {
+    serverSearch.value = '';
+  }
+
+  if (serversGameBadge) {
+    serversGameBadge.innerText = game.name;
+  }
+
+  if (!container) return;
+
+  const list = filteredList || game.servers;
+  container.innerHTML = '';
+
+  if (!list.length) {
+    container.innerHTML = '<div class="empty-state">Ничего не найдено по этому запросу.</div>';
+    return;
+  }
+
+  list.forEach((name) => {
+    const button = document.createElement('button');
+    button.className = 'btn server-btn';
+    button.style.setProperty('--server-color', getServerColor(name));
+    button.innerHTML = `
+      <span class="server-dot" aria-hidden="true"></span>
+      <span class="server-name">${name}</span>
+      <span class="server-arrow" aria-hidden="true">›</span>
+    `;
+    button.onclick = () => selectServer(name);
+    container.appendChild(button);
+  });
+}
+
+function filterServers() {
+  const serverSearch = document.getElementById('serverSearch');
+  const game = currentGame();
+  if (!serverSearch || !game) return;
+
+  const value = serverSearch.value.trim().toLowerCase();
+  const filtered = game.servers.filter((server) => server.toLowerCase().includes(value));
+  renderServers(filtered);
+}
+
+function selectServer(serverName) {
+  state.server = serverName;
+
+  const buyGameName = document.getElementById('buyGameName');
+  const buyServerName = document.getElementById('buyServerName');
+  const buyDeliveryMethodText = document.getElementById('buyDeliveryMethodText');
+  const game = currentGame();
+
+  if (buyGameName && game) {
+    buyGameName.innerText = game.name;
+  }
+
+  if (buyServerName) {
+    buyServerName.innerText = serverName;
+  }
+
+  if (buyDeliveryMethodText) {
+    buyDeliveryMethodText.innerText = getDeliveryMethodLabel();
+  }
+
+  applyGameUiTexts();
+  renderDiscounts();
+  switchScreen('buy');
+}
+
+function handlePromoInput() {
+  const promoEl = document.getElementById('promoStatus');
+  const promoInput = document.getElementById('promoInput');
+
+  if (!promoEl || !promoInput) return;
+
+  const code = promoInput.value.trim().toUpperCase();
+  promoEl.className = 'helper-text';
+  promoEl.innerText = '';
+
+  if (!code) {
+    promoEl.innerText = '';
+  } else if (PROMO_CODES[code]) {
+    promoEl.className = 'helper-text success';
+    promoEl.innerText = `Промокод активирован: скидка ${PROMO_CODES[code]}%`;
+  } else {
+    promoEl.className = 'helper-text warning';
+    promoEl.innerText = 'Промокод не найден.\nЗаказ будет оформлен без скидки.';
+  }
+
+  if (state.lastEdited === 'money') {
+    updateFromMoney();
+  } else {
+    updateFromVirtual();
+  }
+}
+
+function updateFromVirtual() {
+  state.lastEdited = 'virtual';
+
+  const virtualAmount = document.getElementById('virtualAmount');
+  const moneyAmount = document.getElementById('moneyAmount');
+  if (!virtualAmount || !moneyAmount) return;
+
+  const result = calculateFromVirtual(virtualAmount.value);
+  moneyAmount.value = result.total > 0 ? Math.round(result.total) : '';
+  updateSummary(result);
+}
+
+function updateFromMoney() {
+  state.lastEdited = 'money';
+
+  const virtualAmount = document.getElementById('virtualAmount');
+  const moneyAmount = document.getElementById('moneyAmount');
+  if (!virtualAmount || !moneyAmount) return;
+
+  const result = calculateFromMoney(moneyAmount.value);
+  virtualAmount.value = result.virtualAmount > 0 ? Number(result.virtualAmount.toFixed(2)).toString() : '';
+  updateSummary(result);
+}
+
+function sellVirts() {
+  if (!state.gameKey) return;
+
+  const game = currentGame();
+  if (!game) return;
+
+  openExternal(game.sellUrl);
+}
+
+function openSupport() {
+  openExternal(SUPPORT_URL);
+}
+
+function openInfo() {
+  switchScreen('info');
+}
+
+function openOrderGuide() {
+  switchScreen('orderGuide');
+}
+
+function openDeliveryInfo() {
+  switchScreen('deliveryInfo');
+}
+
+function openRefundInfo() {
+  switchScreen('refundInfo');
+}
+
+function openPrivacyPolicy() {
+  switchScreen('privacy');
+}
+
+function openUserAgreement() {
+  switchScreen('agreement');
+}
+
+async function buy() {
+  blurActiveInput();
+
+  const game = currentGame();
+  const nicknameInput = document.getElementById('nickname');
+  const promoInput = document.getElementById('promoInput');
+  const bankAccountInput = document.getElementById('bankAccount');
+
+  if (!game) {
+    alert('Сначала выбери игру.');
+    return;
+  }
+
+  if (game.autoSelectServer && !state.server) {
+    state.server = game.autoSelectServer;
+  }
+
+  const nickname = nicknameInput ? nicknameInput.value.trim() : '';
+  const promoCode = promoInput ? promoInput.value.trim().toUpperCase() : '';
+  const bankAccount = bankAccountInput ? bankAccountInput.value.trim() : '';
+
+  if (!state.server) {
+    alert('Сначала выбери сервер.');
+    return;
+  }
+
+  if (!nickname) {
+    alert('Введите игровой ник.');
+    return;
+  }
+
+  if (state.deliveryMethod === 'bank' && !bankAccount) {
+    alert('Укажите номер игрового банковского счёта.');
+    return;
+  }
+
+  if (state.deliveryMethod === 'bank' && !/^\d+$/.test(bankAccount)) {
+    alert('Номер банковского счёта должен состоять только из цифр.');
+    return;
+  }
+
+  if (!state.virtualAmount || state.virtualAmount <= 0) {
+    alert('Введите количество валюты или сумму оплаты.');
+    return;
+  }
+
+  const amountValue = Number(state.virtualAmount.toFixed(2));
+  const deliveryLabel = getDeliveryMethodLabel();
+
+  const payload = {
+    game: game.name,
+    server: state.server,
+    nickname: nickname,
+    promo: promoCode || '',
+    amount_kk: amountValue,
+    delivery_type: deliveryLabel,
+    bank_account: state.deliveryMethod === 'bank' ? bankAccount : ''
+  };
+
+  try {
+    const headers = {
+      'Content-Type': 'application/json'
+    };
+
+    if (window.Telegram && Telegram.WebApp && Telegram.WebApp.initData) {
+      headers['X-Telegram-Init-Data'] = Telegram.WebApp.initData;
+    }
+
+    const response = await fetch(`${BACKEND_BASE_URL}/api/create-order`, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(payload)
+    });
+
+    const data = await response.json();
+
+    if (!response.ok || !data.ok) {
+      throw new Error(data.error || 'Не удалось создать заказ');
+    }
+
+    if (window.Telegram && Telegram.WebApp && Telegram.WebApp.openLink) {
+      Telegram.WebApp.openLink(data.payment_url);
+    } else {
+      window.open(data.payment_url, '_blank', 'noopener,noreferrer');
+    }
+  } catch (error) {
+    alert(`Не удалось создать заказ: ${error.message}`);
+  }
+}
+
+async function checkAccess() {
+  if (!(window.Telegram && Telegram.WebApp && Telegram.WebApp.initData)) {
+    return;
+  }
+
+  try {
+    const response = await fetch(`${BACKEND_BASE_URL}/api/access`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Telegram-Init-Data': Telegram.WebApp.initData
+      },
+      body: '{}'
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      console.error('Access check failed', data);
+      return;
+    }
+
+    if (data.allowed === false) {
+      document.body.innerHTML = `
+        <div class="restricted-wrap">
+          <div class="restricted-card">
+            <h2>Ведутся технические работы</h2>
+            <p>${data.message || ACCESS_RESTRICTED_TEXT}</p>
+          </div>
+        </div>
+      `;
+    }
+  } catch (e) {
+    console.error('Access check error', e);
+  }
+}
+
+function bootstrap() {
+  injectDynamicStyles();
+  setupKeyboardAutoClose();
+  initTelegram();
+  applyGameUiTexts();
+  setDeliveryMethod('trade');
+  updateSummary({
+    virtualAmount: 0,
+    rate: 0,
+    subtotal: 0,
+    promoDiscount: 0,
+    total: 0,
+  });
+  renderDiscounts();
+  checkAccess();
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', bootstrap);
+} else {
+  bootstrap();
 }

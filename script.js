@@ -513,16 +513,17 @@ function resetBuyForm() {
 }
 
 function injectDynamicStyles() {
-  if (document.getElementById('dynamic-runtime-styles')) return;
+  if (document.getElementById('dynamic-so2-styles')) return;
 
   const style = document.createElement('style');
-  style.id = 'dynamic-runtime-styles';
+  style.id = 'dynamic-so2-styles';
   style.textContent = `
+
     .btn-gold {
-      background: linear-gradient(135deg, #f4c35d, #b67512) !important;
-      color: #1e1405 !important;
+      background: linear-gradient(90deg, #f3c74d, #ba7b00) !important;
+      color: #241700 !important;
       text-align: center;
-      box-shadow: 0 14px 32px rgba(182, 117, 18, 0.24);
+      box-shadow: 0 12px 30px rgba(186, 123, 0, 0.25);
     }
 
     .discount-row {
@@ -544,10 +545,10 @@ function injectDynamicStyles() {
     }
 
     .restricted-card {
-      background: rgba(9, 17, 30, 0.86);
+      background: rgba(14, 22, 34, 0.82);
       border: 1px solid rgba(255, 255, 255, 0.08);
-      box-shadow: 0 22px 60px rgba(0, 0, 0, 0.30);
-      backdrop-filter: blur(18px);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.28);
+      backdrop-filter: blur(20px);
       border-radius: 24px;
       padding: 18px;
       color: #fff;
@@ -699,26 +700,29 @@ function openBuyFlow() {
   switchScreen('servers');
 }
 
-
 function getServerColor(serverName) {
-  const colors = {
-    RED: '#ff4545',
-    GREEN: '#73d65f',
-    BLUE: '#43a7ff',
-    YELLOW: '#ffd84d',
-    ORANGE: '#ff8a2b',
+  const colorMap = {
+    RED: '#ff4242',
+    GREEN: '#65d66e',
+    BLUE: '#38a7ff',
+    YELLOW: '#ffd44d',
+    ORANGE: '#ff8a2a',
     PURPLE: '#9b5cff',
-    WHITE: '#f2f5f8',
+    WHITE: '#f1f5f9',
     GRAY: '#9aa4b2',
-    PINK: '#ff65b3',
-    BLACK: '#202631',
-    LIME: '#a7ff4d',
-    CHERRY: '#c91944',
-    GOLD: '#f5be45',
-    AQUA: '#49d9e6'
+    PINK: '#ff63b5',
+    BLACK: '#6b7280',
+    LIME: '#a3e635',
+    CHERRY: '#ef4444',
+    GOLD: '#f5c451',
+    AZURE: '#38bdf8',
+    AQUA: '#22d3ee',
+    ICE: '#bae6fd',
+    CHILLI: '#fb923c',
+    CHOCO: '#a16207',
   };
 
-  return colors[String(serverName).toUpperCase()] || '#5aa9ff';
+  return colorMap[String(serverName).toUpperCase()] || '#56a8ff';
 }
 
 function renderServers(filteredList) {
@@ -755,12 +759,11 @@ function renderServers(filteredList) {
   list.forEach((name) => {
     const button = document.createElement('button');
     button.className = 'btn server-btn';
+    button.style.setProperty('--server-color', getServerColor(name));
     button.innerHTML = `
-      <span class="server-main">
-        <span class="server-dot" style="--server-color: ${getServerColor(name)}"></span>
-        <span class="server-name">${name}</span>
-      </span>
-      <span class="server-arrow">›</span>
+      <span class="server-dot" aria-hidden="true"></span>
+      <span class="server-name">${name}</span>
+      <span class="server-arrow" aria-hidden="true">›</span>
     `;
     button.onclick = () => selectServer(name);
     container.appendChild(button);

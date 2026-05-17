@@ -713,19 +713,19 @@ p {
 /* Широкий логотип GTA лучше держать чуть шире, но ниже */
 .btn-game-gta .game-icon img,
 .btn-game-gta .game-icon svg {
-  width: 47px;
+  width: 42px;
   height: auto;
-  max-width: 47px;
-  max-height: 38px;
+  max-width: 42px;
+  max-height: 34px;
 }
 
 /* STANDOFF часто выглядит мелко из-за полей в файле */
 .btn-game-so2 .game-icon img,
 .btn-game-so2 .game-icon svg {
-  width: 46px;
-  height: 46px;
-  max-width: 46px;
-  max-height: 46px;
+  width: 50px;
+  height: 50px;
+  max-width: 50px;
+  max-height: 50px;
 }
 
 .game-name {
@@ -755,16 +755,16 @@ p {
 
   .btn-game-gta .game-icon img,
   .btn-game-gta .game-icon svg {
-    width: 44px;
-    max-width: 44px;
-    max-height: 35px;
+    width: 40px;
+    max-width: 40px;
+    max-height: 32px;
   }
 
   .btn-game-so2 .game-icon img,
   .btn-game-so2 .game-icon svg {
-    width: 42px;
-    height: 42px;
-    max-width: 42px;
-    max-height: 42px;
+    width: 46px;
+    height: 46px;
+    max-width: 46px;
+    max-height: 46px;
   }
 }

@@ -3,213 +3,414 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="theme-color" content="#0a0f1a">
+  <meta name="theme-color" content="#0f1725">
   <title>Бот Ватутина</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="./style.css?v=19">
 </head>
 <body>
-  <!-- Ambient Glow Background -->
-  <div class="ambient-glow" id="ambientGlow"></div>
-
   <div class="container">
-    <!-- HOME SCREEN -->
     <div id="home" class="screen active">
-      <div class="header-block">
+      <div class="card">
         <h1 class="title">Сервис цифровых игровых товаров</h1>
-        <p class="subtitle">Выберите игру и оформите заказ на игровую валюту</p>
-      </div>
+        <p class="subtitle">
+          Выберите нужную игру и оформите заказ на игровую валюту.
+        </p>
 
-      <div class="stack">
-        <button class="glass-card game-btn" onclick="selectGame('br')">
-          <div class="game-icon-wrap" style="--accent: #e63946;"><img src="black-russia.svg" alt="BR"></div>
-          <div class="game-info">
-            <span class="game-name">BLACK RUSSIA</span>
-            <span class="game-note">Оформление заказа</span>
+        <div class="stack">
+          <button class="btn btn-game btn-game-br" onclick="selectGame('br')">
+            <span class="game-left">
+              <span class="game-icon">
+                <img src="black-russia.svg" alt="BLACK RUSSIA">
+              </span>
+              <span class="game-meta">
+                <span class="game-name">BLACK RUSSIA</span>
+                <span class="game-note">Оформление заказа на игровую валюту</span>
+              </span>
+            </span>
+            <span class="game-arrow">›</span>
+          </button>
+
+          <button class="btn btn-game btn-game-mat" onclick="selectGame('mat')">
+            <span class="game-left">
+              <span class="game-icon">
+                <img src="matreshka.svg" alt="MATRESHKA RP">
+              </span>
+              <span class="game-meta">
+                <span class="game-name">MATRESHKA RP</span>
+                <span class="game-note">Оформление заказа на игровую валюту</span>
+              </span>
+            </span>
+            <span class="game-arrow">›</span>
+          </button>
+
+          <button class="btn btn-game btn-game-gta" onclick="selectGame('gta')">
+            <span class="game-left">
+              <span class="game-icon">
+                <img src="gta5rp.svg" alt="GTA 5 RP">
+              </span>
+              <span class="game-meta">
+                <span class="game-name">GTA 5 RP</span>
+                <span class="game-note">Оформление заказа на игровую валюту</span>
+              </span>
+            </span>
+            <span class="game-arrow">›</span>
+          </button>
+
+          <button class="btn btn-game btn-game-so2" onclick="selectGame('so2')">
+            <span class="game-left">
+              <span class="game-icon">
+                <img src="standoff.svg" alt="STANDOFF 2">
+              </span>
+              <span class="game-meta">
+                <span class="game-name">STANDOFF 2</span>
+                <span class="game-note">Оформление заказа на игровую валюту</span>
+              </span>
+            </span>
+            <span class="game-arrow">›</span>
+          </button>
+
+
+
+          <div class="quick-info-grid" aria-label="Информация о заказе">
+            <button class="quick-info-tile" type="button" onclick="openOrderGuide()">
+              <span class="quick-info-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M8 4h8a2 2 0 0 1 2 2v14H6V6a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="1.8"/>
+                  <path d="M9 9h6M9 13h6M9 17h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                </svg>
+              </span>
+              <span class="quick-info-title">Как заказать</span>
+            </button>
+
+            <button class="quick-info-tile" type="button" onclick="openDeliveryInfo()">
+              <span class="quick-info-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M4 7h16v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7Z" stroke="currentColor" stroke-width="1.8"/>
+                  <path d="M4 10h16M8 15h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                </svg>
+              </span>
+              <span class="quick-info-title">Доставка</span>
+            </button>
+
+            <button class="quick-info-tile" type="button" onclick="openRefundInfo()">
+              <span class="quick-info-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M12 3 19 6v5c0 4.4-2.8 8.3-7 10-4.2-1.7-7-5.6-7-10V6l7-3Z" stroke="currentColor" stroke-width="1.8"/>
+                  <path d="m8.8 12 2.1 2.1 4.4-4.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+              <span class="quick-info-title">Возврат</span>
+            </button>
           </div>
-          <div class="chevron">›</div>
-        </button>
 
-        <button class="glass-card game-btn" onclick="selectGame('mat')">
-          <div class="game-icon-wrap" style="--accent: #8a2be2;"><img src="matreshka.svg" alt="MAT"></div>
-          <div class="game-info">
-            <span class="game-name">MATRESHKA RP</span>
-            <span class="game-note">Оформление заказа</span>
-          </div>
-          <div class="chevron">›</div>
-        </button>
+          <button class="btn btn-secondary" onclick="openSupport()">Поддержка</button>
+          <button class="btn btn-secondary" onclick="openInfo()">О сервисе</button>
+        </div>
 
-        <button class="glass-card game-btn" onclick="selectGame('gta')">
-          <div class="game-icon-wrap" style="--accent: #f5a623;"><img src="gta5rp.svg" alt="GTA5"></div>
-          <div class="game-info">
-            <span class="game-name">GTA 5 RP</span>
-            <span class="game-note">Оформление заказа</span>
-          </div>
-          <div class="chevron">›</div>
-        </button>
-
-        <button class="glass-card game-btn" onclick="selectGame('so2')">
-          <div class="game-icon-wrap" style="--accent: #5c6bc0;"><img src="standoff.svg" alt="SO2"></div>
-          <div class="game-info">
-            <span class="game-name">STANDOFF 2</span>
-            <span class="game-note">Оформление заказа</span>
-          </div>
-          <div class="chevron">›</div>
-        </button>
-      </div>
-
-      <div class="quick-info-grid">
-        <button class="glass-panel info-tile" onclick="openOrderGuide()">
-          <svg viewBox="0 0 24 24" fill="none"><path d="M8 4h8a2 2 0 0 1 2 2v14H6V6a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="1.5"/><path d="M9 9h6M9 13h6M9 17h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-          <span>Как заказать</span>
-        </button>
-        <button class="glass-panel info-tile" onclick="openDeliveryInfo()">
-          <svg viewBox="0 0 24 24" fill="none"><path d="M4 7h16v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7Z" stroke="currentColor" stroke-width="1.5"/><path d="M4 10h16M8 15h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-          <span>Доставка</span>
-        </button>
-        <button class="glass-panel info-tile" onclick="openRefundInfo()">
-          <svg viewBox="0 0 24 24" fill="none"><path d="M12 3 19 6v5c0 4.4-2.8 8.3-7 10-4.2-1.7-7-5.6-7-10V6l7-3Z" stroke="currentColor" stroke-width="1.5"/><path d="m8.8 12 2.1 2.1 4.4-4.6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <span>Возврат</span>
-        </button>
-      </div>
-
-      <div class="stack row">
-        <button class="glass-button secondary" onclick="openSupport()">Поддержка</button>
-        <button class="glass-button secondary" onclick="openInfo()">О сервисе</button>
-      </div>
-
-      <div class="disclaimer">
-        Сервис не связан с правообладателями игровых проектов. Названия и логотипы используются только для обозначения игр.
+        <div class="footer">
+          Сервис не связан с правообладателями игровых проектов. Названия и логотипы используются только для обозначения игр.
+        </div>
       </div>
     </div>
 
-    <!-- ACTIONS SCREEN -->
     <div id="actions" class="screen">
-      <div class="topbar">
-        <button class="nav-btn" onclick="goHome()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-        </button>
-        <div class="nav-title">Выбор действия</div>
-      </div>
+      <div class="card">
+        <div class="topbar">
+          <button class="back-btn" onclick="goHome()">←</button>
+          <div>
+            <div class="section-title">Выбор действия</div>
+            <h2 id="actionsTitle">Игра</h2>
+          </div>
+        </div>
 
-      <div class="glass-panel action-hero">
-        <div class="badge" id="actionsGameBadge">BLACK RUSSIA</div>
-        <h2 id="actionsTitle">BLACK RUSSIA</h2>
-        <p>Выберите, что вы хотите сделать с игровой валютой на данном проекте.</p>
-      </div>
+        <div class="badge-row">
+          <div class="badge">Игра: <strong id="actionsGameBadge">—</strong></div>
+        </div>
 
-      <div class="stack">
-        <button class="glass-button primary highlight" onclick="openBuyFlow()">Купить вирты</button>
-        <button class="glass-button primary outline" onclick="sellVirts()">Продать вирты</button>
-      </div>
-      <div class="disclaimer text-center mt-4">
-        Покупка открывает оформление заказа. Продажа оформляется как заявка менеджеру в Telegram.
+        <div class="stack">
+          <button class="btn btn-primary center" onclick="openBuyFlow()">КУПИТЬ ВИРТЫ</button>
+          <button class="btn btn-sell" onclick="sellVirts()">ПРОДАТЬ ВИРТЫ</button>
+        </div>
+
+        <div class="footer">
+          Покупка открывает оформление заказа. 
+          Продажа оформляется как заявка менеджеру в Telegram.
+        </div>
       </div>
     </div>
 
-    <!-- SERVERS SCREEN -->
     <div id="servers" class="screen">
-      <div class="topbar">
-        <button class="nav-btn" onclick="goActions()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-        </button>
-        <div class="nav-title">Выбор сервера</div>
-      </div>
+      <div class="card">
+        <div class="topbar">
+          <button class="back-btn" onclick="goActions()">←</button>
+          <div>
+            <div class="section-title">Купить вирты</div>
+            <h2>Выбор сервера</h2>
+          </div>
+        </div>
 
-      <div class="glass-panel compact-header">
-        <span class="label">Игра</span>
-        <strong id="serversGameBadge">BLACK RUSSIA</strong>
-      </div>
+        <div class="badge-row">
+          <div class="badge">Игра: <strong id="serversGameBadge">—</strong></div>
+        </div>
 
-      <div class="glass-input-wrap search-wrap">
-        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-        <input id="serverSearch" class="glass-input" placeholder="Поиск сервера..." oninput="filterServers()">
+        <input id="serverSearch" class="search-box" placeholder="Поиск сервера..." oninput="filterServers()" enterkeyhint="search" autocomplete="off">
+        <div id="serversContainer" class="servers-wrapper"></div>
       </div>
-
-      <div id="serversContainer" class="servers-list"></div>
     </div>
 
-    <!-- BUY ORDER SCREEN -->
     <div id="buy" class="screen">
-      <div class="topbar">
-        <button class="nav-btn" onclick="goServers()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-        </button>
-        <div class="nav-title">Оформление заказа</div>
-      </div>
-
-      <div class="glass-panel summary-card">
-        <div class="row-between"><span class="label">Игра</span><strong id="buyGameName">BLACK RUSSIA</strong></div>
-        <div class="divider"></div>
-        <div class="row-between"><span class="label">Сервер</span><strong id="buyServerName">RED</strong></div>
-        <div class="divider"></div>
-        <div class="row-between"><span class="label">Получение</span><strong id="buyDeliveryMethodText">Трейдом</strong></div>
-      </div>
-
-      <div class="glass-panel form-group">
-        <input id="nickname" class="glass-input" placeholder="Игровой ник">
-        
-        <div class="segmented-control mt-3">
-          <button id="deliveryTradeBtn" class="segment active" onclick="setDeliveryMethod('trade')">Трейдом</button>
-          <button id="deliveryBankBtn" class="segment" onclick="setDeliveryMethod('bank')">Банком</button>
-        </div>
-        
-        <div id="bankAccountWrap" style="display: none;" class="mt-2">
-          <input id="bankAccount" class="glass-input" type="text" inputmode="numeric" placeholder="Счёт в банке" oninput="sanitizeBankAccount()">
-        </div>
-        <div id="deliveryHint" class="input-hint mt-1">Выдача будет отмечена как трейд.</div>
-      </div>
-
-      <div class="glass-panel form-group">
-        <input id="promoInput" class="glass-input" placeholder="Промокод (необязательно)" oninput="handlePromoInput()">
-        <div id="promoStatus" class="input-hint mt-1"></div>
-
-        <div class="grid-2 mt-3">
+      <div class="card">
+        <div class="topbar">
+          <button class="back-btn" onclick="goServers()">←</button>
           <div>
-            <label class="input-label" for="virtualAmount">Валюта (кк)</label>
-            <input id="virtualAmount" class="glass-input" type="number" min="0" step="0.01" placeholder="Напр., 10" oninput="updateFromVirtual()">
-          </div>
-          <div>
-            <label class="input-label" for="moneyAmount">Оплата (₽)</label>
-            <input id="moneyAmount" class="glass-input" type="number" min="0" step="1" placeholder="Напр., 450" oninput="updateFromMoney()">
+            <div class="section-title">Оформление заказа</div>
+            <h2>Покупка виртов</h2>
           </div>
         </div>
-        <div class="input-hint mt-2 text-center">Заполните любое поле — второе рассчитается само.</div>
-      </div>
 
-      <div class="glass-panel tariffs">
-        <div class="tariffs-title">Тарифы и скидки</div>
-        <div id="discountsList"></div>
-      </div>
+        <div class="selected-box">
+          <div class="selected-row"><span>Игра</span><strong id="buyGameName">—</strong></div>
+          <div class="selected-row"><span>Сервер</span><strong id="buyServerName">—</strong></div>
+          <div class="selected-row"><span>Получение</span><strong id="buyDeliveryMethodText">Трейдом</strong></div>
+        </div>
 
-      <div class="glass-panel receipt">
-        <div class="row-between"><span>Сумма</span><strong id="subtotalText">0 ₽</strong></div>
-        <div class="row-between discount"><span>Скидка</span><strong id="promoDiscountText">0 ₽</strong></div>
-        <div class="divider"></div>
-        <div class="row-between total"><span>К оплате</span><strong id="totalText">0 ₽</strong></div>
-      </div>
+        <input id="nickname" class="field" placeholder="Введите игровой ник" enterkeyhint="done" autocomplete="off" autocapitalize="none" spellcheck="false">
 
-      <button class="glass-button primary highlight cta-btn" onclick="buy()">Перейти к оплате</button>
+        <div class="delivery-box">
+          <div class="section-title">Способ получения</div>
+          <div class="delivery-toggle">
+            <button type="button" id="deliveryTradeBtn" class="delivery-option active" onclick="setDeliveryMethod('trade')">
+              Получить трейдом
+            </button>
+            <button type="button" id="deliveryBankBtn" class="delivery-option" onclick="setDeliveryMethod('bank')">
+              Получить банком
+            </button>
+          </div>
+          <input id="bankAccount" class="field delivery-extra" type="text" inputmode="numeric" placeholder="Номер банковского счёта" oninput="sanitizeBankAccount()" enterkeyhint="done" autocomplete="off">
+          <div id="deliveryHint" class="delivery-hint">Выдача будет отмечена как трейд.</div>
+        </div>
+
+        <input id="promoInput" class="field" placeholder="Промокод (необязательно)" oninput="handlePromoInput()" enterkeyhint="done" autocomplete="off" autocapitalize="characters" spellcheck="false">
+        <div id="promoStatus" class="helper-text"></div>
+
+        <div class="grid-2">
+          <div class="input-group">
+            <label for="virtualAmount">Количество валюты (кк)</label>
+            <input id="virtualAmount" class="field" type="number" min="0" step="0.01" placeholder="Например, 10" oninput="updateFromVirtual()" enterkeyhint="done" autocomplete="off">
+          </div>
+          <div class="input-group">
+            <label for="moneyAmount">Сумма оплаты (₽)</label>
+            <input id="moneyAmount" class="field" type="number" min="0" step="1" placeholder="Например, 450" oninput="updateFromMoney()" enterkeyhint="done" autocomplete="off">
+          </div>
+        </div>
+
+        <div class="discounts">
+          <div class="discounts-title">Тарифы и скидки</div>
+          <div id="discountsList"></div>
+        </div>
+
+        <div class="summary-box">
+          <div class="summary-row"><span>Курс</span><strong id="rateText">—</strong></div>
+          <div class="summary-row"><span>Сумма без промокода</span><strong id="subtotalText">0 ₽</strong></div>
+          <div class="summary-row"><span>Скидка по промокоду</span><strong id="promoDiscountText">0 ₽</strong></div>
+          <div class="summary-row total"><span>К оплате</span><strong id="totalText">0 ₽</strong></div>
+        </div>
+
+        <button class="btn btn-primary center" onclick="buy()">КУПИТЬ</button>
+
+        <div class="footer">
+          Можно ввести либо количество виртов, либо сумму в рублях — второе поле пересчитается автоматически.
+        </div>
+      </div>
     </div>
 
-    <!-- INFO SCREENS (Reusing structure) -->
+
+
+    <div id="orderGuide" class="screen">
+      <div class="card">
+        <div class="topbar">
+          <button class="back-btn" onclick="goHome()">←</button>
+          <div>
+            <div class="section-title">Информация</div>
+            <h2>Как проходит заказ</h2>
+          </div>
+        </div>
+
+        <div class="info-box">
+          <div class="info-box-title">Порядок оформления</div>
+          <div class="info-box-text">
+            Выберите игру, сервер, количество игровой валюты и способ получения. После оформления заказ передаётся в обработку, а данные проверяются менеджером.
+          </div>
+        </div>
+
+        <div class="info-box">
+          <div class="info-box-title">Что нужно указать</div>
+          <div class="info-box-text">
+            Для оформления потребуются игровой ник, выбранный сервер, объём заказа и способ получения: трейдом или через игровой банк, если такой способ доступен.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="deliveryInfo" class="screen">
+      <div class="card">
+        <div class="topbar">
+          <button class="back-btn" onclick="goHome()">←</button>
+          <div>
+            <div class="section-title">Информация</div>
+            <h2>Оплата и доставка</h2>
+          </div>
+        </div>
+
+        <div class="info-box">
+          <div class="info-box-title">Цифровой товар</div>
+          <div class="info-box-text">
+            Товар является цифровым. Физическая доставка не осуществляется. Передача выполняется внутри выбранной игры на указанном сервере.
+          </div>
+        </div>
+
+        <div class="info-box">
+          <div class="info-box-title">Способ получения</div>
+          <div class="info-box-text">
+            Доступные способы получения: трейдом или через игровой банк, если такой способ предусмотрен для выбранной игры и сервера.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="refundInfo" class="screen">
+      <div class="card">
+        <div class="topbar">
+          <button class="back-btn" onclick="goHome()">←</button>
+          <div>
+            <div class="section-title">Информация</div>
+            <h2>Возврат и отмена</h2>
+          </div>
+        </div>
+
+        <div class="info-box">
+          <div class="info-box-title">Отмена заказа</div>
+          <div class="info-box-text">
+            Заказ можно отменить до начала выполнения. Если заказ уже выполнен и цифровой товар передан покупателю, возврат невозможен, кроме случаев ошибки со стороны сервиса.
+          </div>
+        </div>
+
+        <div class="info-box">
+          <div class="info-box-title">Если заказ не выполнен</div>
+          <div class="info-box-text">
+            Если заказ не может быть выполнен по техническим причинам, покупателю предлагается возврат средств или согласование другого способа выполнения.
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div id="info" class="screen">
-      <div class="topbar"><button class="nav-btn" onclick="goHome()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button><div class="nav-title">О сервисе</div></div>
-      <div class="glass-panel"><p class="text-sm">Через mini-app можно оформить заказ на цифровые игровые товары и услуги.</p></div>
-      <div class="stack">
-        <button class="glass-button secondary" onclick="switchScreen('privacy')">Политика конфиденциальности</button>
-        <button class="glass-button secondary" onclick="switchScreen('agreement')">Пользовательское соглашение</button>
+      <div class="card">
+        <div class="topbar">
+          <button class="back-btn" onclick="goHome()">←</button>
+          <div>
+            <div class="section-title">О сервисе</div>
+            <h2>Информация</h2>
+          </div>
+        </div>
+
+        <div class="info-box">
+          <div class="info-box-title">О сервисе</div>
+          <div class="info-box-text">
+            Через mini-app можно оформить заказ на цифровые игровые товары и услуги.
+            Подробные условия использования сервиса размещены в разделах ниже.
+          </div>
+        </div>
+
+        <div class="stack">
+          <button class="btn btn-secondary" onclick="openPrivacyPolicy()">Политика конфиденциальности</button>
+          <button class="btn btn-secondary" onclick="openUserAgreement()">Пользовательское соглашение</button>
+
+          <button class="btn btn-secondary" onclick="openSupport()">Поддержка</button>
+        </div>
       </div>
     </div>
-    
-    <!-- Templates for static info screens -->
-    <div id="orderGuide" class="screen"><div class="topbar"><button class="nav-btn" onclick="goHome()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button><div class="nav-title">Как заказать</div></div><div class="glass-panel"><h3 class="mb-2 text-white">Порядок оформления</h3><p class="text-sm">Выберите игру, сервер, количество игровой валюты и способ получения. После оформления заказ передаётся в обработку, а данные проверяются менеджером.</p></div></div>
-    <div id="deliveryInfo" class="screen"><div class="topbar"><button class="nav-btn" onclick="goHome()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button><div class="nav-title">Доставка</div></div><div class="glass-panel"><h3 class="mb-2 text-white">Цифровой товар</h3><p class="text-sm">Товар является цифровым. Передача выполняется внутри выбранной игры на указанном сервере (трейдом или через банк).</p></div></div>
-    <div id="refundInfo" class="screen"><div class="topbar"><button class="nav-btn" onclick="goHome()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button><div class="nav-title">Возврат</div></div><div class="glass-panel"><h3 class="mb-2 text-white">Отмена заказа</h3><p class="text-sm">Заказ можно отменить до начала выполнения. Если заказ выполнен, возврат невозможен.</p></div></div>
-    <div id="privacy" class="screen"><div class="topbar"><button class="nav-btn" onclick="switchScreen('info')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button><div class="nav-title">Политика</div></div><div class="glass-panel"><p class="text-sm text-gray">Данные (ник, сервер, сумма) используются только для обработки заказа и не передаются третьим лицам без законных оснований.</p></div></div>
-    <div id="agreement" class="screen"><div class="topbar"><button class="nav-btn" onclick="switchScreen('info')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button><div class="nav-title">Соглашение</div></div><div class="glass-panel"><p class="text-sm text-gray">Пользователь обязан указывать корректные данные. Сервис не несет ответственности за ошибки в нике или сервере.</p></div></div>
+
+    <div id="privacy" class="screen">
+      <div class="card">
+        <div class="topbar">
+          <button class="back-btn" onclick="goInfo()">←</button>
+          <div>
+            <div class="section-title">О сервисе</div>
+            <h2>Политика конфиденциальности</h2>
+          </div>
+        </div>
+
+        <div class="legal-text">
+Политика конфиденциальности
+
+1. Общие положения
+Настоящая политика конфиденциальности определяет порядок обработки информации пользователей сервиса t.me/alexeyvatutin_bot и mini-app.
+
+2. Какие данные могут использоваться
+- Telegram username и технические данные Telegram;
+- игровой ник;
+- выбранная игра, сервер, объём заказа;
+- промокод;
+- способ получения заказа;
+- номер игрового банковского счёта, если выбран способ получения банком.
+
+3. Для чего используются данные
+- оформление и обработка заказа;
+- связь с пользователем;
+- предоставление поддержки;
+- улучшение работы сервиса;
+- предотвращение злоупотреблений.
+
+4. Передача третьим лицам
+Данные могут передаваться только в объёме, необходимом для обработки платежей, исполнения требований законодательства или защиты сервиса.
+
+5. Контакты
+По вопросам обработки данных: @alexeyvatutin
+        </div>
+      </div>
+    </div>
+
+    <div id="agreement" class="screen">
+      <div class="card">
+        <div class="topbar">
+          <button class="back-btn" onclick="goInfo()">←</button>
+          <div>
+            <div class="section-title">О сервисе</div>
+            <h2>Пользовательское соглашение</h2>
+          </div>
+        </div>
+
+        <div class="legal-text">
+Пользовательское соглашение
+
+1. Общие положения
+Сервис t.me/alexeyvatutin_bot и mini-app предоставляет возможность оформления заказов на цифровые игровые товары и услуги.
+
+2. Обязанности пользователя
+Пользователь обязуется:
+- указывать корректные данные при оформлении заказа;
+- проверять игру, сервер, ник и параметры заказа;
+- не использовать сервис в противоправных целях;
+- не нарушать работу сервиса.
+
+3. Порядок оформления заказа
+Пользователь самостоятельно оформляет заказ через интерфейс mini-app. Заказ передаётся в обработку после подтверждения и/или оплаты.
+
+4. Ответственность
+Сервис не несёт ответственности за ошибки пользователя в нике, сервере, способе получения или иных параметрах заказа.
+
+5. Ограничение ответственности
+Сервис не отвечает за технические сбои Telegram, платёжных систем, игровых платформ и иных внешних сервисов.
+
+6. Поддержка
+По всем вопросам: @alexeyvatutin
+        </div>
+      </div>
+    </div>
   </div>
 
-  <script src="./script.js"></script>
+  <script src="./script.js?v=19"></script>
 </body>
 </html>

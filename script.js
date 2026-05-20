@@ -971,8 +971,10 @@ async function buy() {
       window.open(data.payment_url, '_blank', 'noopener,noreferrer');
     }
   } catch (error) {
-    alert(`Не удалось создать заказ: ${error.message}`);
-  }
+  alert(
+    'Автоматическая оплата временно недоступна.\n\n' +
+    'Чтобы купить вирты, напишите менеджеру в Telegram, который указан в профиле Бота — заказ оформим вручную.'
+  );
 }
 
 async function checkAccess() {

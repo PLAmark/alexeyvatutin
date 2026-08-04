@@ -821,6 +821,7 @@ function openManualPurchaseNotice() {
   const modal = document.getElementById('maintenanceModal');
   if (!modal) return;
 
+  modal.hidden = false;
   modal.classList.add('show');
   modal.setAttribute('aria-hidden', 'false');
   document.body.classList.add('modal-open');
@@ -832,6 +833,7 @@ function closeManualPurchaseNotice() {
 
   modal.classList.remove('show');
   modal.setAttribute('aria-hidden', 'true');
+  modal.hidden = true;
   document.body.classList.remove('modal-open');
 }
 

@@ -929,6 +929,10 @@ body.modal-open {
   transition: opacity 0.2s ease, visibility 0.2s ease;
 }
 
+.notice-modal[hidden] {
+  display: none;
+}
+
 .notice-modal.show {
   visibility: visible;
   opacity: 1;

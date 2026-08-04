@@ -37,9 +37,8 @@ const gtaServers = [
 const matreshkaServers = Array.from({ length: 34 }, (_, i) => `MATRESHKA MOBILE #${i + 1}`);
 
 const blackRussiaPricing = [
-  { min: 100, rate: 40 },
-  { min: 10, rate: 45 },
-  { min: 0, rate: 50 },
+  { min: 10, rate: 50 },
+  { min: 0, rate: 60 },
 ];
 
 const matreshkaPricing = [
@@ -817,94 +816,38 @@ function openUserAgreement() {
   switchScreen('agreement');
 }
 
-async function buy() {
+function openManualPurchaseNotice() {
   blurActiveInput();
+  const modal = document.getElementById('maintenanceModal');
+  if (!modal) return;
 
-  const game = currentGame();
-  const nicknameInput = document.getElementById('nickname');
-  const promoInput = document.getElementById('promoInput');
-  const bankAccountInput = document.getElementById('bankAccount');
+  modal.classList.add('show');
+  modal.setAttribute('aria-hidden', 'false');
+  document.body.classList.add('modal-open');
+}
 
-  if (!game) {
-    alert('Сначала выбери игру.');
-    return;
+function closeManualPurchaseNotice() {
+  const modal = document.getElementById('maintenanceModal');
+  if (!modal) return;
+
+  modal.classList.remove('show');
+  modal.setAttribute('aria-hidden', 'true');
+  document.body.classList.remove('modal-open');
+}
+
+function handleMaintenanceBackdrop(event) {
+  if (event.target === event.currentTarget) {
+    closeManualPurchaseNotice();
   }
+}
 
-  if (game.autoSelectServer && !state.server) {
-    state.server = game.autoSelectServer;
-  }
+function openManualPurchaseChat() {
+  closeManualPurchaseNotice();
+  openExternal('https://t.me/AlexeyVatutin');
+}
 
-  const nickname = nicknameInput ? nicknameInput.value.trim() : '';
-  const promoCode = promoInput ? promoInput.value.trim().toUpperCase() : '';
-  const bankAccount = bankAccountInput ? bankAccountInput.value.trim() : '';
-
-  if (!state.server) {
-    alert('Сначала выбери сервер.');
-    return;
-  }
-
-  if (!nickname) {
-    alert('Введите игровой ник.');
-    return;
-  }
-
-  if (state.deliveryMethod === 'bank' && !bankAccount) {
-    alert('Укажите номер игрового банковского счёта.');
-    return;
-  }
-
-  if (state.deliveryMethod === 'bank' && !/^\d+$/.test(bankAccount)) {
-    alert('Номер банковского счёта должен состоять только из цифр.');
-    return;
-  }
-
-  if (!state.virtualAmount || state.virtualAmount <= 0) {
-    alert('Введите количество валюты или сумму оплаты.');
-    return;
-  }
-
-  const amountValue = Number(state.virtualAmount.toFixed(2));
-  const deliveryLabel = getDeliveryMethodLabel();
-
-  const payload = {
-    game: game.name,
-    server: state.server,
-    nickname: nickname,
-    promo: promoCode || '',
-    amount_kk: amountValue,
-    delivery_type: deliveryLabel,
-    bank_account: state.deliveryMethod === 'bank' ? bankAccount : ''
-  };
-
-  try {
-    const headers = {
-      'Content-Type': 'application/json'
-    };
-
-    if (window.Telegram && Telegram.WebApp && Telegram.WebApp.initData) {
-      headers['X-Telegram-Init-Data'] = Telegram.WebApp.initData;
-    }
-
-    const response = await fetch(`${BACKEND_BASE_URL}/api/create-order`, {
-      method: 'POST',
-      headers,
-      body: JSON.stringify(payload)
-    });
-
-    const data = await response.json();
-
-    if (!response.ok || !data.ok) {
-      throw new Error(data.error || 'Не удалось создать заказ');
-    }
-
-    if (window.Telegram && Telegram.WebApp && Telegram.WebApp.openLink) {
-      Telegram.WebApp.openLink(data.payment_url);
-    } else {
-      window.open(data.payment_url, '_blank', 'noopener,noreferrer');
-    }
-  } catch (error) {
-    alert(`Не удалось создать заказ: ${error.message}`);
-  }
+function buy() {
+  openManualPurchaseNotice();
 }
 
 async function checkAccess() {

@@ -3,132 +3,97 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="theme-color" content="#11131a">
-  <meta name="description" content="Покупка и продажа цифровых игровых товаров в Telegram.">
-  <title>Vatutin Store</title>
+  <meta name="theme-color" content="#111315">
+  <title>Бот Ватутина</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <link rel="stylesheet" href="./style.css?v=30">
+  <link rel="stylesheet" href="./style.css?v=31-final-notice9">
 </head>
 <body>
-  <div class="ambient" aria-hidden="true">
-    <span class="ambient-shape ambient-shape-one"></span>
-    <span class="ambient-shape ambient-shape-two"></span>
-    <span class="ambient-shape ambient-shape-three"></span>
-  </div>
-
   <div class="container">
     <div id="home" class="screen active">
-      <div class="card home-card">
-        <div class="brand-bar">
-          <div class="brand">
-            <span class="brand-mark" aria-hidden="true">V</span>
-            <span class="brand-copy">
-              <strong>Vatutin Store</strong>
-              <small>Цифровые товары</small>
-            </span>
+      <div class="card home-content">
+        <header class="home-heading">
+          <div class="home-brand">Бот Ватутина</div>
+          <h1 class="title">Игровая валюта</h1>
+          <p class="subtitle">Выбери игру, чтобы купить или продать валюту.</p>
+        </header>
+
+        <section class="game-catalog" aria-label="Выбор игры">
+
+          <article class="game-card game-card-br">
+            <div class="game-card-top">
+              <img class="catalog-logo" src="black-russia.png" alt="" aria-hidden="true">
+              <span class="game-unit">Вирты</span>
+            </div>
+            <h2 class="game-card-name">BLACK RUSSIA</h2>
+            <div class="game-card-actions">
+              <button class="btn game-buy" type="button" onclick="buyGameFromHome('br')" aria-label="Купить вирты — BLACK RUSSIA">Купить вирты</button>
+              <button class="game-sell" type="button" onclick="sellGameFromHome('br')" aria-label="Продать вирты — BLACK RUSSIA">Продать вирты<span aria-hidden="true">↗</span></button>
+            </div>
+          </article>
+          <article class="game-card game-card-mat">
+            <div class="game-card-top">
+              <img class="catalog-logo" src="matreshka.png" alt="" aria-hidden="true">
+              <span class="game-unit">Вирты</span>
+            </div>
+            <h2 class="game-card-name">MATRESHKA RP</h2>
+            <div class="game-card-actions">
+              <button class="btn game-buy" type="button" onclick="buyGameFromHome('mat')" aria-label="Купить вирты — MATRESHKA RP">Купить вирты</button>
+              <button class="game-sell" type="button" onclick="sellGameFromHome('mat')" aria-label="Продать вирты — MATRESHKA RP">Продать вирты<span aria-hidden="true">↗</span></button>
+            </div>
+          </article>
+          <article class="game-card game-card-gta">
+            <div class="game-card-top">
+              <img class="catalog-logo" src="gta5rp.png" alt="" aria-hidden="true">
+              <span class="game-unit">Вирты</span>
+            </div>
+            <h2 class="game-card-name">GTA 5 RP</h2>
+            <div class="game-card-actions">
+              <button class="btn game-buy" type="button" onclick="buyGameFromHome('gta')" aria-label="Купить вирты — GTA 5 RP">Купить вирты</button>
+              <button class="game-sell" type="button" onclick="sellGameFromHome('gta')" aria-label="Продать вирты — GTA 5 RP">Продать вирты<span aria-hidden="true">↗</span></button>
+            </div>
+          </article>
+          <article class="game-card game-card-so2">
+            <div class="game-card-top">
+              <img class="catalog-logo" src="standoff.png" alt="" aria-hidden="true">
+              <span class="game-unit">Голда</span>
+            </div>
+            <h2 class="game-card-name">STANDOFF 2</h2>
+            <div class="game-card-actions">
+              <button class="btn game-buy" type="button" onclick="buyGameFromHome('so2')" aria-label="Купить голду — STANDOFF 2">Купить голду</button>
+              <button class="game-sell" type="button" onclick="sellGameFromHome('so2')" aria-label="Продать голду — STANDOFF 2">Продать голду<span aria-hidden="true">↗</span></button>
+            </div>
+          </article>
+        </section>
+
+        <nav class="home-help" aria-label="Информация о заказе">
+          <button class="order-guide-link" type="button" onclick="openOrderGuide()">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M8 4h8a2 2 0 0 1 2 2v14H6V6a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="1.6"/>
+              <path d="M9 9h6M9 13h6M9 17h4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+            <span class="guide-copy"><strong>Как заказать</strong><span>Короткая инструкция перед покупкой</span></span>
+            <span class="guide-arrow" aria-hidden="true">→</span>
+          </button>
+          <div class="home-help-links">
+            <button class="home-link" type="button" onclick="openDeliveryInfo()">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 7h16v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7ZM4 10h16M8 15h4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+              <span>Доставка</span><span class="link-arrow" aria-hidden="true">↗</span>
+            </button>
+            <button class="home-link" type="button" onclick="openRefundInfo()">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3 19 6v5c0 4.4-2.8 8.3-7 10-4.2-1.7-7-5.6-7-10V6l7-3Z" stroke="currentColor" stroke-width="1.6"/><path d="m9 12 2 2 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+              <span>Возврат</span><span class="link-arrow" aria-hidden="true">↗</span>
+            </button>
           </div>
-          <span class="status-pill"><i></i> На связи</span>
+        </nav>
+
+        <div class="home-contact-row">
+          <button class="home-support" type="button" onclick="openSupport()">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 13v-2a8 8 0 0 1 16 0v2M4 12H3v6h4v-6H4Zm16 0h1v6h-4v-6h3ZM20 18a3 3 0 0 1-3 3h-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span><strong>Поддержка</strong><small>@alexeyvatutin</small></span>
+          </button>
+          <button class="home-about" type="button" onclick="openInfo()">О сервисе <span aria-hidden="true">→</span></button>
         </div>
-
-        <h1 class="title">Игровая валюта.<br>Просто и быстро.</h1>
-        <p class="subtitle">
-          Выберите игру — всё остальное займёт пару минут.
-        </p>
-
-        <div class="content-label">Выберите игру</div>
-        <div class="stack">
-          <button class="btn btn-game btn-game-br" onclick="selectGame('br')">
-            <span class="game-left">
-              <span class="game-icon">
-                <img src="black-russia.png" alt="BLACK RUSSIA">
-              </span>
-              <span class="game-meta">
-                <span class="game-name">BLACK RUSSIA</span>
-                <span class="game-note">Оформление заказа на игровую валюту</span>
-              </span>
-            </span>
-            <span class="game-arrow">›</span>
-          </button>
-
-          <button class="btn btn-game btn-game-mat" onclick="selectGame('mat')">
-            <span class="game-left">
-              <span class="game-icon">
-                <img src="matreshka.png" alt="MATRESHKA RP">
-              </span>
-              <span class="game-meta">
-                <span class="game-name">MATRESHKA RP</span>
-                <span class="game-note">Оформление заказа на игровую валюту</span>
-              </span>
-            </span>
-            <span class="game-arrow">›</span>
-          </button>
-
-          <button class="btn btn-game btn-game-gta" onclick="selectGame('gta')">
-            <span class="game-left">
-              <span class="game-icon">
-                <img src="gta5rp.png" alt="GTA 5 RP">
-              </span>
-              <span class="game-meta">
-                <span class="game-name">GTA 5 RP</span>
-                <span class="game-note">Оформление заказа на игровую валюту</span>
-              </span>
-            </span>
-            <span class="game-arrow">›</span>
-          </button>
-
-          <button class="btn btn-game btn-game-so2" onclick="selectGame('so2')">
-            <span class="game-left">
-              <span class="game-icon">
-                <img src="standoff.png" alt="STANDOFF 2">
-              </span>
-              <span class="game-meta">
-                <span class="game-name">STANDOFF 2</span>
-                <span class="game-note">Оформление заказа на игровую валюту</span>
-              </span>
-            </span>
-            <span class="game-arrow">›</span>
-          </button>
-
-
-
-          <div class="quick-info-grid" aria-label="Информация о заказе">
-            <button class="quick-info-tile" type="button" onclick="openOrderGuide()">
-              <span class="quick-info-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none">
-                  <path d="M8 4h8a2 2 0 0 1 2 2v14H6V6a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="1.8"/>
-                  <path d="M9 9h6M9 13h6M9 17h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-                </svg>
-              </span>
-              <span class="quick-info-title">Как заказать</span>
-            </button>
-
-            <button class="quick-info-tile" type="button" onclick="openDeliveryInfo()">
-              <span class="quick-info-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none">
-                  <path d="M4 7h16v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7Z" stroke="currentColor" stroke-width="1.8"/>
-                  <path d="M4 10h16M8 15h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-                </svg>
-              </span>
-              <span class="quick-info-title">Доставка</span>
-            </button>
-
-            <button class="quick-info-tile" type="button" onclick="openRefundInfo()">
-              <span class="quick-info-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none">
-                  <path d="M12 3 19 6v5c0 4.4-2.8 8.3-7 10-4.2-1.7-7-5.6-7-10V6l7-3Z" stroke="currentColor" stroke-width="1.8"/>
-                  <path d="m8.8 12 2.1 2.1 4.4-4.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </span>
-              <span class="quick-info-title">Возврат</span>
-            </button>
-          </div>
-
-          <div class="secondary-row">
-            <button class="btn btn-secondary" onclick="openSupport()">Поддержка</button>
-            <button class="btn btn-secondary" onclick="openInfo()">О сервисе</button>
-          </div>
-        </div>
-
         <div class="footer">
           Сервис не связан с правообладателями игровых проектов. Названия и логотипы используются только для обозначения игр.
         </div>
@@ -221,8 +186,8 @@
             <input id="virtualAmount" class="field" type="number" min="0" step="0.01" placeholder="Например, 10" oninput="updateFromVirtual()" enterkeyhint="done" autocomplete="off">
           </div>
           <div class="input-group">
-            <label for="moneyAmount">Сумма оплаты (₽)</label>
-            <input id="moneyAmount" class="field" type="number" min="0" step="1" placeholder="Например, 450" oninput="updateFromMoney()" enterkeyhint="done" autocomplete="off">
+            <label for="moneyAmount">Сумма по курсу (₽)</label>
+            <input id="moneyAmount" class="field" type="number" min="0" step="0.01" placeholder="Например, 450" oninput="updateFromMoney()" enterkeyhint="done" autocomplete="off">
           </div>
         </div>
 
@@ -235,13 +200,13 @@
           <div class="summary-row"><span>Курс</span><strong id="rateText">—</strong></div>
           <div class="summary-row"><span>Сумма без промокода</span><strong id="subtotalText">0 ₽</strong></div>
           <div class="summary-row"><span>Скидка по промокоду</span><strong id="promoDiscountText">0 ₽</strong></div>
-          <div class="summary-row total"><span>К оплате</span><strong id="totalText">0 ₽</strong></div>
+          <div class="summary-row total"><span>Итого</span><strong id="totalText">0 ₽</strong></div>
         </div>
 
-        <button class="btn btn-primary center" onclick="buy()">КУПИТЬ</button>
+        <button class="btn btn-primary center" onclick="buy()">Купить</button>
 
         <div class="footer">
-          Можно ввести либо количество виртов, либо сумму в рублях — второе поле пересчитается автоматически.
+          Заявку обработает менеджер. Сумму и промокод подтвердит менеджер; онлайн-оплаты в мини-приложении нет.
         </div>
       </div>
     </div>
@@ -432,32 +397,18 @@
     </div>
   </div>
 
-  <div
-    id="maintenanceModal"
-    class="notice-modal"
-    role="dialog"
-    aria-modal="true"
-    aria-hidden="true"
-    hidden
-    aria-labelledby="maintenanceTitle"
-    onclick="handleMaintenanceBackdrop(event)"
-  >
-    <div class="notice-sheet">
-      <div class="notice-icon" aria-hidden="true">i</div>
-      <h2 id="maintenanceTitle">Сервис временно на обновлении</h2>
-      <p>
-        Купить игровую валюту сейчас можно через личные сообщения в Telegram.
-      </p>
-      <a class="notice-link" href="https://t.me/AlexeyVatutin" onclick="event.preventDefault(); openManualPurchaseChat()">
-        t.me/AlexeyVatutin
-      </a>
-      <div class="notice-actions">
-        <button class="btn btn-primary" type="button" onclick="openManualPurchaseChat()">Написать в Telegram</button>
-        <button class="btn btn-secondary" type="button" onclick="closeManualPurchaseNotice()">Закрыть</button>
-      </div>
-    </div>
-  </div>
+  <dialog id="purchaseNotice" class="purchase-notice" aria-labelledby="purchaseNoticeTitle" aria-describedby="purchaseNoticeText purchaseNoticeAlternative">
+    <button class="purchase-notice-close" type="button" aria-label="Закрыть" onclick="closePurchaseNotice()">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="m7 7 10 10M17 7 7 17" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>
+    </button>
+    <h2 id="purchaseNoticeTitle">Сейчас не можем принять заказ</h2>
+    <p id="purchaseNoticeText">У нас много заказов, и мы временно не принимаем новые.</p>
+    <p id="purchaseNoticeAlternative" class="purchase-notice-alternative">Вы можете купить вирты в <span class="purchase-notice-handle">@PlatinovBot</span>. Это другой магазин — мы не отвечаем за его условия и выполнение заказов.</p>
+    <a class="purchase-notice-visit" href="https://t.me/PlatinovBot" target="_blank" rel="noopener noreferrer" onclick="openPurchaseNoticeLink(event)">Перейти в @PlatinovBot</a>
+  </dialog>
 
-  <script src="./script.js?v=24"></script>
+  <script src="./script.js?v=27-final-notice9"></script>
 </body>
 </html>

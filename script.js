@@ -37,25 +37,19 @@ const gtaServers = [
 const matreshkaServers = Array.from({ length: 34 }, (_, i) => `MATRESHKA MOBILE #${i + 1}`);
 
 const blackRussiaPricing = [
-  { min: 10, rate: 50 },
-  { min: 0, rate: 60 },
-];
-
-const matreshkaPricing = [
-  { min: 100, rate: 70 },
-  { min: 10, rate: 80 },
   { min: 0, rate: 100 },
 ];
 
+const matreshkaPricing = [
+  { min: 0, rate: 150 },
+];
+
 const gtaPricing = [
-  { min: 50, rate: 800 },
-  { min: 10, rate: 900 },
-  { min: 5, rate: 950 },
-  { min: 0, rate: 1000 },
+  { min: 0, rate: 1300 },
 ];
 
 const standoffPricing = [
-  { min: 0, rate: 0.55 },
+  { min: 0, rate: 0.7 },
 ];
 
 const games = {
@@ -69,7 +63,7 @@ const games = {
     buyTitle: 'Купить вирты',
     amountLabel: 'Количество валюты (кк)',
     amountPlaceholder: 'Например, 10',
-    buySubmitText: 'КУПИТЬ',
+    buySubmitText: 'Купить',
     rateSuffix: '₽ / 1кк',
     goldMode: false,
     autoSelectServer: '',
@@ -84,7 +78,7 @@ const games = {
     buyTitle: 'Купить вирты',
     amountLabel: 'Количество валюты (кк)',
     amountPlaceholder: 'Например, 10',
-    buySubmitText: 'КУПИТЬ',
+    buySubmitText: 'Купить',
     rateSuffix: '₽ / 1кк',
     goldMode: false,
     autoSelectServer: '',
@@ -99,7 +93,7 @@ const games = {
     buyTitle: 'Купить вирты',
     amountLabel: 'Количество валюты (кк)',
     amountPlaceholder: 'Например, 10',
-    buySubmitText: 'КУПИТЬ',
+    buySubmitText: 'Купить',
     rateSuffix: '₽ / 1кк',
     goldMode: false,
     autoSelectServer: '',
@@ -114,7 +108,7 @@ const games = {
     buyTitle: 'Купить голду',
     amountLabel: 'Количество голды',
     amountPlaceholder: 'Например, 100',
-    buySubmitText: 'КУПИТЬ ГОЛДУ',
+    buySubmitText: 'Купить',
     rateSuffix: '₽ за 1 голду',
     goldMode: true,
     autoSelectServer: 'STANDOFF 2',
@@ -277,8 +271,12 @@ function openExternal(url) {
   window.open(url, '_blank');
 }
 
+function roundMoney(value) {
+  return Math.round((Number(value) + Number.EPSILON) * 100) / 100;
+}
+
 function formatMoney(value) {
-  return `${Math.round(value).toLocaleString('ru-RU')} ₽`;
+  return `${roundMoney(value).toLocaleString('ru-RU', { maximumFractionDigits: 2 })} ₽`;
 }
 
 function getDeliveryMethodLabel() {
@@ -370,10 +368,10 @@ function formatTierLabel(min, goldMode) {
 function calculateFromVirtual(amount) {
   const validAmount = Math.max(0, Number(amount) || 0);
   const rate = getPricingForVirtual(validAmount);
-  const subtotal = validAmount * rate;
+  const subtotal = roundMoney(validAmount * rate);
   const promoPercent = getPromoPercent();
-  const promoDiscount = subtotal * promoPercent / 100;
-  const total = Math.max(0, subtotal - promoDiscount);
+  const promoDiscount = roundMoney(subtotal * promoPercent / 100);
+  const total = roundMoney(Math.max(0, subtotal - promoDiscount));
 
   return {
     virtualAmount: validAmount,
@@ -423,7 +421,7 @@ function updateSummary(result) {
   const game = currentGame();
 
   if (rateText) {
-    rateText.innerText = result.virtualAmount > 0 ? `${result.rate} ${game?.rateSuffix || '₽ / 1кк'}` : '—';
+    rateText.innerText = result.virtualAmount > 0 ? `${formatAmountValue(result.rate)} ${game?.rateSuffix || '₽ / 1кк'}` : '—';
   }
 
   if (subtotalText) {
@@ -451,12 +449,9 @@ function renderDiscounts() {
   }
 
   if (game.goldMode) {
-    container.innerHTML = `
-      <div class="discount-row"><span>1 голда</span><span>0.55 ₽</span></div>
-      <div class="discount-row"><span>100 голды</span><span>55 ₽</span></div>
-      <div class="discount-row"><span>500 голды</span><span>275 ₽</span></div>
-      <div class="discount-row"><span>1000 голды</span><span>550 ₽</span></div>
-    `;
+    container.innerHTML = [1, 100, 500, 1000].map((amount) => `
+      <div class="discount-row"><span>${amount === 1 ? '1 голда' : `${formatAmountValue(amount)} голды`}</span><span>${formatMoney(amount * getPricingForVirtual(amount))}</span></div>
+    `).join('');
     return;
   }
 
@@ -516,7 +511,75 @@ function injectDynamicStyles() {
 
   const style = document.createElement('style');
   style.id = 'dynamic-so2-styles';
-  style.textContent = '';
+  style.textContent = `
+    .btn-game-so2 {
+      color: #fff;
+      background:
+        linear-gradient(90deg, rgba(210, 222, 239, 0.14), transparent 50%),
+        linear-gradient(145deg, rgba(255, 255, 255, 0.10), rgba(255, 255, 255, 0.04)),
+        rgba(12, 29, 50, 0.66);
+      border-color: rgba(214, 230, 249, 0.22);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18), var(--inner-glow);
+    }
+
+    .btn-game-so2::before {
+      color: #dbe8f5;
+      background: #dbe8f5;
+    }
+
+    .btn-game-so2:hover {
+      filter: brightness(1.06);
+    }
+
+    .btn-gold {
+      background: linear-gradient(135deg, rgba(255, 208, 82, 0.96), rgba(186, 123, 0, 0.96)) !important;
+      color: #241700 !important;
+      text-align: center;
+      border-color: rgba(255, 226, 136, 0.48) !important;
+      box-shadow: 0 14px 34px rgba(186, 123, 0, 0.25), var(--inner-glow) !important;
+    }
+
+    .discount-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .discount-row + .discount-row {
+      margin-top: 8px;
+    }
+
+    .restricted-wrap {
+      width: min(100%, 440px);
+      margin: 0 auto;
+      padding: 16px 14px 24px;
+    }
+
+    .restricted-card {
+      background: rgba(14, 22, 34, 0.82);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.28);
+      backdrop-filter: blur(20px);
+      border-radius: 24px;
+      padding: 18px;
+      color: #fff;
+    }
+
+    .restricted-card h2 {
+      margin: 0 0 10px;
+      font-size: 22px;
+      font-weight: 800;
+    }
+
+    .restricted-card p {
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.5;
+      color: rgba(255, 255, 255, 0.78);
+    }
+  `;
   document.head.appendChild(style);
 }
 
@@ -599,9 +662,7 @@ function applyGameUiTexts() {
     }
 
     if (footer) {
-      footer.innerText = game.goldMode
-        ? 'Можно ввести количество голды или сумму в рублях — второе поле пересчитается автоматически.'
-        : 'Можно ввести либо количество виртов, либо сумму в рублях — второе поле пересчитается автоматически.';
+      footer.innerText = 'Заявку обработает менеджер. Сумму и промокод подтвердит менеджер; онлайн-оплаты в мини-приложении нет.';
     }
   }
 }
@@ -609,6 +670,72 @@ function applyGameUiTexts() {
 // =========================
 // ГЛАВНЫЙ ПОТОК
 // =========================
+let purchaseNoticeTrigger = null;
+
+function showPurchaseNotice() {
+  const dialog = document.getElementById('purchaseNotice');
+  if (!dialog || dialog.open) return;
+  purchaseNoticeTrigger = document.activeElement;
+  blurActiveInput();
+  dialog.showModal();
+  document.body.classList.add('purchase-notice-open');
+}
+
+function closePurchaseNotice() {
+  const dialog = document.getElementById('purchaseNotice');
+  if (dialog && dialog.open) dialog.close();
+}
+
+function openPurchaseNoticeLink(event) {
+  if (
+    window.Telegram &&
+    Telegram.WebApp &&
+    Telegram.WebApp.initData &&
+    Telegram.WebApp.openTelegramLink
+  ) {
+    event.preventDefault();
+    Telegram.WebApp.openTelegramLink(event.currentTarget.href);
+  }
+}
+
+function setupPurchaseNotice() {
+  const dialog = document.getElementById('purchaseNotice');
+  if (!dialog) return;
+  dialog.addEventListener('click', (event) => {
+    if (event.target !== dialog) return;
+    const rect = dialog.getBoundingClientRect();
+    if (
+      event.clientX < rect.left || event.clientX > rect.right ||
+      event.clientY < rect.top || event.clientY > rect.bottom
+    ) {
+      dialog.close();
+    }
+  });
+  dialog.addEventListener('close', () => {
+    document.body.classList.remove('purchase-notice-open');
+    if (purchaseNoticeTrigger && purchaseNoticeTrigger.isConnected) {
+      purchaseNoticeTrigger.focus({ preventScroll: true });
+    }
+    purchaseNoticeTrigger = null;
+  });
+}
+
+function buyGameFromHome(key) {
+  if (!games[key]) return;
+  selectGame(key);
+  openBuyFlow();
+  const serversBack = document.querySelector('#servers .back-btn');
+  const purchaseBack = document.querySelector('#buy .back-btn');
+  if (serversBack) serversBack.onclick = goHome;
+  if (purchaseBack) purchaseBack.onclick = games[key].autoSelectServer ? goHome : goServers;
+}
+
+function sellGameFromHome(key) {
+  const game = games[key];
+  if (!game) return;
+  openExternal(game.sellUrl);
+}
+
 function selectGame(key) {
   state.gameKey = key;
   state.server = '';
@@ -637,15 +764,12 @@ function renderActions() {
 
 function openBuyFlow() {
   if (!state.gameKey) return;
-
   const game = currentGame();
   if (!game) return;
-
   if (game.autoSelectServer) {
     selectServer(game.autoSelectServer);
     return;
   }
-
   renderServers();
   switchScreen('servers');
 }
@@ -763,7 +887,7 @@ function updateFromVirtual() {
   if (!virtualAmount || !moneyAmount) return;
 
   const result = calculateFromVirtual(virtualAmount.value);
-  moneyAmount.value = result.total > 0 ? Math.round(result.total) : '';
+  moneyAmount.value = result.total > 0 ? roundMoney(result.total) : '';
   updateSummary(result);
 }
 
@@ -816,40 +940,40 @@ function openUserAgreement() {
   switchScreen('agreement');
 }
 
-function openManualPurchaseNotice() {
-  blurActiveInput();
-  const modal = document.getElementById('maintenanceModal');
-  if (!modal) return;
-
-  modal.hidden = false;
-  modal.classList.add('show');
-  modal.setAttribute('aria-hidden', 'false');
-  document.body.classList.add('modal-open');
-}
-
-function closeManualPurchaseNotice() {
-  const modal = document.getElementById('maintenanceModal');
-  if (!modal) return;
-
-  modal.classList.remove('show');
-  modal.setAttribute('aria-hidden', 'true');
-  modal.hidden = true;
-  document.body.classList.remove('modal-open');
-}
-
-function handleMaintenanceBackdrop(event) {
-  if (event.target === event.currentTarget) {
-    closeManualPurchaseNotice();
-  }
-}
-
-function openManualPurchaseChat() {
-  closeManualPurchaseNotice();
-  openExternal('https://t.me/AlexeyVatutin');
-}
-
 function buy() {
-  openManualPurchaseNotice();
+  blurActiveInput();
+  const game = currentGame();
+  const nicknameInput = document.getElementById('nickname');
+  const bankAccountInput = document.getElementById('bankAccount');
+  if (!game) {
+    alert('Сначала выберите игру.');
+    return;
+  }
+  if (game.autoSelectServer && !state.server) {
+    state.server = game.autoSelectServer;
+  }
+  if (!state.server) {
+    alert('Сначала выберите сервер.');
+    return;
+  }
+  if (!nicknameInput || !nicknameInput.value.trim()) {
+    alert('Введите игровой ник.');
+    return;
+  }
+  const bankAccount = bankAccountInput ? bankAccountInput.value.trim() : '';
+  if (state.deliveryMethod === 'bank' && !bankAccount) {
+    alert('Укажите номер игрового банковского счёта.');
+    return;
+  }
+  if (state.deliveryMethod === 'bank' && !/^\d+$/.test(bankAccount)) {
+    alert('Номер банковского счёта должен состоять только из цифр.');
+    return;
+  }
+  if (!Number.isFinite(state.virtualAmount) || state.virtualAmount <= 0) {
+    alert('Введите количество валюты или сумму оплаты.');
+    return;
+  }
+  showPurchaseNotice();
 }
 
 async function checkAccess() {
@@ -891,6 +1015,7 @@ async function checkAccess() {
 
 function bootstrap() {
   injectDynamicStyles();
+  setupPurchaseNotice();
   setupKeyboardAutoClose();
   initTelegram();
   applyGameUiTexts();
